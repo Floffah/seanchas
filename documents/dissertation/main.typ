@@ -1,3 +1,4 @@
+// Markers, this import points to <https://github.com/Floffah/documents/blob/main/typst.toml>, where the template source exists. It is imported via Typst Web's private versioning to keep the dissertation & project repository as clean as possible (I use this template for other documents and coursework too). It was originally generated via Typst Web's template wizard and then adapted with inspiration from the template Ilm by Muhammad Talal Anwar (https://github.com/talal/ilm). Template is licensed pro forma under 'MIT No Attribution' in cooperation with inspired work
 #import "@local/napier-formal-template-base:0.1.4": *
 #import "@preview/hydra:0.6.2": hydra, anchor
 
@@ -7,13 +8,13 @@
   title: [#gaidhlig Language Learning Web Application Research & Dissertation],
   logo: "napier",
   authors: (
-    (name: "Ramsay Foy (40646655)", affiliation: "Author"),
+    (name: "Ramsay Foy (40646655@live.napier.ac.uk)", affiliation: "Author"),
     (name: "Pete Barclay (P.Barclay@napier.ac.uk)", affiliation: "Supervisor"),
     (name: "Simon Wells (S.Wells@napier.ac.uk)", affiliation: "Second Marker")
   ),
   authorsVertical: true,
   date: "22 April 2026",
-  abstract: "oooo",
+  abstract: "placeholder",
 
   formal: true,
   figure-index: (
@@ -21,7 +22,7 @@
   ),
   bibliography: none,
   word-counter: true,
-  declaration: "[x] NO: I have not used such tools"
+  declaration: "[x] NO: I have not used such tools.\nNote: Grammarly was used in the capacity of grammar fixes and readability suggestions, with the generative AI features disabled."
 )
 
 #set text(lang: "en", region: "uk")
@@ -35,10 +36,14 @@
 
 = Introduction
 
+This project aims to research and develop a language learning website for the endangered language Scottish Gaelic (#gaidhlig). Two essential aspects will be discussed: how languages are best learned, and how those techniques apply to a digital application such as a website.
+
+The #gaidhlig language is endangered, and while there are accessible ways to learn it, they don't work for everyone and don't cater for all learning styles. Tools like SpeakGaelic exist, which provide structured television and podcast episodes alongside a website with quizzes on their content. Duolingo has a course for #gaidhlig\; however, it doesn't teach common phrases or words, and the voices use a wide range of accents and dialects. These tools do work for a large group of people, but some rely on a wider context and more interactive learning techniques. Such tools do not exist yet, and most people don't have #gaidhlig speakers in their lives to help them.
+
+The project aims to create a conversation-based learning resource. It will have set units structured as a single conversation, starting with common ones, and then administering a variety of quizzes. The exact quizzes and the surrounding techniques require research to find the best ways to teach.
+
 #pagebreak()
 = Literature Review
-
-== Introduction
 
 == Techniques for Language Learning and Acquisition
 
@@ -73,7 +78,7 @@
 
 == Evaluation
 
-#pagebreak()
+#pagebreak(weak: true)
 = Conclusion
 
 #set heading(numbering: none)
@@ -81,13 +86,13 @@
 #pagebreak()
 = Appendix 1: Personal Appraisal
 
-#pagebreak()
+#pagebreak(weak: true)
 = Appendix 2: IPO Form & Feedback
 
-#pagebreak()
+#pagebreak(weak: true)
 = Appendix 4: Interim Report
 
-#pagebreak()
+#pagebreak(weak: true)
 = Appendix 5: Meeting Evidence
 
 #[
@@ -106,6 +111,7 @@
   - The basic idea of my project was decided by this point
   - Secured supervisor & second marker
   - Began weekly meetings with supervisor
+  - Initial template for documents & application defined
 
   === Supervisor Comments
   - Looked at prior-art
@@ -154,7 +160,7 @@
 
   Points recorded from the meeting:
   - Chatted again about what makes my project distinct
-  - Looked at some prior-art
+  - Looked at some prior art
   - Anki
   - An Faclair Beag
   - A-Rithist mobile app
@@ -165,11 +171,18 @@
 
   === Objectives
   - Continue work on literature review
+    - A couple of sections completed & reasonable amount of references
 
   === Progress
   - Dissertation outline written
   - Meeting diaries consolidated
   - Began literature review academic research
+
+  === Supervisor Comments
+  Points recorded from the meeting:
+  - #gaidhlig word frequency list: https://github.com/innesmck/GaelicFrequencyLists
 ]
 
-#bibliography(("./references.yml", "./zotero.bib"), style: "american-psychological-association")
+#pagebreak(weak: true)
+
+#bibliography(("./hayagriva.yml", "./zotero.bib"), style: "american-psychological-association")
