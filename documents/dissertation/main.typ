@@ -2,10 +2,41 @@
 #import "@local/napier-formal-template-base:0.1.4": *
 #import "@preview/hydra:0.6.2": hydra, anchor
 
+// doc settings
 #let gaidhlig = "Gàidhlig"
 #show "Gaidhlig": gaidhlig
 
 #let notes_enabled = true
+
+// setup declaration page
+#set text(font: "Arial", lang: "en", size: 12pt)
+#let leading = 1.5em
+#let leading = leading - 0.75em
+#set block(spacing: leading)
+#set par(spacing: leading * 2)
+#set par(leading: leading)
+
+#let note_pill = content => {
+  if notes_enabled [
+    #box(text([#emoji.construction #content #emoji.construction], size: 10pt), fill: gray.transparentize(80%), inset: 5pt, radius: 10pt)
+    <no-wc>
+  ]
+}
+
+#note_pill[This is a draft that was exported on #datetime.today().display("[day] [month repr:long] [year]")]
+
+Document begins on the next page with the title page.
+
+#heading(outlined: false, numbering: none)[Declaration]
+  
+I declare, in accordance with Edinburgh Napier University’s Academic Integrity Regulations that: except where explicit reference is made to the contribution of others\*, this assignment is the result of my own work, and has not been submitted for any module, programme or degree at Edinburgh Napier University or any other institution.
+  
+\*IMPORTANT: Contribution of includes use of generative Artificial Intelligence (AI) tools. Ensure you have read the University Guidelines for Students on AI & Writing Assistant Tools). Please declare here whether you have used such tools, and to what extent:
+
+[x] NO: I have not used such tools
+- Grammarly was used in the capacity of grammar fixes and readability suggestions, with the generative AI features disabled.\
+
+#pagebreak(weak: true)
 
 #show: project.with(
   title: [Gaidhlig Language Learning Web Application Research & Dissertation],
@@ -16,7 +47,7 @@
     (name: "Simon Wells (S.Wells@napier.ac.uk)", affiliation: "Second Marker")
   ),
   authorsVertical: true,
-  date: "22 April 2026",
+  date: datetime.today().display("[day] [month repr:long] [year]"),
   abstract: "placeholder",
 
   formal: true,
@@ -25,7 +56,6 @@
   ),
   bibliography: none,
   word-counter: true,
-  declaration: "[x] NO: I have not used such tools.\nNote: Grammarly was used in the capacity of grammar fixes and readability suggestions, with the generative AI features disabled."
 )
 
 #set text(lang: "en", region: "uk")
@@ -45,16 +75,7 @@
 #[
 #show: word-count.with(exclude: <no-wc>)
 
-#let note_pill = content => {
-  if notes_enabled [
-    #box(text([#emoji.construction #content #emoji.construction], size: 10pt), fill: gray.transparentize(80%), inset: 5pt, radius: 10pt)
-    <no-wc>
-  ]
-}
-
-= Introduction 
-#note_pill("DRAFT SECTION!")
-
+= Introduction
 This project aims to research and develop a language learning website for the endangered language Scottish Gaelic (Gaidhlig). Two essential aspects will be discussed: how languages are best learned, and how those techniques apply to a digital application such as a website.
 
 The Gaidhlig language is endangered, and while there are accessible ways to learn it, they don't work for everyone and don't cater for all learning styles. Tools like SpeakGaelic exist, which provide structured television and podcast episodes alongside a website with quizzes on their content. Duolingo has a course for Gaidhlig\; however, it doesn't teach common phrases or words, and the voices use a wide range of accents and dialects. These tools do work for a large group of people, but some rely on a wider context and more interactive learning techniques. Such tools do not exist yet, and most people don't have Gaidhlig speakers in their lives to help them.
@@ -66,7 +87,7 @@ The project aims to create a conversation-based learning resource. It will have 
 #word-count(exclude: <no-wc>, total => [
 = Literature Review
 
-#note_pill([lit review section total words: #total.words])
+#note_pill([lit review section total words: #total.words. work still to be done to tie the litereature together more])
 
 The study of language learning has existed for centuries, as language is the basis of human communication. Anyone can learn a second language (L2) and be able to reach more people, but finding the correct method is crucial to progressing from conversational to fluency. #cite(<piechurska-kuciel_at_2017>, form: "prose") notes that a "routine approach" isn't quite enough; instead, other factors such as motivation, aptitude, personality, anxiety, the emotional reaction, their feelings towards speakers of the language, and understanding of the language speaker's culture are also significant factors in obtaining an L2. There may exist techniques to ease these aspects in a digital setting.
 
@@ -74,17 +95,35 @@ This literature review explores and compares documented language-learning techni
 
 == Techniques for Language Learning and Acquisition
 
+A topic that is well studied among language learning researchers is the extent to which vocabulary expansion occurs when presented with "L2 input". Individuals learning a second language must give enough focus to a word to insert it into their knowledge of the language. It has been found that learning from input alone is an errant and laborious process, but learners aren't absolutely likely to notice "novel words" and commit them to memory. When attempting to infer their meaning, this may not "lead to correct form-meaning links" @montero_perez_vocabulary_2018.
+
+Enhancement techniques are wise to use alongside L2 input media to help retain vocabulary during language learning. A study was conducted to examine how "retrieval practice" and "spacing" affect retention. These techniques involve studying "items" with a significant gap of time between them, and testing the learner's knowledge rather than just presenting items again, respectively @karatas_improving_2025. The study found that these techniques help with retention significantly more than "initial study and then cramming before an exam".
+
+Enhancement techniques may be required to learn a language quickly and meaningfully, rather than just being suggested. To further these points, #cite(<schuetze_spacing_2015>, form: "prose") states that researchers found university students remember very little after two years of study. #cite(<schuetze_spacing_2015>, form: "prose") conducted a study on how exactly the repetition should be performed. Both using "uniform" vs "expanded" intervals, and using a "one-plus-three" vs "one-plus-four" (one introduction and three or four repetitions). They found that the "uniform interval" for repetition yields the best long-term results, with the "expanded interval" group having a larger fall-off in word retention. They found that the "one-plus-four" increases retention scores. Both comparisons, although with improved scores, were statistically insignificant, but still point to these techniques being beneficial. They point out that a good place to start for long-term learning is with five repetitions.
+
 The idea of "corrective feedback" on a language learner's written mistakes is a proven feature of structured language learning methods. But there are often disagreements on the best way to give this feedback. #cite(<la_russa_treating_2017>, form: "prose") goes on to outline that "written corrective feedback", where the learner is presented with corrections alongside their errors in writing, gives the learner sufficient time and attentional capabilities to analyse where in their thinking they have been mistaken and be able to move towards a better understanding of the L2 they are learning. This contrasts with oral feedback, which may not provide sufficient cognitive resources to process the corrections and learn from them.
+
+#cite(<bodah_challenges_2016>, form: "prose") promoted the idea to move learning towards a Mobile Assisted Language Use (MALU) system, due to the uptake of "connectivism" in education. They found a couple of studies in which students were given mobile devices to supplement their learning, showing that students would use these tools outside of class. They noted that existing studies are limited by age range and by their focus on common foreign languages.
+
+It has also been proposed that a "telecollaboration" approach could be used, where students are paired with both other students and speakers of the target language. A study using this idea found that, regardless of the type of partner, the students benefited. As well as improving their skills in using the language, it improved their opinion towards the target language @lewis_creating_2016.
 
 === Learning Endangered Languages
 
-=== Modern Uptake of Scottish Gaidhlig
+In Brazil, they found that there is disproportionate access to learning materials all over the country for learning English or Portuguese. It has been noted that the implementation of technology to promote the learning of indigenous languages (which may be endangered) must be placed in the proper context, with regard to the challenges and history @bodah_challenges_2016.
+
+A likely first-of-its-kind research project into Yiddish revitalisation in the digital age states that current students prefer "interactive and collaborative learning" alongside "online projects with a creative component". The conservation of endangered languages can include "virtual language" communities, and making such teaching tools more accessible to eager learners @legutko_yiddish_2016.
+
+// === Modern Uptake of Scottish Gaidhlig
 
 == Blockages in Motivation to Learn a Language
 
-== Emotional Conveyance in Language Learning
+Language is at the centre of human emotion. It is how we convey what's going on within us to another individual or group. Therefore, it is likely that emotion can affect language learning. Current literature establishes the term Language Anxiety (LA). #cite(<baran-lucarz_fl_2017>, form: "prose") identified several studies that show that LA has a "debilitative effect" on language learning. They outlined that LA occurs across several aspects: "listening", "writing", "reading", "speaking", "grammar", and "pronunciation". They say pronunciation is essential because it is key to language identity. They explored definitions of pronunciation anxiety as "self-image" and "fear of negative evaluation", whether from peers or native speakers. 
 
-=== Applying Emotional Conveyance to Digital Learning Technologies
+#cite(<lacabex_pronunciation_2023>, form: "prose") says that the pronunciation of L2 and "phonological competence" have historically been more tied to speech and accent, comparatively to a native speaker, with a modern shift happening more towards meaning and communication.
+
+In the classroom, there is little attention paid to teaching correct pronunciation, with time and resources cited as reasons. This becomes an issue as there is importance in pronunciation as it "facilitates intelligibility, communication and fluency" @szyszka_pronunciation_2017
+
+LA in general, including pronunciation anxiety, is tied to self-image and self-efficacy. Specifically, high language anxiety is strongly negatively linked to self-efficacy and moderately negatively linked to motivation. Some studies add that some learners with high levels of anxiety were more concerned with communication rather than pronunciation. @baran-lucarz_fl_2017 @piniel_investigating_2024 Given the right tools to improve these self-views, it is possible to ease language anxiety.
 
 == LLMs with Endangered Languages
 
@@ -95,6 +134,8 @@ The idea of "corrective feedback" on a language learner's written mistakes is a 
 
 #pagebreak()
 = Methodology
+
+
 
 == Requirements Analysis
 
@@ -108,7 +149,9 @@ The idea of "corrective feedback" on a language learner's written mistakes is a 
 
 == Project in Practice
 
-== Implementation
+#pagebreak(weak: true)
+
+= Implementation
 
 == Testing
 
@@ -125,7 +168,7 @@ The idea of "corrective feedback" on a language learner's written mistakes is a 
 = Appendix 1: Personal Appraisal
 
 #pagebreak(weak: true)
-= Appendix 2: IPO Form & Feedback
+= Appendix 2: IPO Form
 
 // the original IPO document is copied verbatim from the other document markup, with edits made to fix the heading level depths
 
@@ -213,6 +256,18 @@ It will also prove whether or not LLMs can converse in endangered languages, and
 As modern LLMs and #gaidhlig only began research in the current millennium, during the research phase of the literature review, I will need to spend a considerable amount of time refining search terms and literature sources to identify all relevant articles to comment on.
 
 During the design and implementation of the project, I will have the challenge of using the correct #gaidhlig language. I am at a beginner to intermediate level, with an understanding of grammar, and I am able to have basic conversations. Alongside the project, I will be learning more complex language and building on existing skills, primarily using the resources identified in the #link(<info-sources>)[Info Sources] section.
+]
+
+#pagebreak(weak: true)
+
+== Feedback
+
+I received the following feedback from the second marker when submitting the above IPO form.
+
+#quote(attribution: "Simon Wells", block: true, quotes: true)[
+  A strong software development project that will benefit from building on the foundation of language learning research.
+
+  I feel you've missed an opportunity to link the work to published research in language learning and language acquisition. Such links would provide a nice foundation within the wider academic landscape and elevate this from software development project towards academic dissertation.
 ]
 
 #pagebreak(weak: true)
@@ -313,4 +368,4 @@ During the design and implementation of the project, I will have the challenge o
 
 #pagebreak(weak: true)
 
-#bibliography(("./hayagriva.yml", "./zotero.bib"), style: "american-psychological-association")
+#bibliography("./zotero.bib", style: "american-psychological-association")
