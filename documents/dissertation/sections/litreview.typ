@@ -35,9 +35,9 @@ A likely first-of-its-kind research project into Yiddish revitalisation in the d
 
 A study of motivation for learning the "indigenous Taiwanese (...) heritage language" identified two factors. One being the current and future self identity, aligned with being able to speak the language. They say that if there is a positive idealised self, students will have "passion and conviction" to learn the language. This positive idealised (future) self is equally crucial as "community-based motivation" @huang_heritage_2024.
 
-These two previous findings @legutko_yiddish_2016 @huang_heritage_2024 point towards community and a positive image of self being able to communicate in the language, as being important in giving learners motivation when trying to learn an endangered language.
+These two previous findings @legutko_yiddish_2016 @huang_heritage_2024 point towards community and a positive image of self as being important in giving learners motivation when trying to learn an endangered language.
 
-For the endangered language Irish (Gaeilge) there have been significant digital development in supplementing Irish language learning. One includes a natural language chatbot for interacting in Gaeilge @chiarain_chatbot_2016
+For the endangered language Irish (Gaeilge), there have been significant digital developments in supplementing Irish language learning. One includes a natural language chatbot for interacting in Gaeilge @chiarain_chatbot_2016
 
 // === Modern Uptake of Scottish Gaidhlig
 

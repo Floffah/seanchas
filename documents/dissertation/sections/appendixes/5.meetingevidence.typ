@@ -107,4 +107,23 @@
   - Further talk about project, aims, literature review, deadlines
 
   #line(length: 100%)
+  == Tuesday 18 November
+
+  === Objectives
+  - Continue work on literature review
+    - Get it to the level necessary for a good interim meeting
+
+  === Progress
+  - Some progress on the literature review, more sources more paragraphs
+  - Outlined aims, evaluation methodology, and brought schedule in from the IPO document
+  - Dissertation mostly ready for interim meeting, need more literature review work (and likely write out bullet points into prose)
+  - Supervisor and I are in contact with the second marker to schedule the interim meeting
+
+  === Supervisor Comments
+  - Continuing with scheduling interim meeting (calendar conflicts found)
+  - Potential user: PHD student with interest in the area
+  - Further talk about project, aims, literature review, and interim meeting, 
+  - Project on schedule
+
+  #line(length: 100%)
 ]
