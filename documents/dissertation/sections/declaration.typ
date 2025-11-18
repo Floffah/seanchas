@@ -8,7 +8,7 @@
 
 This is a draft that was exported on #datetime.today().display("[day] [month repr:long] [year]")
 
-Document begins on the next page with the title page. More work is needed to improve the flow of prose, which is currently loose topics in the correct heading.
+Document begins on the next page with the title page. More work is needed to improve the flow of prose.
 
 #heading(outlined: false, numbering: none)[Declaration]
   

@@ -60,7 +60,7 @@
 
   === Progress
 
-  Just back from holiday, no progress this week
+  Just back from holiday, minimal progress this week on literature review
 
   === Supervisor Comments
 
@@ -114,10 +114,10 @@
     - Get it to the level necessary for a good interim meeting
 
   === Progress
-  - Some progress on the literature review, more sources more paragraphs
+  - Some progress on the literature review, more sources and more paragraphs
   - Outlined aims, evaluation methodology, and brought schedule in from the IPO document
-  - Dissertation mostly ready for interim meeting, need more literature review work (and likely write out bullet points into prose)
-  - Supervisor and I are in contact with the second marker to schedule the interim meeting
+  - Dissertation document closer to being ready for interim meeting, need more literature review work needed
+  - Interim meeting scheduled
 
   === Supervisor Comments
   - Continuing with scheduling interim meeting (calendar conflicts found)
