@@ -1,13 +1,15 @@
 "use client";
 
+import { useAuthActions } from "@convex-dev/auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import Link from "next/link";
-import { ViewTransition } from "react";
+import { ViewTransition, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/ui/button-loading";
 import {
     Card,
     CardAction,
@@ -26,7 +28,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuthActions } from "@convex-dev/auth/react";
 
 const formSchema = z.object({
     email: z.email(),
@@ -34,7 +35,7 @@ const formSchema = z.object({
 });
 
 export default function Home() {
-    const { signIn } = useAuthActions()
+    const { signIn } = useAuthActions();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -43,8 +44,8 @@ export default function Home() {
     const onSubmit = form.handleSubmit(async (data) => {
         await signIn("password", {
             ...data,
-            flow: "signIn"
-        })
+            flow: "signIn",
+        });
     });
 
     return (
@@ -100,9 +101,13 @@ export default function Home() {
                             </Form>
                         </CardContent>
                         <CardFooter className="flex-col gap-2">
-                            <Button type="submit" className="w-full">
+                            <LoadingButton
+                                type="submit"
+                                className="w-full"
+                                isLoading={form.formState.isSubmitting}
+                            >
                                 Log in
-                            </Button>
+                            </LoadingButton>
                             {/*<Button variant="link" asChild>*/}
                             {/*    <Link href="/reset">Forgot password?</Link>*/}
                             {/*</Button>*/}
