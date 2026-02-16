@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { PropsWithChildren } from "react";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -41,7 +42,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
                         enableSystem
                         disableTransitionOnChange
                     >
-                        <ConvexClientProvider>{children}</ConvexClientProvider>
+                        <ConvexClientProvider>
+                            <TooltipProvider>{children}</TooltipProvider>
+                        </ConvexClientProvider>
                     </ThemeProvider>
                 </body>
             </html>
