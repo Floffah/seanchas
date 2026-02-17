@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useSnapshot } from "valtio";
 
 import {
@@ -14,6 +14,9 @@ import {
     ConversationSpeaker,
     DisplayEvent,
     Part,
+    TokenPart,
+    TokenRefPart,
+    Utterance,
     conversationToEvents,
     globalTips,
 } from "@/lib/language/convos";
@@ -112,33 +115,42 @@ function ConversationMessage({
                     return;
                 }
             }}
-            className={cn("flex rounded-lg p-4", {
-                "self-start bg-card text-card-foreground":
-                    utterance.speaker === ConversationSpeaker.A,
-                "self-end bg-primary text-primary-foreground":
-                    utterance.speaker === ConversationSpeaker.B,
-            })}
+            className="flex flex-col gap-1"
         >
-            <p>
-                {utterance.parts.map((part, id) => (
-                    <Fragment key={id}>
-                        {part.kind === "text" && part.text}
-                        {part.kind === "token" && (
-                            <TokenPart
-                                step={step}
-                                part={part}
-                                tipEvents={tipEvents}
-                            />
-                        )}
-                        {part.kind === "punct" && part.text}
-                    </Fragment>
-                ))}
-            </p>
+            <div
+                className={cn("flex rounded-lg p-4", {
+                    "self-start bg-card text-card-foreground":
+                        utterance.speaker === ConversationSpeaker.A,
+                    "self-end bg-primary text-primary-foreground":
+                        utterance.speaker === ConversationSpeaker.B,
+                })}
+            >
+                <p>
+                    {utterance.parts.map((part, id) => (
+                        <Fragment key={id}>
+                            {part.kind === "text" && part.text}
+                            {part.kind === "token" && (
+                                <MessageTokenPart
+                                    step={step}
+                                    part={part}
+                                    tipEvents={tipEvents}
+                                />
+                            )}
+                            {part.kind === "token_ref" && (
+                                <MessagePartTokenRef part={part} />
+                            )}
+                            {part.kind === "punct" && part.text}
+                        </Fragment>
+                    ))}
+                </p>
+            </div>
+
+            <Translation utterance={utterance} />
         </motion.div>
     );
 }
 
-function TokenPart({
+function MessageTokenPart({
     part,
     step,
     tipEvents,
@@ -171,8 +183,6 @@ function TokenPart({
         ? globalTips[currentTooltipData.tip.tipId]
         : null;
 
-    console.log(currentTooltipData, step, tokenText, thisTokenTipEvents);
-
     return (
         <Tooltip open={!!currentTooltip}>
             <TooltipTrigger asChild>
@@ -196,5 +206,124 @@ function TokenPart({
                 )}
             </TooltipContent>
         </Tooltip>
+    );
+}
+
+/**
+ * Wraps MessageTokenPart and calls it with the real token if this is a token ref
+ */
+function MessagePartTokenRef({
+    part,
+}: {
+    part: Extract<Part, { kind: "token_ref" }>;
+}) {
+    const convo = useConversation();
+    const convoTokens = useSnapshot(convo.convoTokenState);
+
+    const token = useMemo(
+        () =>
+            convo.utterances
+                .flatMap((u) => u.parts)
+                .find(
+                    (p): p is Extract<Part, { kind: "token" }> =>
+                        p.kind === "token" && p.id === part.ref,
+                ),
+        [convo, part.ref],
+    );
+
+    if (!token) {
+        return <span className="text-destructive">{part.ref}</span>;
+    }
+
+    return <MessageTokenPart part={token} step={-1} tipEvents={[]} />;
+}
+
+function Translation({ utterance }: { utterance: Utterance }) {
+    const convo = useConversation();
+    const tokenState = useSnapshot(convo.convoTokenState);
+
+    const translation = useMemo(() => {
+        let final = "";
+
+        let parsingTokenId = false;
+        let accum = "";
+
+        for (const char of utterance.translationFormat) {
+            if (char === "$") {
+                if (parsingTokenId) {
+                    const tokenId = accum;
+                    const tokenValue = tokenState.tokenValues[tokenId];
+
+                    if (tokenValue) {
+                        let baseToken = utterance.parts.find(
+                            (p): p is TokenPart =>
+                                p.kind === "token" && p.id === tokenId,
+                        );
+                        const tokenRef = utterance.parts.find(
+                            (t): t is TokenRefPart =>
+                                t.kind === "token_ref" && t.ref === tokenId,
+                        );
+                        if (tokenRef) {
+                            const token = convo.utterances
+                                .flatMap((u) => u.parts)
+                                .find(
+                                    (
+                                        p,
+                                    ): p is Extract<Part, { kind: "token" }> =>
+                                        p.kind === "token" &&
+                                        p.id === tokenRef.ref,
+                                );
+
+                            baseToken = token ?? baseToken;
+                        }
+
+                        if (
+                            baseToken &&
+                            tokenValue.currentVariant === baseToken.id
+                        ) {
+                            final += baseToken.translation;
+                        } else {
+                            const variant = baseToken?.variants?.find(
+                                (v) => v.id === tokenValue.currentVariant,
+                            );
+
+                            final += variant?.translation ?? tokenId;
+                        }
+                    } else {
+                        const baseToken = utterance.parts.find(
+                            (p): p is Extract<Part, { kind: "token" }> =>
+                                p.kind === "token" && p.id === tokenId,
+                        );
+
+                        final += baseToken?.translation ?? tokenId;
+                    }
+
+                    parsingTokenId = false;
+                } else {
+                    accum = "";
+                    parsingTokenId = true;
+                }
+            } else {
+                if (parsingTokenId) {
+                    accum += char;
+                } else {
+                    final += char;
+                }
+            }
+        }
+
+        final = final.charAt(0).toUpperCase() + final.substring(1);
+
+        return final;
+    }, [utterance.translationFormat, tokenState.tokenValues]);
+
+    return (
+        <p
+            className={cn("text-sm text-muted-foreground", {
+                "text-right": utterance.speaker === ConversationSpeaker.B,
+            })}
+        >
+            {translation}
+        </p>
     );
 }
