@@ -40,12 +40,24 @@ export default function ConversationIntro() {
                 ),
         [events],
     );
+    const utteranceEventIndexes = useMemo(
+        () => new Set(utteranceEvents.map(([, idx]) => idx)),
+        [utteranceEvents],
+    );
 
     const [animationDone, setAnimationDone] = useState(false);
+    const lastEventIndex = events.length - 1;
 
     const { step } = useAdvance({
-        canAdvance: () => animationDone && tips.firstIntroSeen,
+        canAdvance: (step) =>
+            animationDone && tips.firstIntroSeen && step < lastEventIndex,
+        onAdvance: (nextStep) => {
+            if (utteranceEventIndexes.has(nextStep)) {
+                setAnimationDone(false);
+            }
+        },
     });
+    const isConversationComplete = animationDone && step >= lastEventIndex;
 
     return (
         <>
@@ -89,24 +101,27 @@ export default function ConversationIntro() {
             >
                 <div className="flex w-full max-w-lg grow flex-col gap-4">
                     {utteranceEvents.map(
-                        ([event, id]) =>
-                            step >= id && (
+                        ([event, eventIndex]) =>
+                            step >= eventIndex && (
                                 <ConversationMessage
                                     key={event.utteranceId}
-                                    id={id}
+                                    eventIndex={eventIndex}
+                                    currentStep={step}
                                     event={event}
                                     events={events}
-                                    onDone={() => setAnimationDone(true)}
+                                    onAnimationDone={() =>
+                                        setAnimationDone(true)
+                                    }
                                 />
                             ),
                     )}
                     <div className="shrink-0 grow" />
-                    {step <= utteranceEvents.length && (
+                    {!isConversationComplete && (
                         <p className="self-center text-sm text-muted-foreground">
                             Press space to advance
                         </p>
                     )}
-                    {step > utteranceEvents.length && (
+                    {isConversationComplete && (
                         <MotionButton
                             initial={{
                                 opacity: 0,

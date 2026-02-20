@@ -6,24 +6,29 @@ import { Fragment, useMemo } from "react";
 import MessagePartTokenRef from "@/components/blocks/MessagePartTokenRef";
 import MessageTokenPart from "@/components/blocks/MessageTokenPart";
 import Translation from "@/components/blocks/Translation";
-import { useAdvance } from "@/lib/hooks/useAdvance";
-import { ConversationSpeaker, DisplayEvent } from "@/lib/language/convos";
+import {
+    ConversationSpeaker,
+    DisplayEvent,
+    ShowTipDisplayEvent,
+} from "@/lib/language/convos";
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
-type Props = {
-    id: number;
+interface ConversationMessageProps {
+    eventIndex: number;
+    currentStep: number;
     event: Extract<DisplayEvent, { type: "show_utterance" }>;
     events: DisplayEvent[];
-    onDone: () => void;
-};
+    onAnimationDone: () => void;
+}
 
 export default function ConversationMessage({
-    id,
+    eventIndex,
+    currentStep,
     event,
     events,
-    onDone,
-}: Props) {
+    onAnimationDone,
+}: ConversationMessageProps) {
     const convo = useConversation();
 
     const utterance = useMemo(
@@ -33,44 +38,30 @@ export default function ConversationMessage({
 
     const tipEvents = useMemo(() => {
         const nextUtteranceIdx = events.findIndex(
-            (e, idx) => idx > id && e.type === "show_utterance",
+            (e, idx) => idx > eventIndex && e.type === "show_utterance",
         );
 
-        let tipEvents: Extract<DisplayEvent, { type: "show_tip" }>[] = [];
+        let tipEvents: DisplayEvent[] = [];
 
         if (nextUtteranceIdx === -1) {
-            tipEvents = events
-                .slice(id + 1)
-                .filter((e) => e.type === "show_tip");
+            tipEvents = events.slice(eventIndex + 1);
         } else {
-            tipEvents = events
-                .slice(id + 1, nextUtteranceIdx)
-                .filter((e) => e.type === "show_tip");
+            tipEvents = events.slice(eventIndex + 1, nextUtteranceIdx);
         }
 
-        return tipEvents.map((tip, idx) => ({ tip, idx }));
-    }, [events, id]);
+        return tipEvents
+            .filter((e): e is ShowTipDisplayEvent => e.type === "show_tip")
+            .map((tip, idx) => ({ tip, idx }));
+    }, [events, eventIndex]);
 
-    const { step } = useAdvance({
-        canAdvance: (step) => step <= tipEvents.length,
-        onAdvance: (step) => {
-            if (tipEvents.length > 0 && step >= tipEvents.length) {
-                onDone();
-            }
-        },
-    });
+    const localTipStep = Math.max(0, currentStep - eventIndex);
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            onAnimationComplete={() => {
-                if (tipEvents.length === 0) {
-                    onDone();
-                    return;
-                }
-            }}
+            onAnimationComplete={onAnimationDone}
             className="flex flex-col gap-1"
         >
             <div
@@ -87,7 +78,7 @@ export default function ConversationMessage({
                             {part.kind === "text" && part.text}
                             {part.kind === "token" && (
                                 <MessageTokenPart
-                                    step={step}
+                                    step={localTipStep}
                                     part={part}
                                     tipEvents={tipEvents}
                                 />

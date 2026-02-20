@@ -6,26 +6,16 @@ import MessageTokenPart from "@/components/blocks/MessageTokenPart";
 import { Part } from "@/lib/language/convos";
 import { useConversation } from "@/providers/ConvoProvider";
 
-type Props = {
+interface MessagePartTokenRefProps {
     part: Extract<Part, { kind: "token_ref" }>;
-};
+}
 
-/**
- * Wraps MessageTokenPart and calls it with the real token if this is a token ref
- */
-export default function MessagePartTokenRef({ part }: Props) {
+export default function MessagePartTokenRef({
+    part,
+}: MessagePartTokenRefProps) {
     const convo = useConversation();
 
-    const token = useMemo(
-        () =>
-            convo.utterances
-                .flatMap((u) => u.parts)
-                .find(
-                    (p): p is Extract<Part, { kind: "token" }> =>
-                        p.kind === "token" && p.id === part.ref,
-                ),
-        [convo, part.ref],
-    );
+    const token = useMemo(() => convo.resolveTokenRef(part), [convo, part]);
 
     if (!token) {
         return <span className="text-destructive">{part.ref}</span>;

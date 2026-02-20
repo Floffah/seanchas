@@ -8,7 +8,12 @@ import {
     useState,
 } from "react";
 
-import { Conversation, conversations } from "@/lib/language/convos";
+import {
+    Conversation,
+    TokenPart,
+    TokenRefPart,
+    conversations,
+} from "@/lib/language/convos";
 import { createConvoTokenStore } from "@/lib/state/convos";
 
 export enum ConvoUnitStep {
@@ -20,6 +25,8 @@ interface ConvoContextValue extends Conversation {
     step: ConvoUnitStep;
     convoTokenState: ReturnType<typeof createConvoTokenStore>;
     progress: () => void;
+
+    resolveTokenRef: (ref: TokenRefPart) => TokenPart | undefined;
 }
 
 const ConvoContext = createContext<ConvoContextValue>(null!);
@@ -27,18 +34,10 @@ const ConvoContext = createContext<ConvoContextValue>(null!);
 export const useConversation = () => useContext(ConvoContext);
 
 export default function ConvoProvider({
-    slug,
+    conversation,
+    index,
     children,
-}: PropsWithChildren<{ slug: string }>) {
-    const conversation = useMemo(
-        () => conversations.find((c) => c.id === slug)!,
-        [slug],
-    );
-    const convoIdx = useMemo(
-        () => conversations.findIndex((c) => c.id === slug)!,
-        [slug],
-    );
-
+}: PropsWithChildren<{ conversation: Conversation; index: number }>) {
     const [step, setStep] = useState(ConvoUnitStep.Intro);
 
     const convoTokenState = useMemo(
@@ -46,14 +45,20 @@ export default function ConvoProvider({
         [conversation],
     );
 
+    const resolveTokenRef = ({ ref }: TokenRefPart) =>
+        conversation.utterances
+            .flatMap((u) => u.parts)
+            .find((p): p is TokenPart => p.kind === "token" && p.id === ref);
+
     return (
         <ConvoContext.Provider
             value={{
                 ...conversation,
-                convoIdx,
+                convoIdx: index,
                 step,
                 convoTokenState,
                 progress: () => setStep((s) => s + 1),
+                resolveTokenRef,
             }}
         >
             {children}

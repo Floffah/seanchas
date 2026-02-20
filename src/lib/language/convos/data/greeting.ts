@@ -9,6 +9,8 @@ export const greeting: Conversation = {
             id: "greeting.u0",
             speaker: ConversationSpeaker.A,
             translationFormat: "$greeting.math$ $greeting.daySegment$!",
+            incorrectTranslations: ["Good day!", "Hello!"],
+
             parts: [
                 {
                     kind: "token",
@@ -34,7 +36,7 @@ export const greeting: Conversation = {
                 {
                     kind: "token",
                     id: "greeting.math",
-                    base: "math!",
+                    base: "math",
                     translation: "good",
                     transforms: [
                         {
@@ -43,7 +45,7 @@ export const greeting: Conversation = {
                             when: {
                                 variantPresent: "greeting.daySegment.madainn",
                             },
-                            map: { "math!": "mhath!" },
+                            becomes: "mhath",
                         },
                     ],
                     tips: [
@@ -54,15 +56,9 @@ export const greeting: Conversation = {
                                 type: "always",
                             },
                         },
-                        {
-                            tipId: "lenition_basic",
-                            when: {
-                                type: "on_transform",
-                                transform: "lenition",
-                            },
-                        },
                     ],
                 },
+                { kind: "punct", text: "!" },
             ],
         },
 
@@ -71,6 +67,10 @@ export const greeting: Conversation = {
             speaker: ConversationSpeaker.B,
             translationFormat:
                 "$greeting.math$ $greeting.daySegment$. How are $greeting.you$?",
+            incorrectTranslations: [
+                "Good day. What's up?",
+                "Hello. How are you?",
+            ],
             parts: [
                 {
                     kind: "token_ref",
@@ -108,6 +108,10 @@ export const greeting: Conversation = {
             speaker: ConversationSpeaker.A,
             translationFormat:
                 "I am good, thank $greeting.tyou$. How are $greeting.you$?",
+            incorrectTranslations: [
+                "I am bad, thanks. How are you?",
+                "I am tired, thanks. How are you?",
+            ],
             parts: [
                 {
                     kind: "text",

@@ -13,11 +13,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
-type Props = {
+interface TranslationProps {
     utterance: Utterance;
-};
+}
 
-export default function Translation({ utterance }: Props) {
+export default function Translation({ utterance }: TranslationProps) {
     const convo = useConversation();
     const tokenState = useSnapshot(convo.convoTokenState);
 
@@ -43,15 +43,7 @@ export default function Translation({ utterance }: Props) {
                                 t.kind === "token_ref" && t.ref === tokenId,
                         );
                         if (tokenRef) {
-                            const token = convo.utterances
-                                .flatMap((u) => u.parts)
-                                .find(
-                                    (
-                                        p,
-                                    ): p is Extract<Part, { kind: "token" }> =>
-                                        p.kind === "token" &&
-                                        p.id === tokenRef.ref,
-                                );
+                            const token = convo.resolveTokenRef(tokenRef);
 
                             baseToken = token ?? baseToken;
                         }
@@ -98,7 +90,7 @@ export default function Translation({ utterance }: Props) {
         utterance.translationFormat,
         utterance.parts,
         tokenState.tokenValues,
-        convo.utterances,
+        convo,
     ]);
 
     return (
