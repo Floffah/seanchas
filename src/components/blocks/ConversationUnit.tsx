@@ -1,11 +1,10 @@
 "use client";
 
 import { XIcon } from "lucide-react";
-import { motion } from "motion/react";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
-import ConversationIntro from "@/app/[slug]/ConversationIntro";
+import ConversationIntro from "@/components/blocks/ConversationIntro";
 import { ConvoUnitStep, useConversation } from "@/providers/ConvoProvider";
 
 export default function ConversationUnit({}) {
