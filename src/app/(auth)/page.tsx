@@ -4,7 +4,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import Link from "next/link";
-import { ViewTransition, useTransition } from "react";
+import { ViewTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -49,7 +49,7 @@ export default function Home() {
     });
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-slate-950 to-background p-2">
+        <main className="flex min-h-screen items-center justify-center bg-linear-to-b from-slate-950 to-background p-2">
             <ViewTransition>
                 <Card asChild className="w-full max-w-sm">
                     <motion.form layout layoutId="auth" onSubmit={onSubmit}>
