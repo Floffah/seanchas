@@ -5,14 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-    const router = useRouter()
-    const { signOut } = useAuthActions()
+    const router = useRouter();
+    const { signOut } = useAuthActions();
 
     useQuery({
         queryKey: ["sign out"],
         queryFn: async () => {
             await signOut();
-            router.replace("/")
-        }
-    })
+            router.replace("/");
+        },
+    });
 }

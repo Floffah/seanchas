@@ -27,6 +27,7 @@
         "react-hook-form": "^7.71.1",
         "tailwind-merge": "^3.5.0",
         "valtio": "^2.3.0",
+        "valtio-persist": "^2.2.4",
         "zod": "^4.3.6",
       },
       "devDependencies": {
@@ -1598,6 +1599,8 @@
     "validate-npm-package-name": ["validate-npm-package-name@7.0.2", "", {}, "sha512-hVDIBwsRruT73PbK7uP5ebUt+ezEtCmzZz3F59BSr2F6OVFnJ/6h8liuvdLrQ88Xmnk6/+xGGuq+pG9WwTuy3A=="],
 
     "valtio": ["valtio@2.3.0", "", { "dependencies": { "proxy-compare": "^3.0.1" }, "peerDependencies": { "@types/react": ">=18.0.0", "react": ">=18.0.0" }, "optionalPeers": ["@types/react", "react"] }, "sha512-1MfKNcmOIdBSatiJsYgw420n6jnD+jeoI0V+RkOQbCB0ElLh6GKUfPr0hc9uq/KBGeghivDEarRsKFFdSQQnKw=="],
+
+    "valtio-persist": ["valtio-persist@2.2.4", "", { "dependencies": { "proxy-compare": "^3.0.1", "valtio": "^2.1.4" }, "peerDependencies": { "@react-native-async-storage/async-storage": "^2.1.2" }, "optionalPeers": ["@react-native-async-storage/async-storage"] }, "sha512-1jRmqtgB4on0pCccDcHY3FzJvyzdS4WyQ+dSGLLBJ0mJtXaAwDSb808K9WGzdQExGl2OC/nfQwBHaQFLQottUw=="],
 
     "vary": ["vary@1.1.2", "", {}, "sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg=="],
 

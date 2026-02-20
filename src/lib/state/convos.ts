@@ -1,8 +1,8 @@
 import { proxy } from "valtio";
 
-import { Conversation, TokenId } from "./language/convos";
+import { Conversation, TokenId } from "../language/convos";
 
-export const createConvoTokenState = (convo: Conversation) => {
+export const createConvoTokenStore = (convo: Conversation) => {
     const tokenValues = {} as Record<
         TokenId,
         {

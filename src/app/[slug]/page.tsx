@@ -26,9 +26,7 @@ export default async function Page({
 
     return (
         <ConvoProvider slug={slug}>
-            <ViewTransition>
-                <ConversationUnit />
-            </ViewTransition>
+            <ConversationUnit />
         </ConvoProvider>
     );
 }

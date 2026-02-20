@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence } from "framer-motion";
 import { XIcon } from "lucide-react";
 import Link from "next/link";
 import { ViewTransition } from "react";
@@ -38,7 +39,11 @@ export default function ConversationUnit({}) {
                     </ViewTransition>
                 </div>
 
-                {convo.step === ConvoUnitStep.Intro && <ConversationIntro />}
+                <AnimatePresence mode="wait">
+                    {convo.step === ConvoUnitStep.Intro && (
+                        <ConversationIntro key="intro" />
+                    )}
+                </AnimatePresence>
             </div>
         </ViewTransition>
     );

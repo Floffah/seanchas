@@ -9,7 +9,7 @@ import {
 } from "react";
 
 import { Conversation, conversations } from "@/lib/language/convos";
-import { createConvoTokenState } from "@/lib/state";
+import { createConvoTokenStore } from "@/lib/state/convos";
 
 export enum ConvoUnitStep {
     Intro,
@@ -18,7 +18,8 @@ export enum ConvoUnitStep {
 interface ConvoContextValue extends Conversation {
     convoIdx: number;
     step: ConvoUnitStep;
-    convoTokenState: ReturnType<typeof createConvoTokenState>;
+    convoTokenState: ReturnType<typeof createConvoTokenStore>;
+    progress: () => void;
 }
 
 const ConvoContext = createContext<ConvoContextValue>(null!);
@@ -41,7 +42,7 @@ export default function ConvoProvider({
     const [step, setStep] = useState(ConvoUnitStep.Intro);
 
     const convoTokenState = useMemo(
-        () => createConvoTokenState(conversation),
+        () => createConvoTokenStore(conversation),
         [conversation],
     );
 
@@ -52,6 +53,7 @@ export default function ConvoProvider({
                 convoIdx,
                 step,
                 convoTokenState,
+                progress: () => setStep((s) => s + 1),
             }}
         >
             {children}
