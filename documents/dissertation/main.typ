@@ -71,4 +71,4 @@
 
 #pagebreak(weak: true)
 
-#bibliography("./zotero.bib", style: "american-psychological-association")
+#bibliography(("./zotero.bib", "./zotero2.bib"), style: "american-psychological-association")

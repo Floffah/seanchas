@@ -1,17 +1,40 @@
 #import "@preview/wordometer:0.1.4": word-count
 
 #word-count(exclude: <no-wc>, total => [
-= Literature Review
+#total.words
+  
+= Research
 
-! Work in progress
-- Restructuring required
-- More depth on each point
+== Literature Review
 
-The study of language learning has existed for centuries, as language is the basis of human communication. Anyone can learn a second language (L2) and be able to reach more people, but finding the correct method is crucial to progressing from conversational to fluency. A "routine approach" isn't quite enough; instead, other factors such as motivation, aptitude, personality, anxiety, the emotional reaction, their feelings towards speakers of the language, and understanding of the language speaker's culture are also significant factors in obtaining an L2 @piechurska-kuciel_at_2017. We need to design solutions in language learning courses that make it more accessible to learn an L2 while easing some of these blockers and use a medium that works for language learners.
+The study of language learning has existed for centuries, as language is the basis of human communication. Anyone can learn a second language (L2) and be able to reach more people, but finding the correct method is crucial to progressing from conversational to fluency. A "routine approach" isn't quite enough; instead, other factors such as motivation, aptitude, personality, anxiety, the emotional reaction, their feelings towards speakers of the language, and understanding of the language speaker's culture are also significant factors in obtaining an L2 @piechurska-kuciel_at_2017. We need to design solutions in language learning courses that make it more accessible to learn an L2 while easing some of these blockers, and use a medium that works for language learners.
 
-This literature review explores and compares documented language-learning techniques and related ideas that help learners excel in second-language learning. It delves into literature on the emotional aspects of language learning and potential barriers to language learning, which may be helpful when designing the techniques mentioned in a digital application. It also reviews literature on language learning and endangered languages, with and without reference to LLMs, providing a baseline understanding that can serve as inspiration when implementing an application that uses these technologies and techniques. 
+This literature review explores and compares documented language-learning theory and techniques, along with related ideas that help learners excel in second-language learning. It delves into literature on the emotional aspects of language learning and potential barriers to language learning, which may be helpful when designing the techniques mentioned in a digital application. It also reviews literature on language learning and endangered languages, with and without reference to LLMs, providing a baseline understanding that can serve as inspiration when implementing an application that uses these technologies and techniques.
 
-== Techniques for Language Learning and Acquisition
+=== Mobile-Assisted Language Learning
+
+A well-known digital language learning (DLL) approach, mobile-assisted language learning (MALL), has become increasingly prevalent in recent years, especially as more people own and use a mobile device in their day-to-day lives. MALL resources are a specific type of resource that provide convenience to L2 language acquisition by enabling learning anywhere, not just in the classroom. MALL resources typically will use the real world as context for learning and improving immersion @li_digital_2022. Furthermore, a theoretical learning model that is often related to MALL is called Situated Learning Theory (SLT). It points to language learners being taught with in-context materials and situations. Specifically, it covers collaboration and peer interaction in realistic, in-context conditions, in a guided fashion using learning resources. In some situations, it may also be moderated by another person @li_mobile-assisted_2022 @lantolf_sociocultural_1994.
+
+After a concern in limited theoretical and practical frameworks related to MALL, and how existing MALL pedagogy lags behind technological innovation (crucial to effectiveness), #cite(<wang_designing_2024>, form: "prose") proposes a new practical theoretical framework for implementing MALL called "PF4M". PF4M uses Technological Pedagogical Content Knowledge (TPACK) as a basis. They define the pillars of PF4M as Learner, which focuses on the participation of the learner and their competency, determination, and other factors. Device, which covers the hardware capabilities of their mobile device and whether or not they own one. 
+// meanings include learner participation, determination, "digital literacy", and language competency.
+Teacher, which is described as "the administrator and facilitator of learning", also covers the designer and a provider of language-specific calibre. Finally, Content, which includes the content and material that the learner uses, with some specific attributes such as how much it satisfies the "learning objectives", "quality", "usability", among others.
+
+As well as these pillars, PF4M has specific attributes that should be taken into account when designing and implementing a MALL-supported solution. First is Mobility, which includes "temporal" and "spatial" mobility. Formality, including "formal" and "informal" learning. Authenticity, which includes "authentic task" and "authentic context". Finally, Personalisation, including "agency" and "customisation". Given these pillars and attributes, this is a framework for MALL that will stand the test of time and provide a sufficient basis to design technologies and solutions using MALL theory @wang_designing_2024.
+
+Furthermore, #cite(<cakmak_mobile_2019>, form: "prose") splits a list of attributes related to mobile learning (m-learning) as a whole, into three distinct categories: "process design, environmental design, and mobile
+interface design". They say that MALL is an evolution of combining computer-assisted language learning (CALL) with m-learning. M-learning, although not specifically related to language learning, aligns with many of the attributes that MALL and the PF4M framework seek. These include temporal and spatial attributes, mobility, personalisation, and more @cakmak_mobile_2019 @wang_designing_2024.
+
+Researchers have also developed a "three contexts" framework for different types of MALL. They are teacher-driven, community-driven, and learner-driven. They define scales of formality, regulation, autonomy vs teacher-guided, and specified vs proposed activity. Teacher-driven contexts are mainly "formally designed" and guided. Community-driven contexts can be both "formal and informal education" settings. Learner-driven is majorly "user-generated" and autonomous @cakmak_mobile_2019 @hulme_charting_2010
+
+A survey was conducted to better understand users' perspectives on MALL in practice. It found that users would use smartphones and laptops to improve their vocabulary, reading, listening, grammar, and writing skills, along with browsing dictionaries, consuming audiovisual media, browsing social media (for language learning purposes), and reading books. They ranked "good content" as the most important attribute, with "design and usability", and "free access" placed second and third. Elaborating on "good content" as "content delivered in an easy and catchy way". Very few learners use a mobile device every day for language learning, but most commonly do so at home autonomously. Some students noted that MALL technologies cannot replace a teacher, and that "compulsory lessons" are favoured @lenci_technology_2020.
+
+=== Social Frameworks for Language Learning
+
+A researcher proposes that the concept of Metaverse is related to language learning. Metaverse is a concept that was first seen in the book Snow Crash by Neal Stephenson, which describes a "virtual city" and utopia #footnote[It has also been described as a "place where morality and justice" are crucial to its performance @boehm_hiro_2004, however, this aspect is possibly irrelevant to the correlation with social language learning.] @boehm_hiro_2004. It is proposed that modern Metaverse-inspired products could be related to language learning due to their social-centred experience, ability to expose users to cultural differences firsthand, potential to address overpopulation (within a given learning group), personalisation, ability to create communities, and possibility to elicit motivation. Consequently, it also has issues related to "security, privacy", "accessibility", developmental problems, and "social awareness", especially since it is available to most age groups @istanbul_medeniyet_university_metaverse_2022.
+
+---
+
+=== Features of Language Learning
 
 A topic that is well studied among language learning researchers is the extent to which vocabulary expansion occurs when presented with "L2 input". Individuals learning a second language must give enough focus to a word to insert it into their knowledge of the language. It has been found that learning from input alone is an errant and laborious process, but learners aren't absolutely likely to notice "novel words" and commit them to memory. When attempting to infer their meaning, this may not "lead to correct form-meaning links" @montero_perez_vocabulary_2018.
 
@@ -29,7 +52,7 @@ It has also been proposed that a "telecollaboration" approach could be used, whe
 
 // === Corrective Feedback
 
-=== Learning Endangered Languages
+==== Learning Endangered Languages
 
 In Brazil, they found that there is disproportionate access to learning materials all over the country for learning English compared to Portuguese. It has been noted that the implementation of technology to promote the learning of indigenous languages (such as endangered ones) must be placed in the proper context, with regard to the challenges and history @bodah_challenges_2016.
 
@@ -43,7 +66,9 @@ For the endangered language Irish (Gaeilge), there have been significant digital
 
 // === Modern Uptake of Scottish Gaidhlig
 
-== Blockages in Motivation to Learn a Language
+=== Blockages in Motivation to Learn a Language
+
+==== Language Anxiety
 
 Language is at the centre of human emotion. It is how we convey what's going on within us to another individual or group. Therefore, it is likely that emotion can affect language learning. Current literature establishes the term Language Anxiety (LA). #cite(<baran-lucarz_fl_2017>, form: "prose") identified several studies that show that LA has a "debilitative effect" on language learning. They outlined that LA occurs across several aspects: "listening", "writing", "reading", "speaking", "grammar", and "pronunciation". They say pronunciation is essential because it is key to language identity. They explored definitions of pronunciation anxiety as "self-image" and "fear of negative evaluation", whether from peers or native speakers. 
 
@@ -53,9 +78,14 @@ In the classroom, there is little attention paid to teaching correct pronunciati
 
 LA in general, including pronunciation anxiety, is tied to self-image and self-efficacy. Specifically, high language anxiety is strongly negatively linked to self-efficacy and moderately negatively linked to motivation. Some studies add that some learners with high levels of anxiety were more concerned with communication rather than pronunciation. @baran-lucarz_fl_2017 @piniel_investigating_2024 Given the right tools to improve these self-views, it is possible to ease language anxiety.
 
-== LLMs with Endangered Languages
+==== External Factors
 
-== Scripting conversations in LLMs
+Based on previous surveys and a new survey, #cite(<ekiz_factors_2016>, form: "prose") examined connections between certain factors and L2 learning motivation. These factors include: parental encouragement (in younger years), "realistic learner aims", participating in relevant activities with clear goals, and teacher behaviour. These factors are relevant to creating a good and motivating environment for students in education. The students in their study were also more motivated when given the opportunity to work with others, but if the class is "crowded" and "noisy", it can have a negative effect.
 
-== Evaluation
+
+ 
+=== Evaluation
+
+== Review of Existing Materials
+
 ])
