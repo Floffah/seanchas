@@ -126,4 +126,80 @@
   - Project on schedule
 
   #line(length: 100%)
+
+  == Tuesday 25 November
+
+  #line(length: 100%)
+
+  == Tuesday 2 December
+
+  #line(length: 100%)
+
+  == Tuesday 9 December
+
+  #line(length: 100%)
+
+  == Tuesday 16 December
+
+  #line(length: 100%)
+
+  == Tuesday 6 January
+
+  #line(length: 100%)
+
+  == Tuesday 13 January
+
+  #line(length: 100%)
+
+  == Tuesday 20 January
+
+  #line(length: 100%)
+
+  == Tuesday 27 January
+
+  #line(length: 100%)
+
+  == Tuesday 3 February
+
+  #line(length: 100%)
+
+  == Tuesday 10 February
+
+  #line(length: 100%)
+
+  == Tuesday 17 February
+
+  #line(length: 100%)
+
+  == Tuesday 24 February
+
+  #line(length: 100%)
+
+  == Tuesday 3 March
+
+  === Objectives
+
+  - Get first draft sent to Pete within 2 weeks
+
+  === Progress
+
+  - Combination of implementation and writing work continued
+
+  === Supervisor Comments
+
+  #line(length: 100%)
+
+  == Tuesday 10 March
+
+  === Objectives
+
+  - Get first draft up to implementation section completed for next week
+
+  === Progress
+
+  - Lots of progress on writing of report in methodology section
+
+  === Supervisor Comments
+
+  - Just continuing to work on the project
 ]

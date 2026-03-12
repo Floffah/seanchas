@@ -1,0 +1,16 @@
+erDiagram
+    direction LR
+    USER ||--o{ USER_UNIT_COMPLETION : Completes
+
+    USER[User] {
+        int id
+        string name
+        string email
+        string passwordHash
+    }
+
+    USER_UNIT_COMPLETION[UserUnitCompletion] {
+        string unitId
+        int userId
+        string lastStepCompleted
+    }

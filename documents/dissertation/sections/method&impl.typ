@@ -2,7 +2,9 @@
 
 == Functional Requirements
 
-The core purpose of this application is to provide a learning experience to users who want to learn Gaidhlig. There are several features that are required to provide this.
+In the space, there are only a few resources for learning Gaidhlig, with only a couple being curated-learning paths with appropriate activities.
+
+The core purpose of this application is to provide a learning experience to users who want to learn Gaidhlig, in a manner that is curated, linear, easy to follow, and easy to integrate into day to day life. There are several features that are required to provide this.
 
 The features that surround but are not specific to language learning are related to authentication. The site must allow users to register and log in, providing the core foundation for the system to save and locate information related to the user's learning journey, which paves the way for most other features. Registration and login must provide a way for the user to enter an email address and password, to create or log into their account. The site must provide a way to reset the password of the user's account.
 
@@ -28,7 +30,7 @@ The initial reason why I considered the conversation-based design is that simila
 
 Several researchers point towards two learning theories that are effective: Mobile-Assisted Language Learning (MALL) and Situated Learning Theory (SLT).
 
-Firstly, PF4M @wang_designing_2024 places strong emphasis on content, its context, and its application to real-world scenarios. We don't want to create an application that teaches learners vocabulary, but rather an application that truly can contribute to a learner's true understanding and communicative potential of the language.
+Firstly, PF4M @wang_designing_2024 places strong emphasis on content, its context, and its application to real-world scenarios. We don't want to create an application that teaches learners solely vocabulary, but rather one that truly can contribute to a learner's true understanding and communicative potential of the language.
 
 == Non-functional Requirements
 
@@ -40,38 +42,66 @@ User experience (UX) should be core to the application's design. Based on the re
 
 === Architecture
 
-This project doesn't require a complex system design. I went with a basic single-repository project using standardised web frameworks with support for front-end and back-end code. The back-end component will interact with a basic database for storing login and progress information.
-
-Given this, the project will follow a layered-approach with the front-end presentation layer, application layer, and data layer. 
+This project doesn't require a complex system design. It will be implemented using standardised web frameworks, with front-end and back-end aspects. The back-end component will interact with a basic database for storing login and progress information. Given this, the project will follow a layered-approach with a front-end presentation layer, application layer, and data layer. 
 
 The front-end layer is responsible for rendering the interface, handling interactions, and interacting with backend functions. The front-end layer will be built with a component architecture, splitting all main UI responsibilities into its own components. It will feature routing, separating each logical system aspect into its own page. The site will also use server-side rendering with a client-side hydration system to manage the UI, so users will see content as quickly as possible.
 
-The backend-layer will be structured as a remote-procedure-call (RPC) structure, with each necessary operation as its own callable function. Each function will process incoming requests, validate them, perform business logic, and interact with the database. RPC will happen over REST. It will also include a basic real-time data-syncing component to inform the web client of data changes as needed.
+The backend layer will be structured as a remote procedure call (RPC) structure, with each necessary operation as its own callable function. Each function will process incoming requests, validate them, perform business logic, and interact with the database. RPC will happen over REST. It will also include a basic real-time data-syncing component to inform the web client of data changes as needed.
 
 The data layer will use a simple document-relational database. It will store data for user login information and track the user's learning progress.
 
+#figure(
+  image("../images/arch-c4.png"),
+  caption: [System architecture C4 Diagram]
+)
+
+=== Data Design
+
+The database will be very simple. The database will hold a user table for storing login information and allowing authentication. It will also hold a table for tracking unit completions, which only takes a user ID, unit ID, and the step they are currently on (or a completed state) via a union or enum type.
+
+#figure(
+  image("../images/data-design.png"),
+  caption: [Database Design]
+)
+
+=== UI Design
+
+The first page I tackled is the home dashboard page. This is the portal to all of the site's content after login. This page must provide a way for the user to access all of the units the site offers and account settings. I also designed UI for displaying a user's streak, amount of units completed, links to a potential news and practice page, and terms of service/privacy policy links.
+
+#figure(
+  image("../images/figmas/home-screen.png"),
+  caption: [Home Page Design]
+)
+
+
+
 === Tools and Technologies
 
-I have identified a suite of technologies I will use to implement this site. A big factor to the choice of these tools is how comfortable I am with them already, but each have their own pros as to why it makes sense to use it here.
+I have identified a suite of technologies I will use to implement this site. A big factor in the choice of these tools is how comfortable I am with them already, but each have their own pros as to why it makes sense to use it here.
 
-To implement the frontend I will use the framework NextJS#footnote[https://nextjs.org/] (React) with Typescript#footnote[https://www.typescriptlang.org/] (JavaScript) which provides me with great primitives that help with the accessibility and performance aspects of the application, also minimising work needed to be done to get to a working prototype. The site has a lot of dynamic data across the application, and NextJS is the best JavaScript framework for coping with a dynamic site.
+To implement the frontend I will use the framework NextJS#footnote[https://nextjs.org/] (React) with Typescript#footnote[https://www.typescriptlang.org/] (JavaScript) which provides me with great primitives that help with the accessibility and performance aspects of the application, also minimising work needed to be done to get to a working prototype. The site has a lot of dynamic data across the application, and NextJS is the best JavaScript framework for coping with a dynamic site like this.
 
-In the frontend I will use the TailwindCSS#footnote[https://tailwindcss.com/] styling system and ShadCN#footnote[https://ui.shadcn.com/] component library so that a design system is already established and I can focus on layout and functionality. The Figma designs below uses the Figma version of ShadCN. Both of these tools work very well with NextJS and provide a basis of good user experience and developer experience.
+In the frontend I will use the TailwindCSS#footnote[https://tailwindcss.com/] styling system and ShadCN#footnote[https://ui.shadcn.com/] component library so that a design system is already established and I can focus on layout and functionality. The Figma designs below uses the Figma version of ShadCN. Both of these tools work very well with NextJS and provide a solid foundation for a good user and developer experience.
 
-For the backend I have decided to use Convex#footnote[https://www.convex.dev/] as it provides me with everything I need to make a working application. It provides a database, RPC API, file storage, and authentication solution with realtime capabilities. Convex will handle almost the entire backend for me, with my implementation focusing on database schema and backend logic.
+For the backend I have decided to use Convex#footnote[https://www.convex.dev/] as it provides me with everything I need to make a working application. It provides a database, RPC API, file storage, and authentication solution, all with real-time capabilities. Convex will handle most of the backend for me, with my implementation focusing on database schema and backend logic.
 
 == Software Development Methodology
 
 In developing this application, I will follow a strict workflow methodology. All tasks will be noted in an issue tracker (Linear#footnote[https://linear.app/]). This issue tracker holds the Gantt chart and task list for everything I will complete. I follow a Gitflow-adjacent structure.
 
-All changes will be checked into a specific branch. This will be named `feature/some-change`. Changes that map directly to a single Linear ticket will use the Linear-generated branch name, e.g. `feature/ram-20-introduce-conversation`, where RAM-20 is the ticket ID. When the changes are ready and complete, a pull request will be opened where changes are summarised and any related Linear tickets are associated. GitHub Copilot (AI agent) will be requested for review to ensure I didn't miss any oversights during the process, but is disallowed from making actual code changes. Once I am satisfied the changes are ready, the changes will be merged to the `main` branch.
+All changes will be checked into a specific branch. This will be named `feature/some-change`. Changes that map directly to a single Linear ticket will use the Linear-generated branch name, e.g. `feature/ram-20-introduce-conversation`, where RAM-20 is the ticket ID. When the changes are ready and complete, a pull request will be opened where changes are summarised, and any related Linear tickets are associated. GitHub Copilot (AI agent) will be requested for review to ensure I didn't miss any oversights during the process, but is disallowed from making actual code changes. Once I am satisfied the changes are ready, the changes will be merged to the `main` branch.
 
 When a pile of changes are ready to be promoted to production, they will be pushed from the `main` branch into a separate non-default `production` branch.
 
-Branch summary:
-- Development branches: `feature/...`
-- Staging/default branch: `main`
-- Production branch: `production`
+=== DevOps
+
+Developer Operations (DevOps) is a key portion for delivery of the application. In this application, I will provide several continuous integration (CI) and continuous deployment (CD) strategies.
+
+The front-end code will use a custom or provided CD pipeline where every successful change to the main (development / staging) branch will automatically deploy the changes to the staging environment. Eventually, these deployments can be promoted to production by merging into the production branch where the same technology will automatically build and deploy it to the production environment.
+
+The back-end will use a very similar approach, with the crucial piece being that both the front-end and back-end CI/CD pipelines should deploy at the same time to minimise service disruption.
+
+
 
 == Evaluation Methodology
 
