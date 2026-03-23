@@ -11,7 +11,7 @@
 #pagebreak(weak: true)
 
 #show: project.with(
-  title: [Gaidhlig Language Learning Web Application Research & Dissertation],
+  title: [Teaching Scottish Gaidhlig Through Mobile Learning With Pre-Scripted Conversations],
   logo: "napier",
   authors: (
     (name: "Ramsay Foy (40646655@live.napier.ac.uk)", affiliation: "Author"),

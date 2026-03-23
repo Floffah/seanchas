@@ -1,5 +1,5 @@
 
-= Appendix 5: Meeting Evidence
+= Appendix 4: Meeting Evidence
 
 #[
   #set heading(outlined: false)
@@ -129,49 +129,174 @@
 
   == Tuesday 25 November
 
+  === Objectives
+
+  - Continue literature review
+    - Incorporate and think about feedback from interim meeting
+
+  === Progress
+
+  - Had interim meeting
+    - Feedback to do with needing more academic theory and backing
+    - Also make it more formal (but would rather a good informal report than bad formal report)
+  - Some more work done on the literature review
+  - Sidenote, had good meeting with PHD student about our projects
+
+  === Supervisor Comments
+
+  - See Interim Report for more information
+
   #line(length: 100%)
 
   == Tuesday 2 December
+
+  === Objectives
+
+  - Continue work on literature review
+
+  === Progress
+
+  - Small amounts of literature review work done between coursework piling up
 
   #line(length: 100%)
 
   == Tuesday 9 December
 
+  === Objectives
+
+  - Continue work on literature review
+
+  === Progress
+
+  - Small amounts of literature review work done between coursework piling up
+
   #line(length: 100%)
 
   == Tuesday 16 December
+
+  === Objectives
+
+  - Continue work on literature review
+
+  === Progress
+
+  - Small amounts of literature review work done between coursework and exams piling up
 
   #line(length: 100%)
 
   == Tuesday 6 January
 
+  === Objectives
+
+  - Finish off literature review
+
+  === Progress
+
+  - Not much progress over christmas break, small amounts of literature review done
+
+  === Supervisor Comments
+
+  - Continue getting more done on literature review, word count is not a benchmark
+
   #line(length: 100%)
 
   == Tuesday 13 January
+
+  === Objectives
+
+  - Continue getting some more literature review meat developed
+
+  === Progress
+
+  - More work done on continuing literature review
+
+  === Supervisor Comments
+
+  - Looked over Gantt chart, it is okay, some deadlines missed, things need to move along
 
   #line(length: 100%)
 
   == Tuesday 20 January
 
-  #line(length: 100%)
+  === Objectives
 
-  == Tuesday 27 January
+  - Try and continue with literature review
+  - Wrap up literature review soon to focus on implementation
+
+  === Progress
+
+  - A little bit more written on the literature review
+
+  === Supervisor Comments
+
+  - Can only do so much on literature review, need to think about implementation soon
 
   #line(length: 100%)
 
   == Tuesday 3 February
 
+  Meeting was on Thursday 5 February this week
+
+  === Objectives
+
+  - Work on implementation
+
+  === Progress
+
+  - Begun work on implementation
+  - Thinking done about how evaluation approach will be done
+
+  === Supervisor Comments
+
+  - To think about evaluation
+
   #line(length: 100%)
 
   == Tuesday 10 February
+
+  === Objectives
+
+  - Continue implementation
+
+  === Progress
+
+  - Background work done on implementation to do with storing conversations in the project
+
+  === Supervisor Comments
+
+  - Wants to see it working next week with deployment
 
   #line(length: 100%)
 
   == Tuesday 17 February
 
+  === Objectives
+
+  - Continue getting implementation done, hopefully be end of february
+
+  === Progress
+
+  - Lots of groundwork done on implementation with learning units page
+
+  === Supervisor Comments
+
+  - Happy with implementation progress so far
+
   #line(length: 100%)
 
   == Tuesday 24 February
+
+  === Objectives
+
+  - Need to start getting methodology and write up moving, to aim for a draft soon
+
+  === Progress
+
+  - Continued work on implementation
+
+  === Supervisor Comments
+
+  - Wants to see a draft soon
 
   #line(length: 100%)
 
@@ -202,4 +327,23 @@
   === Supervisor Comments
 
   - Just continuing to work on the project
+  - Need to think about ethics of evaluating it with real users
+
+  #line(length: 100%)
+
+  == Tuesday 17 March
+
+  === Objectives
+
+  - Continue on implementation and implementation write-up
+  - Fix missing diagrams in the report
+
+  === Progress
+
+  - Methodology draft complete and sent, but missing diagrams
+  - Filled out the Napier ethics checklist, no need for ethical approval just a signature from supervisor
+
+  === Supervisor Comments
+
+  - Will review draft, to send new draft with missing diagrams in the mean time
 ]

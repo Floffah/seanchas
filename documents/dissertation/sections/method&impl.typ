@@ -55,6 +55,13 @@ The data layer will use a simple document-relational database. It will store dat
   caption: [System architecture C4 Diagram]
 )
 
+I have created a diagram that explains all the use cases in the system and which type of user will interact with each one. The use case diagram is below.
+
+#figure(
+  image("../images/use-case.drawio.png", width: 60%),
+  caption: [Use case diagram]
+)
+
 === Data Design
 
 The database will be very simple. The database will hold a user table for storing login information and allowing authentication. It will also hold a table for tracking unit completions, which only takes a user ID, unit ID, and the step they are currently on (or a completed state) via a union or enum type.
@@ -66,14 +73,71 @@ The database will be very simple. The database will hold a user table for storin
 
 === UI Design
 
-The first page I tackled is the home dashboard page. This is the portal to all of the site's content after login. This page must provide a way for the user to access all of the units the site offers and account settings. I also designed UI for displaying a user's streak, amount of units completed, links to a potential news and practice page, and terms of service/privacy policy links.
+Some of these pages automatically work on mobile, but where necessary, a mobile variant is designed, and would need responsive layout code in the implementation stage to automatically switch between both versions.
+
+Firstly, the entry point into the application is the login page. This page doubles as a sign-up page, allowing the user to do both in a simple user interface (UI).
 
 #figure(
-  image("../images/figmas/home-screen.png"),
+  image("../images/figmas/login.png"),
+  caption: [Login page]
+)
+
+The user dashboard page is the portal to all of the site's content after login. This page must provide a way for the user to access all of the units the site offers and account settings. I also designed UI for displaying a user's streak, the number of units completed, links to a potential news and practice page, and terms of service/privacy policy links.
+
+The mobile variant of this site is similar. It shows the same content but with both of the asides collapsed into menu buttons near the top. Clicking these will open the corresponding aside menu overlaid above the main content.
+
+#figure(
+  grid(columns: (76.4%, auto), 
+  gutter: 2%,
+  image("../images/figmas/home-screen.png"), image("../images/figmas/home-screen-mobile.png")),
   caption: [Home Page Design]
 )
 
+When the user selects a unit, it will take them to the last step (or first if not applicable) that they completed in that unit. The first step consists of the actual conversation they will study for this unit. It is a very minimal page so the focus is on the content itself. They will initially see the first message in the conversation, and must subsequently press the space bar (or tap the screen on mobile) to show the next message.
 
+Occasionally, the system will show a small tooltip above a specific part of a message if we need to point something out to the learner. For example, in the first beginner unit, we may point out that adjectives usually come after the noun they modify. This is a unique step in the display flow. Pressing space will dismiss the tooltip and continue on to the next message or another tooltip if necessary.
+
+#figure(
+  image("../images/figmas/conversation.png", width: 90%),
+  caption: [Unit Page Design: Conversation Step]
+)
+
+Once the user finishes viewing the conversation, we move on to a set of quizzes. We will reuse the same UI for all quiz types, as it is versatile. It consists of the question context, e.g. a phrase, with the question underneath. Under this, there are a number of answer candidates. When selecting the correct answer, it will turn green and let the user advance. If they select the incorrect answer, it will appear in red and show context underneath on what the correct answer was, and why it was correct.
+
+The types of questions that will be shown are explained at the beginning of the methodology section.
+
+#figure(
+  image("../images/figmas/quiz.png", width: 90%),
+  caption: [Unit Page Design: Quiz Step]
+)
+
+The practice page is another simple page. Its main function is to present users with the units they previously made mistakes on, giving them an opportunity to revise it. Each unit card redirects to the same unit screens as above.
+
+#figure(
+  image("../images/figmas/practice.png", width: 80%),
+  caption: [Practice page Design]
+)
+
+The news/blog page is simple. It will provide users with a log of what admins of the site have changed over time.
+
+Similar to the dashboard, on mobile it will hide the left aside but is still accessible by clicking the menu icon.
+
+#figure(
+  grid(columns: (73.7%, auto), 
+  gutter: 2%,
+  image("../images/figmas/news-desktop.png"), image("../images/figmas/news-mobile.png")),
+  caption: [News Page Design]
+)
+
+The account page is also very simple. It provides the user with a way to sign out or delete their account. This page also hides the left navigation aside, but still makes it accessible with the menu icon button.
+
+
+#figure(
+  grid(columns: (73.7%, auto), 
+  gutter: 2%,
+  image("../images/figmas/account-desktop.png"), image("../images/figmas/account-mobile.png")),
+  caption: [Account Page Design]
+)
 
 === Tools and Technologies
 
@@ -105,9 +169,9 @@ The back-end will use a very similar approach, with the crucial piece being that
 
 == Evaluation Methodology
 
-To evaluate this project implementation I will conduct several analysis processes.
+To evaluate this project implementation, I will conduct several analysis processes.
 
-The first is analysing it compared to the cacademic techniques noted in the literature review. Specifically, I will analyse it using the PF4M model designed by #cite(<wang_designing_2024>, form: "prose"). The basic questions I will consider in analysing the site are:
+The first is analysing it compared to the academic techniques noted in the literature review. Specifically, I will analyse it using the PF4M model designed by #cite(<wang_designing_2024>, form: "prose"). The basic questions I will consider in analysing the site are:
 - Learner / Personalisation
   - Does the system adapt to the learner?
   - Can learners control pacing?
@@ -182,4 +246,156 @@ After applying and considering all of these questions, we should have a comprehe
 
 == Testing
 
+This project employs a combination of manual testing and unit testing. 
+
+I have used the unit testing system built into the Bun runtime and target non-UI surfaces that include logic that may contain regressions on future changes.
+
 == Evaluation
+
+=== PF4M Evaluation
+
+#[
+#set heading(outlined: false)
+
+In this evaluation step, boolean questions are answered with either yes, no, or somewhat, and with an appropriate description and evidence. Questions that require more explanation will respond and analyse appropriately. Where applicable, answers will explain how the answer to the question can be changed in a future version of the application.
+
+==== Learner / Personalisation
+
+===== Does the system adapt to the learner?
+
+Somewhat. The application learns what units the learner previously struggled with and gives a way to reattempt them. It does not personalise the content within units to each learner.
+
+In the future, as technology advances, specialised LLMs may be used to personalise each unit and create new practice sessions based on the user's previous interactions.
+
+===== Can learners control pacing?
+
+Yes. Units can tackle each unit whenever they like without a time limit, giving them the space to learn at whatever pace they like.
+
+===== How does it consider knowledge gaps?
+
+The application will periodically display tooltips above a given word or phrase in a conversation and explain the context about common knowledge gaps.
+
+===== Does it report progress?
+
+Yes. When a unit is completed, it is moved to the bottom of the units list. When the user fails a unit, it can be seen in the practice tab.
+
+===== Can learners choose paths?
+
+No. The application defines a linear progression of units.
+
+In the future, LLMs may be used to personalise the user and lead them down paths specialised to their learning challenges.
+
+===== Are learning trajectories dynamic?
+
+No. The progression of learning is linear and predefined.
+
+In the future. LLMs may be used to create more dynamic challenges, units, and practice sessions for users, where they may be able to define more custom trajectories.
+
+===== Is learning relevant to learners?
+
+Yes. The content is specific to beginners of the language Scottish Gaidhlig.
+
+===== Does it apply difficulty matching?
+
+Somewhat. Within the bounds of pre-written conversation units, each unit builds on the last with slightly more difficulty and less helpful harnesses.
+
+===== Does it help learners understand why they made mistakes?
+
+Yes. When they choose the wrong option in the quiz, it will explain what was the correct answer and why they might have gotten it wrong.
+
+===== Does it promote reflection?
+
+Yes. When a learner gets a quiz question wrong, the quiz pauses, shows the correct answer, and only advances once they click next.
+
+===== Can learners set goals or learning intentions?
+
+No. There is no functionality to do so within the application, but space is given for the user to pick whichever unit they like and pick it up whenever they like, so freedom to set intentional goals is still possible outside of the application.
+
+In the future, LLMs involved in personalisation of units may help with a first-class goal-setting ability.
+
+===== Does personalisation affect pedagogy or only surface features?
+
+===== Does it support different learning styles or preferences?
+
+No. This application is specific to a particular type of in-context learning with conversations, for people who want to use it more in context than just learning vocabulary.
+
+In the future, LLM personalisation may help with this.
+
+===== Does it respond to disengagement or frustration?
+
+No. If the user closes the site, we don't call them back. It is difficult to appropriately gauge how the user feels while using the site in a web format.
+
+==== Device / Mobility
+
+===== Is the experience mobile-first?
+
+===== Does it support interruptions?
+
+===== Can it be used offline?
+
+===== Can learning happen in short bursts?
+
+===== Are independent sessions cumulative?
+
+===== Does it consider accessibility?
+ 
+===== How usable is the site?
+
+===== Does the platform leverage mobile affordances (audio recording, camera, location)?
+
+===== Is session continuity seamless across devices?
+
+===== Does the platform support context-aware learning?
+ 
+===== Is performance stable under poor connectivity?
+
+===== Does the UI support cognitive load minimisation on small screens?
+
+==== Teacher / Formality
+ 
+===== Are tasks sequenced meaningfully?
+
+===== Is feedback instructional or solely corrective?
+
+===== Is there a curriculum structure or autonomous exploration?
+
+===== Are learning objectives explicit?
+
+===== Does task difficulty align with skill development?
+
+===== Are tasks designed around learning theory (even implicitly)?
+
+===== Does the system model a pedagogical rationale?
+
+===== Does the platform support teacher oversight or authoring?
+ 
+===== Does instruction transition from guided to independent practice?
+
+===== Is there integration between formal and informal learning activities?
+
+==== Content / Authenticity
+
+===== Is the content designed for language acquisition or practice?
+
+===== Does difficulty scale meaningfully?
+
+===== Is the language use contextualised?
+
+===== Are learners solving real communicative tasks?
+
+===== Does it simulate reality?
+
+===== Is the content multimodal (audio, visual, text) in meaningful ways?
+
+===== Are tasks outcome-oriented rather than drill-oriented?
+
+===== Does content reflect real linguistic variation?
+
+===== Does content support pragmatic competence (tone, register, culture)?
+
+===== Are learners exposed to authentic discourse structures?
+
+===== Does content support interaction with real language users?
+
+===== Are tasks situated in believable contexts?
+]
