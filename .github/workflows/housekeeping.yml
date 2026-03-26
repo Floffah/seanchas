@@ -15,4 +15,4 @@ jobs:
       - run: bun run build
       - run: bun run lint
       - run: bunx tsc --noEmit
-      - run: bun run test
+      - run: bun test
