@@ -8,19 +8,15 @@ import {
     useState,
 } from "react";
 
-import {
-    Conversation,
-    TokenPart,
-    TokenRefPart,
-    conversations,
-} from "@/lib/language/convos";
+import { Conversation, TokenPart, TokenRefPart } from "@/lib/language/convos";
 import { createConvoTokenStore } from "@/lib/state/convos";
 
 export enum ConvoUnitStep {
     Intro,
+    TranslationQuiz,
 }
 
-interface ConvoContextValue extends Conversation {
+export interface ConvoContextValue extends Conversation {
     convoIdx: number;
     step: ConvoUnitStep;
     convoTokenState: ReturnType<typeof createConvoTokenStore>;

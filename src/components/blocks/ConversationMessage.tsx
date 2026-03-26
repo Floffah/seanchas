@@ -92,7 +92,13 @@ export default function ConversationMessage({
                 </p>
             </div>
 
-            <Translation utterance={utterance} />
+            <p
+                className={cn("text-sm text-muted-foreground", {
+                    "text-right": utterance.speaker === ConversationSpeaker.B,
+                })}
+            >
+                <Translation utterance={utterance} />
+            </p>
         </motion.div>
     );
 }

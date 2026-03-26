@@ -69,7 +69,7 @@ export const greeting: Conversation = {
                 "$greeting.math$ $greeting.daySegment$. How are $greeting.you$?",
             incorrectTranslations: [
                 "Good day. What's up?",
-                "Hello. How are you?",
+                "Hello. How are $greeting.you$?",
             ],
             parts: [
                 {
@@ -81,7 +81,7 @@ export const greeting: Conversation = {
                     kind: "token_ref",
                     ref: "greeting.math",
                 },
-                { kind: "text", text: " " },
+                { kind: "text", text: ". " },
                 { kind: "text", text: "Ciamar a tha" },
                 { kind: "text", text: " " },
                 {
@@ -109,8 +109,8 @@ export const greeting: Conversation = {
             translationFormat:
                 "I am good, thank $greeting.tyou$. How are $greeting.you$?",
             incorrectTranslations: [
-                "I am bad, thanks. How are you?",
-                "I am tired, thanks. How are you?",
+                "I am bad, thank $greeting.tyou$. How are $greeting.you$?",
+                "I am tired, thank $greeting.tyou$. How are $greeting.you$?",
             ],
             parts: [
                 {
