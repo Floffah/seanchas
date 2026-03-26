@@ -12,16 +12,20 @@ import { DisplayEvent, Part, globalTips } from "@/lib/language/convos";
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
-type Props = {
+interface MessageTokenPartProps {
     part: Extract<Part, { kind: "token" }>;
     tipEvents: {
         tip: Extract<DisplayEvent, { type: "show_tip" }>;
         idx: number;
     }[];
     step: number;
-};
+}
 
-export default function MessageTokenPart({ part, step, tipEvents }: Props) {
+export default function MessageTokenPart({
+    part,
+    step,
+    tipEvents,
+}: MessageTokenPartProps) {
     const convo = useConversation();
     const convoTokens = useSnapshot(convo.convoTokenState);
 

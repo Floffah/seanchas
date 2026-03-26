@@ -8,17 +8,21 @@ import {
     useState,
 } from "react";
 
-import { Conversation, conversations } from "@/lib/language/convos";
-import { createConvoTokenState } from "@/lib/state";
+import { Conversation, TokenPart, TokenRefPart } from "@/lib/language/convos";
+import { createConvoTokenStore } from "@/lib/state/convos";
 
 export enum ConvoUnitStep {
     Intro,
+    TranslationQuiz,
 }
 
-interface ConvoContextValue extends Conversation {
+export interface ConvoContextValue extends Conversation {
     convoIdx: number;
     step: ConvoUnitStep;
-    convoTokenState: ReturnType<typeof createConvoTokenState>;
+    convoTokenState: ReturnType<typeof createConvoTokenStore>;
+    progress: () => void;
+
+    resolveTokenRef: (ref: TokenRefPart) => TokenPart | undefined;
 }
 
 const ConvoContext = createContext<ConvoContextValue>(null!);
@@ -26,32 +30,31 @@ const ConvoContext = createContext<ConvoContextValue>(null!);
 export const useConversation = () => useContext(ConvoContext);
 
 export default function ConvoProvider({
-    slug,
+    conversation,
+    index,
     children,
-}: PropsWithChildren<{ slug: string }>) {
-    const conversation = useMemo(
-        () => conversations.find((c) => c.id === slug)!,
-        [slug],
-    );
-    const convoIdx = useMemo(
-        () => conversations.findIndex((c) => c.id === slug)!,
-        [slug],
-    );
-
+}: PropsWithChildren<{ conversation: Conversation; index: number }>) {
     const [step, setStep] = useState(ConvoUnitStep.Intro);
 
     const convoTokenState = useMemo(
-        () => createConvoTokenState(conversation),
+        () => createConvoTokenStore(conversation),
         [conversation],
     );
+
+    const resolveTokenRef = ({ ref }: TokenRefPart) =>
+        conversation.utterances
+            .flatMap((u) => u.parts)
+            .find((p): p is TokenPart => p.kind === "token" && p.id === ref);
 
     return (
         <ConvoContext.Provider
             value={{
                 ...conversation,
-                convoIdx,
+                convoIdx: index,
                 step,
                 convoTokenState,
+                progress: () => setStep((s) => s + 1),
+                resolveTokenRef,
             }}
         >
             {children}

@@ -1,5 +1,7 @@
 import { Side } from "@floating-ui/utils";
 
+import { globalTips } from "@/lib/language/convos/tips";
+
 export enum ConversationSpeaker {
     A,
     B,
@@ -23,7 +25,8 @@ export type Utterance = {
     id: UtteranceId;
     speaker: Speaker;
     parts: Part[];
-    translationFormat: string; // e.g. "$someId $someOtherId"
+    translationFormat: string; // e.g. "$someId$ $someOtherId$"
+    incorrectTranslations?: string[]; // wrong translations to show as options in a quiz
 };
 
 export type Part = TokenRefPart | TextPart | TokenPart | PunctPart;
@@ -73,7 +76,7 @@ export type Variant = {
 
 export type Transform = {
     type: "lenition";
-    map?: Record<string, string>; // { "math": "mhath" }
+    becomes: string; // e.g. "mhath"
     when?: {
         variantPresent?: string; // only apply if a specific variant is chosen
         featureEquals?: { [featureName: string]: string }; // only apply if token has a specific feature value
@@ -83,7 +86,7 @@ export type Transform = {
 };
 
 export type TipRef = {
-    tipId: string;
+    tipId: keyof typeof globalTips;
     side?: Side;
     when:
         | {

@@ -1,10 +1,12 @@
 "use client";
 
 import { XIcon } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
 import ConversationIntro from "@/components/blocks/ConversationIntro";
+import ConversationTranslationQuiz from "@/components/blocks/ConversationTranslationQuiz";
 import { ConvoUnitStep, useConversation } from "@/providers/ConvoProvider";
 
 export default function ConversationUnit({}) {
@@ -38,7 +40,14 @@ export default function ConversationUnit({}) {
                     </ViewTransition>
                 </div>
 
-                {convo.step === ConvoUnitStep.Intro && <ConversationIntro />}
+                <AnimatePresence mode="wait">
+                    {convo.step === ConvoUnitStep.Intro && (
+                        <ConversationIntro key="intro" />
+                    )}
+                    {convo.step === ConvoUnitStep.TranslationQuiz && (
+                        <ConversationTranslationQuiz key="translation-quiz" />
+                    )}
+                </AnimatePresence>
             </div>
         </ViewTransition>
     );

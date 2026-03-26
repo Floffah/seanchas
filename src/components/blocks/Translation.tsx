@@ -3,31 +3,30 @@
 import { useMemo } from "react";
 import { useSnapshot } from "valtio";
 
-import {
-    ConversationSpeaker,
-    Part,
-    TokenPart,
-    TokenRefPart,
-    Utterance,
-} from "@/lib/language/convos";
-import { cn } from "@/lib/utils";
+import { TokenPart, TokenRefPart, Utterance } from "@/lib/language/convos";
 import { useConversation } from "@/providers/ConvoProvider";
 
-type Props = {
+interface TranslationProps {
     utterance: Utterance;
-};
+    overwriteFormat?: string;
+}
 
-export default function Translation({ utterance }: Props) {
+export default function Translation({
+    utterance,
+    overwriteFormat,
+}: TranslationProps) {
     const convo = useConversation();
     const tokenState = useSnapshot(convo.convoTokenState);
 
-    const translation = useMemo(() => {
+    const translationFormat = overwriteFormat ?? utterance.translationFormat;
+
+    return useMemo(() => {
         let final = "";
 
         let parsingTokenId = false;
         let accum = "";
 
-        for (const char of utterance.translationFormat) {
+        for (const char of translationFormat) {
             if (char === "$") {
                 if (parsingTokenId) {
                     const tokenId = accum;
@@ -43,15 +42,7 @@ export default function Translation({ utterance }: Props) {
                                 t.kind === "token_ref" && t.ref === tokenId,
                         );
                         if (tokenRef) {
-                            const token = convo.utterances
-                                .flatMap((u) => u.parts)
-                                .find(
-                                    (
-                                        p,
-                                    ): p is Extract<Part, { kind: "token" }> =>
-                                        p.kind === "token" &&
-                                        p.id === tokenRef.ref,
-                                );
+                            const token = convo.resolveTokenRef(tokenRef);
 
                             baseToken = token ?? baseToken;
                         }
@@ -70,7 +61,7 @@ export default function Translation({ utterance }: Props) {
                         }
                     } else {
                         const baseToken = utterance.parts.find(
-                            (p): p is Extract<Part, { kind: "token" }> =>
+                            (p): p is TokenPart =>
                                 p.kind === "token" && p.id === tokenId,
                         );
 
@@ -94,20 +85,5 @@ export default function Translation({ utterance }: Props) {
         final = final.charAt(0).toUpperCase() + final.substring(1);
 
         return final;
-    }, [
-        utterance.translationFormat,
-        utterance.parts,
-        tokenState.tokenValues,
-        convo.utterances,
-    ]);
-
-    return (
-        <p
-            className={cn("text-sm text-muted-foreground", {
-                "text-right": utterance.speaker === ConversationSpeaker.B,
-            })}
-        >
-            {translation}
-        </p>
-    );
+    }, [translationFormat, tokenState.tokenValues, utterance.parts, convo]);
 }

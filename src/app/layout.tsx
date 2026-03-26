@@ -1,12 +1,12 @@
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import type { Metadata } from "next";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { PropsWithChildren } from "react";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 
 import "./globals.css";
 
@@ -36,16 +36,18 @@ export default function RootLayout({ children }: PropsWithChildren) {
                         geistMono.variable,
                     )}
                 >
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
-                        <ConvexClientProvider>
-                            <TooltipProvider>{children}</TooltipProvider>
-                        </ConvexClientProvider>
-                    </ThemeProvider>
+                    <ConvexClientProvider>
+                        <TooltipProvider>
+                            <NextThemesProvider
+                                attribute="class"
+                                defaultTheme="system"
+                                enableSystem={true}
+                                disableTransitionOnChange
+                            >
+                                {children}
+                            </NextThemesProvider>
+                        </TooltipProvider>
+                    </ConvexClientProvider>
                 </body>
             </html>
         </ConvexAuthNextjsServerProvider>

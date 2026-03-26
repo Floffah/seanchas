@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { ViewTransition } from "react";
 
 import ConversationUnit from "@/components/blocks/ConversationUnit";
 import { conversations } from "@/lib/language/convos";
@@ -19,16 +18,15 @@ export default async function Page({
     const { slug } = await params;
 
     const convo = conversations.find((c) => c.id === slug);
+    const convoIdx = conversations.findIndex((c) => c.id === slug);
 
-    if (!convo) {
+    if (!convo || convoIdx === -1) {
         return notFound();
     }
 
     return (
-        <ConvoProvider slug={slug}>
-            <ViewTransition>
-                <ConversationUnit />
-            </ViewTransition>
+        <ConvoProvider conversation={convo} index={convoIdx}>
+            <ConversationUnit />
         </ConvoProvider>
     );
 }
