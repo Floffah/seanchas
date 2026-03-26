@@ -83,7 +83,7 @@ export default function ConversationIntro() {
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <DialogClose>
+                        <DialogClose asChild>
                             <Button className="px-6">Okay!</Button>
                         </DialogClose>
                     </DialogFooter>

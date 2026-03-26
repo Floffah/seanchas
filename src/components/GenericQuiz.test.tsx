@@ -15,11 +15,7 @@ import {
     useGenericQuiz,
     useQuiz,
 } from "@/components/GenericQuiz";
-import {
-    CardAction,
-    CardDescription,
-    CardTitle,
-} from "@/components/ui/card";
+import { CardAction, CardDescription, CardTitle } from "@/components/ui/card";
 import { queryBySlot } from "@/lib/testing/queries";
 
 interface TestQuestion {
@@ -291,7 +287,9 @@ describe("GenericQuiz", () => {
     test("renders the quiz shell and progress from context", () => {
         const view = render(<GenericQuizHarness />);
 
-        expect(queryBySlot(view.container, "generic-quiz-card")).toBeInTheDocument();
+        expect(
+            queryBySlot(view.container, "generic-quiz-card"),
+        ).toBeInTheDocument();
         expect(view.getByText("Question 1 of 2")).toBeInTheDocument();
     });
 

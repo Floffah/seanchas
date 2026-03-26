@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { ViewTransition } from "react";
 
 import ConversationUnit from "@/components/blocks/ConversationUnit";
 import { conversations } from "@/lib/language/convos";

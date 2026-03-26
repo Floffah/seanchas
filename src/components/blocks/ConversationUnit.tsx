@@ -1,7 +1,7 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
 import { XIcon } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
