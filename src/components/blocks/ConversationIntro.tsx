@@ -133,7 +133,7 @@ export default function ConversationIntro() {
                                 duration: 0.3,
                             }}
                             size="lg"
-                            onClick={() => convo.progress()}
+                            onClick={() => convo.next()}
                         >
                             I&apos;ve got it!
                         </MotionButton>
