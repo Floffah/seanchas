@@ -17,6 +17,7 @@ import {
 } from "@/components/GenericQuiz";
 import SourcePhrase from "@/components/blocks/SourcePhrase";
 import Translation from "@/components/blocks/Translation";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardAction,
@@ -95,6 +96,7 @@ export default function ConversationTranslationQuiz() {
                                 You got {quiz.correctCount} out of{" "}
                                 {quiz.questionCount} correct.
                             </CardDescription>
+                            <Button onClick={convo.next}>Next Step</Button>
                         </CardContent>
                     </Card>
                 )}

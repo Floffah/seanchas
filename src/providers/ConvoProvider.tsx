@@ -1,27 +1,21 @@
 "use client";
 
-import {
-    PropsWithChildren,
-    createContext,
-    useContext,
-    useMemo,
-    useState,
-} from "react";
+import { useMachine } from "@xstate/react";
+import { PropsWithChildren, createContext, useContext, useMemo } from "react";
+import { StateFrom } from "xstate";
 
 import { Conversation, TokenPart, TokenRefPart } from "@/lib/language/convos";
 import { createConvoTokenStore } from "@/lib/state/convos";
+import { createConvoUnitMachine } from "@/lib/state/units";
 
-export enum ConvoUnitStep {
-    Intro,
-    TranslationQuiz,
-}
+export const conversationUnitSteps = ["intro", "translationQuiz"] as const;
 
 export interface ConvoContextValue extends Conversation {
     convoIdx: number;
-    step: ConvoUnitStep;
     convoTokenState: ReturnType<typeof createConvoTokenStore>;
-    progress: () => void;
+    state: StateFrom<ReturnType<typeof createConvoUnitMachine>>;
 
+    next: () => void;
     resolveTokenRef: (ref: TokenRefPart) => TokenPart | undefined;
 }
 
@@ -34,7 +28,8 @@ export default function ConvoProvider({
     index,
     children,
 }: PropsWithChildren<{ conversation: Conversation; index: number }>) {
-    const [step, setStep] = useState(ConvoUnitStep.Intro);
+    const conversationUnitMachine = useMemo(() => createConvoUnitMachine(), []);
+    const [state, send] = useMachine(conversationUnitMachine);
 
     const convoTokenState = useMemo(
         () => createConvoTokenStore(conversation),
@@ -51,9 +46,10 @@ export default function ConvoProvider({
             value={{
                 ...conversation,
                 convoIdx: index,
-                step,
                 convoTokenState,
-                progress: () => setStep((s) => s + 1),
+                state,
+
+                next: () => send({ type: "NEXT" }),
                 resolveTokenRef,
             }}
         >

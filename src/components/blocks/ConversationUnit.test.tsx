@@ -1,0 +1,104 @@
+import { fireEvent, render } from "@testing-library/react";
+import { describe, expect, test } from "bun:test";
+
+import ConversationUnit from "@/components/blocks/ConversationUnit";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { greeting } from "@/lib/language/convos/data/greeting";
+import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
+
+function UseConversationHarness() {
+    const convo = useConversation();
+
+    return (
+        <div>
+            <p data-testid="state-value">{String(convo.state.value)}</p>
+            <button type="button" onClick={convo.next}>
+                Next
+            </button>
+        </div>
+    );
+}
+
+function ConversationUnitHarness() {
+    const convo = useConversation();
+
+    return (
+        <>
+            <button type="button" onClick={convo.next}>
+                Advance unit
+            </button>
+            <ConversationUnit />
+        </>
+    );
+}
+
+describe("ConvoProvider", () => {
+    test("initializes on the intro state", () => {
+        const view = render(
+            <ConvoProvider conversation={greeting} index={0}>
+                <UseConversationHarness />
+            </ConvoProvider>,
+        );
+
+        expect(view.getByTestId("state-value")).toHaveTextContent("intro");
+    });
+
+    test("advances to translationQuiz with next()", () => {
+        const view = render(
+            <ConvoProvider conversation={greeting} index={0}>
+                <UseConversationHarness />
+            </ConvoProvider>,
+        );
+
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent(
+            "translationQuiz",
+        );
+    });
+
+    test("reaches complete and ignores extra NEXT events afterwards", () => {
+        const view = render(
+            <ConvoProvider conversation={greeting} index={0}>
+                <UseConversationHarness />
+            </ConvoProvider>,
+        );
+
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent("complete");
+
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent("complete");
+    });
+});
+
+describe("ConversationUnit", () => {
+    test("renders intro first and translation quiz after advancing", async () => {
+        const view = render(
+            <TooltipProvider>
+                <ConvoProvider conversation={greeting} index={0}>
+                    <ConversationUnitHarness />
+                </ConvoProvider>
+            </TooltipProvider>,
+        );
+
+        expect(
+            view.queryByText("Which is the correct translation?"),
+        ).not.toBeInTheDocument();
+        expect(view.getByText("Press space to advance")).toBeInTheDocument();
+
+        fireEvent.click(
+            view.getByRole("button", {
+                name: "Advance unit",
+                hidden: true,
+            }),
+        );
+
+        expect(
+            await view.findByText("Which is the correct translation?"),
+        ).toBeInTheDocument();
+    });
+});
