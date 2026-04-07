@@ -1,0 +1,34 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`conversationToEvents matches the greeting event sequence 1`] = `
+[
+  {
+    "type": "show_utterance",
+    "utteranceId": "greeting.u0",
+  },
+  {
+    "side": "right",
+    "tipId": "adjectives_after_words",
+    "tokenId": "greeting.math",
+    "type": "show_tip",
+  },
+  {
+    "type": "show_utterance",
+    "utteranceId": "greeting.u1",
+  },
+  {
+    "type": "show_utterance",
+    "utteranceId": "greeting.u2",
+  },
+  {
+    "side": undefined,
+    "tipId": "gu_math",
+    "tokenId": "greeting.gu",
+    "type": "show_tip",
+  },
+  {
+    "type": "show_utterance",
+    "utteranceId": "greeting.u3",
+  },
+]
+`;

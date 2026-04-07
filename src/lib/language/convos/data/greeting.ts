@@ -10,6 +10,7 @@ export const greeting: Conversation = {
             speaker: ConversationSpeaker.A,
             translationFormat: "$greeting.math$ $greeting.daySegment$!",
             incorrectTranslations: ["Good day!", "Hello!"],
+            incorrectResponseIds: ["greeting.u2", "greeting.u3"],
 
             parts: [
                 {
@@ -71,6 +72,7 @@ export const greeting: Conversation = {
                 "Good day. What's up?",
                 "Hello. How are $greeting.you$?",
             ],
+            incorrectResponseIds: ["greeting.u0", "greeting.u3"],
             parts: [
                 {
                     kind: "token_ref",
@@ -88,12 +90,12 @@ export const greeting: Conversation = {
                     kind: "token",
                     id: "greeting.you",
                     base: "thu",
-                    translation: "you (informal)",
+                    translation: "you",
                     variants: [
                         {
                             id: "greeting.you.informal",
                             text: "sibh",
-                            translation: "you (formal)",
+                            translation: "you",
                             features: { conceptTags: ["formal_you"] },
                         },
                     ],
@@ -112,6 +114,7 @@ export const greeting: Conversation = {
                 "I am bad, thank $greeting.tyou$. How are $greeting.you$?",
                 "I am tired, thank $greeting.tyou$. How are $greeting.you$?",
             ],
+            incorrectResponseIds: ["greeting.u0", "greeting.u1"],
             parts: [
                 {
                     kind: "text",
@@ -141,12 +144,12 @@ export const greeting: Conversation = {
                     kind: "token",
                     id: "greeting.tyou",
                     base: "leat",
-                    translation: "you (informal)",
+                    translation: "you",
                     variants: [
                         {
                             id: "greeting.tyou.formal",
                             text: "leibh",
-                            translation: "you (formal)",
+                            translation: "you",
                             features: {
                                 conceptTags: ["formal_you"],
                             },

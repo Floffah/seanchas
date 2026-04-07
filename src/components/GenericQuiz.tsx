@@ -50,10 +50,9 @@ export interface UseQuizResult<TQuestion, TAnswer> {
     next: () => void;
 }
 
-const GenericQuizContext = createContext<UseQuizResult<
-    unknown,
-    unknown
-> | null>(null);
+const GenericQuizContext = createContext<UseQuizResult<unknown, unknown>>(
+    null!,
+);
 
 function useQuiz<TQuestion, TAnswer>({
     questions,

@@ -8,7 +8,12 @@ import { Conversation, TokenPart, TokenRefPart } from "@/lib/language/convos";
 import { createConvoTokenStore } from "@/lib/state/convos";
 import { createConvoUnitMachine } from "@/lib/state/units";
 
-export const conversationUnitSteps = ["intro", "translationQuiz"] as const;
+export const conversationUnitSteps = [
+    "intro",
+    "translationQuiz",
+    "responseQuiz",
+    "complete",
+] as const;
 
 export interface ConvoContextValue extends Conversation {
     convoIdx: number;

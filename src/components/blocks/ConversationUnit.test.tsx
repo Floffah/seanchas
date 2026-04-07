@@ -57,7 +57,7 @@ describe("ConvoProvider", () => {
         );
     });
 
-    test("reaches complete and ignores extra NEXT events afterwards", () => {
+    test("advances through responseQuiz into complete and ignores extra NEXT events afterwards", () => {
         const view = render(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
@@ -65,6 +65,12 @@ describe("ConvoProvider", () => {
         );
 
         fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent(
+            "responseQuiz",
+        );
+
         fireEvent.click(view.getByRole("button", { name: "Next" }));
 
         expect(view.getByTestId("state-value")).toHaveTextContent("complete");
@@ -76,7 +82,7 @@ describe("ConvoProvider", () => {
 });
 
 describe("ConversationUnit", () => {
-    test("renders intro first and translation quiz after advancing", async () => {
+    test("renders intro, then translation quiz, then response quiz as the unit advances", async () => {
         const view = render(
             <TooltipProvider>
                 <ConvoProvider conversation={greeting} index={0}>
@@ -99,6 +105,17 @@ describe("ConversationUnit", () => {
 
         expect(
             await view.findByText("Which is the correct translation?"),
+        ).toBeInTheDocument();
+
+        fireEvent.click(
+            view.getByRole("button", {
+                name: "Advance unit",
+                hidden: true,
+            }),
+        );
+
+        expect(
+            await view.findByText("Which response comes next?"),
         ).toBeInTheDocument();
     });
 });

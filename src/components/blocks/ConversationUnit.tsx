@@ -5,7 +5,9 @@ import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 
 import DynamicViewTransition from "@/components/DynamicViewTransition";
+import ConversationCorrectResponseQuiz from "@/components/blocks/ConversationCorrectResponseQuiz";
 import ConversationIntro from "@/components/blocks/ConversationIntro";
+import ConversationUnitComplete from "@/components/blocks/ConversationUnitComplete";
 import ConversationTranslationQuiz from "@/components/blocks/ConversationTranslationQuiz";
 import { useConversation } from "@/providers/ConvoProvider";
 
@@ -48,6 +50,12 @@ export default function ConversationUnit({}) {
                     )}
                     {convo.state.matches("translationQuiz") && (
                         <ConversationTranslationQuiz key="translation-quiz" />
+                    )}
+                    {convo.state.matches("responseQuiz") && (
+                        <ConversationCorrectResponseQuiz key="response-quiz" />
+                    )}
+                    {convo.state.matches("complete") && (
+                        <ConversationUnitComplete key="complete" />
                     )}
                 </AnimatePresence>
             </div>
