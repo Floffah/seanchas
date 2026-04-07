@@ -27,6 +27,7 @@ export type Utterance = {
     parts: Part[];
     translationFormat: string; // e.g. "$someId$ $someOtherId$"
     incorrectTranslations?: string[]; // wrong translations to show as options in a quiz
+    incorrectResponseIds?: UtteranceId[]; // wrong response utterance ids to show as options in a response quiz
 };
 
 export type Part = TokenRefPart | TextPart | TokenPart | PunctPart;

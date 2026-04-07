@@ -15,6 +15,11 @@ export function createConvoUnitMachine() {
             },
             translationQuiz: {
                 on: {
+                    NEXT: "responseQuiz",
+                },
+            },
+            responseQuiz: {
+                on: {
                     NEXT: "complete",
                 },
             },
