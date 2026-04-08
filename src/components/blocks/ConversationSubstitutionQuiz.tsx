@@ -15,7 +15,6 @@ import {
     useQuiz,
 } from "@/components/GenericQuiz";
 import SourcePhrase from "@/components/blocks/SourcePhrase";
-import Translation from "@/components/blocks/Translation";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -25,18 +24,21 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {
-    ResponseQuizOption,
-    ResponseQuizQuestion,
-    buildResponseQuizQuestions,
-} from "@/lib/language/quiz/responseQuiz";
+    buildSubstitutionQuizQuestions,
+    SubstitutionQuizOption,
+    SubstitutionQuizQuestion,
+} from "@/lib/language/quiz/substitutionQuiz";
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
-export default function ConversationCorrectResponseQuiz() {
+export default function ConversationSubstitutionQuiz() {
     const convo = useConversation();
-    const questions = useMemo(() => buildResponseQuizQuestions(convo), [convo]);
+    const questions = useMemo(
+        () => buildSubstitutionQuizQuestions(convo),
+        [convo],
+    );
 
-    const quiz = useQuiz<ResponseQuizQuestion, string | null>({
+    const quiz = useQuiz<SubstitutionQuizQuestion, string | null>({
         questions,
         createInitialAnswer: () => null,
         isAnswerReady: (_question, answer) => answer !== null,
@@ -60,7 +62,7 @@ export default function ConversationCorrectResponseQuiz() {
                                 {quiz.questionCount} correct.
                             </CardDescription>
                             <Button className="mt-2" onClick={convo.next}>
-                                Next Step
+                                Finish Unit
                             </Button>
                         </CardContent>
                     </Card>
@@ -69,17 +71,10 @@ export default function ConversationCorrectResponseQuiz() {
                 {!quiz.isComplete && (
                     <GenericQuiz quiz={quiz} className="w-full">
                         <GenericQuizHeader>
-                            <CardDescription>Prompt</CardDescription>
+                            <CardDescription>Phrase</CardDescription>
                             <CardTitle>
-                                <SourcePhrase
-                                    utterance={question.promptUtterance}
-                                />
+                                <SourcePhrase utterance={question.promptUtterance} />
                             </CardTitle>
-                            <CardDescription>
-                                <Translation
-                                    utterance={question.promptUtterance}
-                                />
-                            </CardDescription>
                             <CardAction>
                                 <GenericQuizProgress />
                             </CardAction>
@@ -88,17 +83,15 @@ export default function ConversationCorrectResponseQuiz() {
                         <GenericQuizContent>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm font-medium">
-                                    Which response comes next?
+                                    Which alternative also works here?
                                 </p>
                                 {question.options.map(
-                                    (option: ResponseQuizOption) => (
+                                    (option: SubstitutionQuizOption) => (
                                         <GenericQuizAnswerButton
                                             option={option}
                                             key={option.id}
                                         >
-                                            <SourcePhrase
-                                                utterance={option.utterance}
-                                            />
+                                            {option.value}
                                         </GenericQuizAnswerButton>
                                     ),
                                 )}
@@ -116,12 +109,8 @@ export default function ConversationCorrectResponseQuiz() {
                                     {quiz.isCorrect && "Correct."}
                                     {!quiz.isCorrect && (
                                         <>
-                                            Not quite. The correct response is:{" "}
-                                            <SourcePhrase
-                                                utterance={
-                                                    question.correctResponse
-                                                }
-                                            />
+                                            Not quite. The correct alternative
+                                            is: {question.correctOption.value}
                                         </>
                                     )}
                                 </p>

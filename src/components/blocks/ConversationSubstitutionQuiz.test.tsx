@@ -1,7 +1,7 @@
 import { fireEvent, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 
-import ConversationCorrectResponseQuiz from "@/components/blocks/ConversationCorrectResponseQuiz";
+import ConversationSubstitutionQuiz from "@/components/blocks/ConversationSubstitutionQuiz";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { greeting } from "@/lib/language/convos/data/greeting";
 import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
@@ -27,92 +27,78 @@ function StateHarness() {
                 onClick={() => {
                     convo.next();
                     convo.next();
+                    convo.next();
                 }}
             >
-                Advance to response quiz
+                Advance to substitution quiz
             </button>
         </>
     );
 }
 
-describe("ConversationCorrectResponseQuiz", () => {
-    test("renders the Gaelic prompt, translation hint, and Gaelic responses", () => {
+describe("ConversationSubstitutionQuiz", () => {
+    test("renders the original prompt and full Gaelic substitution options", () => {
         const view = render(
             <TooltipProvider>
                 <ConvoProvider conversation={greeting} index={0}>
-                    <ConversationCorrectResponseQuiz />
+                    <ConversationSubstitutionQuiz />
                 </ConvoProvider>
             </TooltipProvider>,
         );
 
         expect(
-            view.getByText("Feasgar math. Ciamar a tha thu?"),
-        ).toBeInTheDocument();
-        expect(
-            view.getByText("Good afternoon/evening. How are you?"),
+            view.getByText("Tha mi gu math, tapadh leat. Ciamar a tha thu?"),
         ).toBeInTheDocument();
         expect(
             view.getByRole("button", {
-                name: "Tha mi gu math, tapadh leat. Ciamar a tha thu?",
+                name: "Tha mi gu math, tapadh leibh. Ciamar a tha sibh?",
             }),
         ).toBeInTheDocument();
         expect(
-            view.queryByRole("button", {
-                name: "I am good, thank you. How are you?",
+            view.getByRole("button", {
+                name: "Tha mi gu math, tapadh leat. Ciamar a tha sibh?",
             }),
-        ).not.toBeInTheDocument();
+        ).toBeInTheDocument();
+        expect(
+            view.getByRole("button", {
+                name: "Tha mi gu math, tapadh leibh. Ciamar a tha thu?",
+            }),
+        ).toBeInTheDocument();
     });
 
-    test("supports answering questions and advancing to the substitution quiz", () => {
+    test("supports answering the question and advancing the unit to complete", () => {
         const view = render(
             <TooltipProvider>
                 <ConvoProvider conversation={greeting} index={0}>
                     <StateHarness />
-                    <ConversationCorrectResponseQuiz />
+                    <ConversationSubstitutionQuiz />
                 </ConvoProvider>
             </TooltipProvider>,
         );
 
         fireEvent.click(
-            view.getByRole("button", { name: "Advance to response quiz" }),
+            view.getByRole("button", { name: "Advance to substitution quiz" }),
         );
-
-        expect(view.getByTestId("state-value")).toHaveTextContent(
-            "responseQuiz",
-        );
-
-        fireEvent.click(
-            view.getByRole("button", {
-                name: "Tha mi gu math, tapadh leat. Ciamar a tha thu?",
-            }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Check" }));
-        expect(view.getByText("Correct.")).toBeInTheDocument();
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-
-        fireEvent.click(
-            view.getByRole("button", {
-                name: "Tha mi gu math cuideachd, tapadh leat.",
-            }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Check" }));
-        expect(view.getByText("Correct.")).toBeInTheDocument();
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-
-        fireEvent.click(
-            view.getByRole("button", {
-                name: "Feasgar math. Ciamar a tha thu?",
-            }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Check" }));
-        expect(view.getByText("Correct.")).toBeInTheDocument();
-        fireEvent.click(view.getByRole("button", { name: "Finish" }));
-
-        expect(view.getByText("Step Complete")).toBeInTheDocument();
-        fireEvent.click(view.getByRole("button", { name: "Next Step" }));
 
         expect(view.getByTestId("state-value")).toHaveTextContent(
             "substitutionQuiz",
         );
+
+        fireEvent.click(
+            view.getByRole("button", {
+                name: "Tha mi gu math, tapadh leibh. Ciamar a tha sibh?",
+            }),
+        );
+        fireEvent.click(view.getByRole("button", { name: "Check" }));
+
+        expect(view.getByText("Correct.")).toBeInTheDocument();
+
+        fireEvent.click(view.getByRole("button", { name: "Finish" }));
+
+        expect(view.getByText("Step Complete")).toBeInTheDocument();
+
+        fireEvent.click(view.getByRole("button", { name: "Finish Unit" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent("complete");
     });
 });

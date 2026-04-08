@@ -11,6 +11,12 @@ export enum ConversationSpeaker {
 export type ConversationId = string;
 export type UtteranceId = string;
 export type TokenId = string;
+export type TokenOverrideMap = Partial<Record<TokenId, TokenId>>;
+
+export type SubstitutionQuestion = {
+    correctOverrides: TokenOverrideMap;
+    incorrectOverrides: TokenOverrideMap[];
+};
 
 export type Speaker = ConversationSpeaker;
 
@@ -28,6 +34,7 @@ export type Utterance = {
     translationFormat: string; // e.g. "$someId$ $someOtherId$"
     incorrectTranslations?: string[]; // wrong translations to show as options in a quiz
     incorrectResponseIds?: UtteranceId[]; // wrong response utterance ids to show as options in a response quiz
+    substitutionQuestion?: SubstitutionQuestion; // substitutions to show as options in a substitution quiz
 };
 
 export type Part = TokenRefPart | TextPart | TokenPart | PunctPart;
