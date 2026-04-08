@@ -20,6 +20,11 @@ export function createConvoUnitMachine() {
             },
             responseQuiz: {
                 on: {
+                    NEXT: "substitutionQuiz",
+                },
+            },
+            substitutionQuiz: {
+                on: {
                     NEXT: "complete",
                 },
             },

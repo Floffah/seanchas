@@ -115,6 +115,20 @@ export const greeting: Conversation = {
                 "I am tired, thank $greeting.tyou$. How are $greeting.you$?",
             ],
             incorrectResponseIds: ["greeting.u0", "greeting.u1"],
+            substitutionQuestion: {
+                correctOverrides: {
+                    "greeting.you": "greeting.you.informal",
+                    "greeting.tyou": "greeting.tyou.formal",
+                },
+                incorrectOverrides: [
+                    {
+                        "greeting.you": "greeting.you.informal",
+                    },
+                    {
+                        "greeting.tyou": "greeting.tyou.formal",
+                    },
+                ],
+            },
             parts: [
                 {
                     kind: "text",
