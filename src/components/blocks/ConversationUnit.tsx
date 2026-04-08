@@ -7,10 +7,11 @@ import Link from "next/link";
 import DynamicViewTransition from "@/components/DynamicViewTransition";
 import ConversationCorrectResponseQuiz from "@/components/blocks/ConversationCorrectResponseQuiz";
 import ConversationIntro from "@/components/blocks/ConversationIntro";
-import ConversationSummaryQuiz from "@/components/blocks/ConversationSummaryQuiz";
 import ConversationSubstitutionQuiz from "@/components/blocks/ConversationSubstitutionQuiz";
-import ConversationUnitComplete from "@/components/blocks/ConversationUnitComplete";
+import ConversationSummaryQuiz from "@/components/blocks/ConversationSummaryQuiz";
 import ConversationTranslationQuiz from "@/components/blocks/ConversationTranslationQuiz";
+import ConversationUnitComplete from "@/components/blocks/ConversationUnitComplete";
+import { ConvoUnitStepId } from "@/lib/state/units";
 import { useConversation } from "@/providers/ConvoProvider";
 
 export default function ConversationUnit({}) {
@@ -47,23 +48,33 @@ export default function ConversationUnit({}) {
                 </div>
 
                 <AnimatePresence mode="wait">
-                    {convo.state.matches("intro") && (
-                        <ConversationIntro key="intro" />
+                    {convo.state.matches(ConvoUnitStepId.Intro) && (
+                        <ConversationIntro key={ConvoUnitStepId.Intro} />
                     )}
-                    {convo.state.matches("translationQuiz") && (
-                        <ConversationTranslationQuiz key="translation-quiz" />
+                    {convo.state.matches(ConvoUnitStepId.TranslationQuiz) && (
+                        <ConversationTranslationQuiz
+                            key={ConvoUnitStepId.TranslationQuiz}
+                        />
                     )}
-                    {convo.state.matches("responseQuiz") && (
-                        <ConversationCorrectResponseQuiz key="response-quiz" />
+                    {convo.state.matches(ConvoUnitStepId.ResponseQuiz) && (
+                        <ConversationCorrectResponseQuiz
+                            key={ConvoUnitStepId.ResponseQuiz}
+                        />
                     )}
-                    {convo.state.matches("substitutionQuiz") && (
-                        <ConversationSubstitutionQuiz key="substitution-quiz" />
+                    {convo.state.matches(ConvoUnitStepId.SubstitutionQuiz) && (
+                        <ConversationSubstitutionQuiz
+                            key={ConvoUnitStepId.SubstitutionQuiz}
+                        />
                     )}
-                    {convo.state.matches("summaryQuiz") && (
-                        <ConversationSummaryQuiz key="summary-quiz" />
+                    {convo.state.matches(ConvoUnitStepId.SummaryQuiz) && (
+                        <ConversationSummaryQuiz
+                            key={ConvoUnitStepId.SummaryQuiz}
+                        />
                     )}
-                    {convo.state.matches("complete") && (
-                        <ConversationUnitComplete key="complete" />
+                    {convo.state.matches(ConvoUnitStepId.Complete) && (
+                        <ConversationUnitComplete
+                            key={ConvoUnitStepId.Complete}
+                        />
                     )}
                 </AnimatePresence>
             </div>

@@ -23,10 +23,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {
-    buildSummaryQuizQuestions,
     SummaryQuizOption,
     SummaryQuizQuestion,
+    buildSummaryQuizQuestions,
 } from "@/lib/language/quiz/summaryQuiz";
+import { ConvoUnitStepId } from "@/lib/state/units";
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
@@ -57,7 +58,17 @@ export default function ConversationSummaryQuiz() {
                                 You got {quiz.correctCount} out of{" "}
                                 {quiz.questionCount} correct.
                             </CardDescription>
-                            <Button className="mt-2" onClick={convo.next}>
+                            <Button
+                                className="mt-2"
+                                onClick={() => {
+                                    convo.recordStepCompletion(
+                                        ConvoUnitStepId.SummaryQuiz,
+                                        quiz.correctCount,
+                                        quiz.questionCount,
+                                    );
+                                    convo.next();
+                                }}
+                            >
                                 Next Step
                             </Button>
                         </CardContent>

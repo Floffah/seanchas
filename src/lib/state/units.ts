@@ -1,39 +1,48 @@
 import { createMachine } from "xstate";
 
+export enum ConvoUnitStepId {
+    Intro = "intro",
+    SummaryQuiz = "summaryQuiz",
+    TranslationQuiz = "translationQuiz",
+    ResponseQuiz = "responseQuiz",
+    SubstitutionQuiz = "substitutionQuiz",
+    Complete = "complete",
+}
+
 export function createConvoUnitMachine() {
     return createMachine({
         id: "conversationUnit",
-        initial: "intro",
+        initial: ConvoUnitStepId.Intro,
         types: {
             events: {} as { type: "NEXT" },
         },
         states: {
-            intro: {
+            [ConvoUnitStepId.Intro]: {
                 on: {
-                    NEXT: "summaryQuiz",
+                    NEXT: ConvoUnitStepId.SummaryQuiz,
                 },
             },
-            summaryQuiz: {
+            [ConvoUnitStepId.SummaryQuiz]: {
                 on: {
-                    NEXT: "translationQuiz",
+                    NEXT: ConvoUnitStepId.TranslationQuiz,
                 },
             },
-            translationQuiz: {
+            [ConvoUnitStepId.TranslationQuiz]: {
                 on: {
-                    NEXT: "responseQuiz",
+                    NEXT: ConvoUnitStepId.ResponseQuiz,
                 },
             },
-            responseQuiz: {
+            [ConvoUnitStepId.ResponseQuiz]: {
                 on: {
-                    NEXT: "substitutionQuiz",
+                    NEXT: ConvoUnitStepId.SubstitutionQuiz,
                 },
             },
-            substitutionQuiz: {
+            [ConvoUnitStepId.SubstitutionQuiz]: {
                 on: {
-                    NEXT: "complete",
+                    NEXT: ConvoUnitStepId.Complete,
                 },
             },
-            complete: {},
+            [ConvoUnitStepId.Complete]: {},
         },
     });
 }

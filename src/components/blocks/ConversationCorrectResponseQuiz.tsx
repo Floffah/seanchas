@@ -29,6 +29,7 @@ import {
     ResponseQuizQuestion,
     buildResponseQuizQuestions,
 } from "@/lib/language/quiz/responseQuiz";
+import { ConvoUnitStepId } from "@/lib/state/units";
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
@@ -59,7 +60,17 @@ export default function ConversationCorrectResponseQuiz() {
                                 You got {quiz.correctCount} out of{" "}
                                 {quiz.questionCount} correct.
                             </CardDescription>
-                            <Button className="mt-2" onClick={convo.next}>
+                            <Button
+                                className="mt-2"
+                                onClick={() => {
+                                    convo.recordStepCompletion(
+                                        ConvoUnitStepId.ResponseQuiz,
+                                        quiz.correctCount,
+                                        quiz.questionCount,
+                                    );
+                                    convo.next();
+                                }}
+                            >
                                 Next Step
                             </Button>
                         </CardContent>
