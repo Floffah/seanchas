@@ -34,11 +34,10 @@ function buildTokenMap(convo: Conversation) {
 }
 
 export function formatUtteranceWithOverrides(
-    convo: Conversation,
     utterance: Utterance,
     overrides: TokenOverrideMap,
+    tokenMap: ReturnType<typeof buildTokenMap>,
 ) {
-    const tokenMap = buildTokenMap(convo);
     let final = "";
 
     for (const part of utterance.parts) {
@@ -68,6 +67,7 @@ export function formatUtteranceWithOverrides(
 export function buildSubstitutionQuizQuestions(
     convo: Conversation,
 ): SubstitutionQuizQuestion[] {
+    const tokenMap = buildTokenMap(convo);
     const eligible = convo.utterances
         .filter((utterance) => utterance.substitutionQuestion)
         .sort((a, b) => compareAlphabetically(a.id, b.id));
@@ -78,9 +78,9 @@ export function buildSubstitutionQuizQuestions(
             isCorrect: true,
             overrides: utterance.substitutionQuestion!.correctOverrides,
             value: formatUtteranceWithOverrides(
-                convo,
                 utterance,
                 utterance.substitutionQuestion!.correctOverrides,
+                tokenMap,
             ),
         };
 
@@ -95,9 +95,9 @@ export function buildSubstitutionQuizQuestions(
                         isCorrect: false,
                         overrides,
                         value: formatUtteranceWithOverrides(
-                            convo,
                             utterance,
                             overrides,
+                            tokenMap,
                         ),
                     }),
                 ),
