@@ -1,10 +1,14 @@
-import { fireEvent, render } from "@testing-library/react";
-import { describe, expect, test } from "bun:test";
+import { cleanup, fireEvent, render } from "@testing-library/react";
+import { afterEach, describe, expect, test } from "bun:test";
 
 import ConversationUnit from "@/components/blocks/ConversationUnit";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { greeting } from "@/lib/language/convos/data/greeting";
 import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
+
+afterEach(() => {
+    cleanup();
+});
 
 function UseConversationHarness() {
     const convo = useConversation();
@@ -43,7 +47,7 @@ describe("ConvoProvider", () => {
         expect(view.getByTestId("state-value")).toHaveTextContent("intro");
     });
 
-    test("advances to translationQuiz with next()", () => {
+    test("advances to summaryQuiz with next()", () => {
         const view = render(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
@@ -53,11 +57,11 @@ describe("ConvoProvider", () => {
         fireEvent.click(view.getByRole("button", { name: "Next" }));
 
         expect(view.getByTestId("state-value")).toHaveTextContent(
-            "translationQuiz",
+            "summaryQuiz",
         );
     });
 
-    test("advances through substitutionQuiz into complete and ignores extra NEXT events afterwards", () => {
+    test("advances through summaryQuiz into complete and ignores extra NEXT events afterwards", () => {
         const view = render(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
@@ -65,6 +69,17 @@ describe("ConvoProvider", () => {
         );
 
         fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent(
+            "summaryQuiz",
+        );
+
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent(
+            "translationQuiz",
+        );
+
         fireEvent.click(view.getByRole("button", { name: "Next" }));
 
         expect(view.getByTestId("state-value")).toHaveTextContent(
@@ -88,7 +103,7 @@ describe("ConvoProvider", () => {
 });
 
 describe("ConversationUnit", () => {
-    test("renders intro, then translation quiz, then response quiz, then substitution quiz as the unit advances", async () => {
+    test("renders intro, then summary quiz, then translation quiz, then response quiz, then substitution quiz as the unit advances", async () => {
         const view = render(
             <TooltipProvider>
                 <ConvoProvider conversation={greeting} index={0}>
@@ -101,6 +116,17 @@ describe("ConversationUnit", () => {
             view.queryByText("Which is the correct translation?"),
         ).not.toBeInTheDocument();
         expect(view.getByText("Press space to advance")).toBeInTheDocument();
+
+        fireEvent.click(
+            view.getByRole("button", {
+                name: "Advance unit",
+                hidden: true,
+            }),
+        );
+
+        expect(
+            await view.findByText("What was the conversation about?"),
+        ).toBeInTheDocument();
 
         fireEvent.click(
             view.getByRole("button", {

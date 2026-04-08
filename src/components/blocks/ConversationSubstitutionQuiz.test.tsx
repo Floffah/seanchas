@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react";
+import { cleanup, fireEvent, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 
 import ConversationSubstitutionQuiz from "@/components/blocks/ConversationSubstitutionQuiz";
@@ -14,6 +14,7 @@ beforeEach(() => {
 
 afterEach(() => {
     Math.random = originalRandom;
+    cleanup();
 });
 
 function StateHarness() {
@@ -22,15 +23,8 @@ function StateHarness() {
     return (
         <>
             <p data-testid="state-value">{String(convo.state.value)}</p>
-            <button
-                type="button"
-                onClick={() => {
-                    convo.next();
-                    convo.next();
-                    convo.next();
-                }}
-            >
-                Advance to substitution quiz
+            <button type="button" onClick={convo.next}>
+                Next state
             </button>
         </>
     );
@@ -76,9 +70,10 @@ describe("ConversationSubstitutionQuiz", () => {
             </TooltipProvider>,
         );
 
-        fireEvent.click(
-            view.getByRole("button", { name: "Advance to substitution quiz" }),
-        );
+        fireEvent.click(view.getByRole("button", { name: "Next state" }));
+        fireEvent.click(view.getByRole("button", { name: "Next state" }));
+        fireEvent.click(view.getByRole("button", { name: "Next state" }));
+        fireEvent.click(view.getByRole("button", { name: "Next state" }));
 
         expect(view.getByTestId("state-value")).toHaveTextContent(
             "substitutionQuiz",

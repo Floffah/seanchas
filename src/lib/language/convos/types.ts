@@ -18,12 +18,19 @@ export type SubstitutionQuestion = {
     incorrectOverrides: TokenOverrideMap[];
 };
 
+export type SummaryQuestion = {
+    prompt: string;
+    correctAnswer: string;
+    incorrectAnswers: string[];
+};
+
 export type Speaker = ConversationSpeaker;
 
 export type Conversation = {
     id: ConversationId;
     name: string;
     description?: string;
+    summaryQuestions?: SummaryQuestion[];
     utterances: Utterance[];
 };
 

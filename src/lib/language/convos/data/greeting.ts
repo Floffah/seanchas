@@ -4,6 +4,16 @@ export const greeting: Conversation = {
     id: "greeting",
     name: "Greeting",
     description: "A simple greeting conversation. An introduction to Gaidhlig.",
+    summaryQuestions: [
+        {
+            prompt: "What was the conversation about?",
+            correctAnswer: "Greeting someone and asking how they are.",
+            incorrectAnswers: [
+                "Buying food at a market.",
+                "Talking about the weather forecast.",
+            ],
+        },
+    ],
     utterances: [
         {
             id: "greeting.u0",

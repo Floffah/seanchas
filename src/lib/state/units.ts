@@ -10,6 +10,11 @@ export function createConvoUnitMachine() {
         states: {
             intro: {
                 on: {
+                    NEXT: "summaryQuiz",
+                },
+            },
+            summaryQuiz: {
+                on: {
                     NEXT: "translationQuiz",
                 },
             },
