@@ -1,14 +1,37 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
-import { afterEach, describe, expect, test } from "bun:test";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+
+const saveCompletionMock = mock(async () => "completion-id");
+
+mock.module("@convex-dev/react-query", () => ({
+    useConvexMutation: () => saveCompletionMock,
+}));
 
 import ConversationUnit from "@/components/blocks/ConversationUnit";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { greeting } from "@/lib/language/convos/data/greeting";
+import { ConvoUnitStepId } from "@/lib/state/units";
 import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
 
+beforeEach(() => {
+    saveCompletionMock.mockImplementation(async () => "completion-id");
+});
+
 afterEach(() => {
+    mock.clearAllMocks();
     cleanup();
 });
+
+function renderWithQueryClient(children: React.ReactNode) {
+    const queryClient = new QueryClient();
+
+    return render(
+        <QueryClientProvider client={queryClient}>
+            {children}
+        </QueryClientProvider>,
+    );
+}
 
 function UseConversationHarness() {
     const convo = useConversation();
@@ -36,9 +59,63 @@ function ConversationUnitHarness() {
     );
 }
 
+function CompletionHarness() {
+    const convo = useConversation();
+
+    return (
+        <>
+            <p data-testid="state-value">{String(convo.state.value)}</p>
+            <p data-testid="completion-error">
+                {convo.saveCompletionError?.toString() ?? ""}
+            </p>
+            <button type="button" onClick={convo.next}>
+                Next
+            </button>
+            <button
+                type="button"
+                onClick={() =>
+                    convo.recordStepCompletion(ConvoUnitStepId.SummaryQuiz, 1, 1)
+                }
+            >
+                Record summary
+            </button>
+            <button
+                type="button"
+                onClick={() =>
+                    convo.recordStepCompletion(ConvoUnitStepId.TranslationQuiz, 2, 3)
+                }
+            >
+                Record translation
+            </button>
+            <button
+                type="button"
+                onClick={() =>
+                    convo.recordStepCompletion(ConvoUnitStepId.ResponseQuiz, 3, 3)
+                }
+            >
+                Record response
+            </button>
+            <button
+                type="button"
+                onClick={() =>
+                    convo.recordStepCompletion(ConvoUnitStepId.SubstitutionQuiz, 1, 2)
+                }
+            >
+                Record substitution
+            </button>
+            <button
+                type="button"
+                onClick={() => void convo.finishUnit()}
+            >
+                Finish unit
+            </button>
+        </>
+    );
+}
+
 describe("ConvoProvider", () => {
     test("initializes on the intro state", () => {
-        const view = render(
+        const view = renderWithQueryClient(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
             </ConvoProvider>,
@@ -48,7 +125,7 @@ describe("ConvoProvider", () => {
     });
 
     test("advances to summaryQuiz with next()", () => {
-        const view = render(
+        const view = renderWithQueryClient(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
             </ConvoProvider>,
@@ -62,7 +139,7 @@ describe("ConvoProvider", () => {
     });
 
     test("advances through summaryQuiz into complete and ignores extra NEXT events afterwards", () => {
-        const view = render(
+        const view = renderWithQueryClient(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
             </ConvoProvider>,
@@ -100,11 +177,53 @@ describe("ConvoProvider", () => {
 
         expect(view.getByTestId("state-value")).toHaveTextContent("complete");
     });
+
+    test("aggregates scored steps and saves one completion record while staying on complete", async () => {
+        const view = renderWithQueryClient(
+            <ConvoProvider conversation={greeting} index={0}>
+                <CompletionHarness />
+            </ConvoProvider>,
+        );
+
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        expect(view.getByTestId("state-value")).toHaveTextContent(
+            "substitutionQuiz",
+        );
+
+        fireEvent.click(view.getByRole("button", { name: "Record summary" }));
+        fireEvent.click(
+            view.getByRole("button", { name: "Record translation" }),
+        );
+        fireEvent.click(view.getByRole("button", { name: "Record response" }));
+        fireEvent.click(
+            view.getByRole("button", { name: "Record substitution" }),
+        );
+        fireEvent.click(view.getByRole("button", { name: "Finish unit" }));
+
+        await waitFor(() => {
+            expect(saveCompletionMock).toHaveBeenCalledTimes(1);
+        });
+        const firstSaveCall = saveCompletionMock.mock.calls.at(0) as
+            | [Record<string, unknown>, ...unknown[]]
+            | undefined;
+        expect(firstSaveCall?.[0]).toEqual({
+            unitId: "greeting",
+            correctAnswers: 7,
+            questionCount: 9,
+        });
+
+        expect(view.getByTestId("state-value")).toHaveTextContent("substitutionQuiz");
+        expect(view.getByTestId("completion-error")).toHaveTextContent("");
+    });
 });
 
 describe("ConversationUnit", () => {
     test("renders intro, then summary quiz, then translation quiz, then response quiz, then substitution quiz as the unit advances", async () => {
-        const view = render(
+        const view = renderWithQueryClient(
             <TooltipProvider>
                 <ConvoProvider conversation={greeting} index={0}>
                     <ConversationUnitHarness />

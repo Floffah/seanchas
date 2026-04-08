@@ -1,5 +1,12 @@
 import { cleanup, fireEvent, render } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+
+const saveCompletionMock = mock(async () => "completion-id");
+
+mock.module("@convex-dev/react-query", () => ({
+    useConvexMutation: () => saveCompletionMock,
+}));
 
 import ConversationSummaryQuiz from "@/components/blocks/ConversationSummaryQuiz";
 import { greeting } from "@/lib/language/convos/data/greeting";
@@ -13,8 +20,19 @@ beforeEach(() => {
 
 afterEach(() => {
     Math.random = originalRandom;
+    mock.clearAllMocks();
     cleanup();
 });
+
+function renderWithQueryClient(children: React.ReactNode) {
+    const queryClient = new QueryClient();
+
+    return render(
+        <QueryClientProvider client={queryClient}>
+            {children}
+        </QueryClientProvider>,
+    );
+}
 
 function StateHarness() {
     const convo = useConversation();
@@ -31,7 +49,7 @@ function StateHarness() {
 
 describe("ConversationSummaryQuiz", () => {
     test("renders the authored English prompt and answer options", () => {
-        const view = render(
+        const view = renderWithQueryClient(
             <ConvoProvider conversation={greeting} index={0}>
                 <ConversationSummaryQuiz />
             </ConvoProvider>,
@@ -56,7 +74,7 @@ describe("ConversationSummaryQuiz", () => {
     });
 
     test("supports answering questions and advancing to the translation quiz", () => {
-        const view = render(
+        const view = renderWithQueryClient(
             <ConvoProvider conversation={greeting} index={0}>
                 <StateHarness />
                 <ConversationSummaryQuiz />

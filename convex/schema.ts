@@ -15,10 +15,12 @@ const schema = defineSchema({
         // other "users" fields...
     }).index("email", ["email"]),
 
-
     unitCompletions: defineTable({
         userId: v.id("users"),
         unitId: v.string(),
+        correctAnswers: v.number(),
+        questionCount: v.number(),
+        completedAt: v.number(),
     }).index("userId_unitId", ["userId", "unitId"]),
 });
 

@@ -24,10 +24,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {
-    buildSubstitutionQuizQuestions,
     SubstitutionQuizOption,
     SubstitutionQuizQuestion,
+    buildSubstitutionQuizQuestions,
 } from "@/lib/language/quiz/substitutionQuiz";
+import { ConvoUnitStepId } from "@/lib/state/units";
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
@@ -61,7 +62,17 @@ export default function ConversationSubstitutionQuiz() {
                                 You got {quiz.correctCount} out of{" "}
                                 {quiz.questionCount} correct.
                             </CardDescription>
-                            <Button className="mt-2" onClick={convo.next}>
+                            <Button
+                                className="mt-2"
+                                onClick={() => {
+                                    convo.recordStepCompletion(
+                                        ConvoUnitStepId.SubstitutionQuiz,
+                                        quiz.correctCount,
+                                        quiz.questionCount,
+                                    );
+                                    convo.next();
+                                }}
+                            >
                                 Finish Unit
                             </Button>
                         </CardContent>
@@ -73,7 +84,9 @@ export default function ConversationSubstitutionQuiz() {
                         <GenericQuizHeader>
                             <CardDescription>Phrase</CardDescription>
                             <CardTitle>
-                                <SourcePhrase utterance={question.promptUtterance} />
+                                <SourcePhrase
+                                    utterance={question.promptUtterance}
+                                />
                             </CardTitle>
                             <CardAction>
                                 <GenericQuizProgress />
