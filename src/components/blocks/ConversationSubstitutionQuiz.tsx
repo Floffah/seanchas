@@ -62,7 +62,7 @@ export default function ConversationSubstitutionQuiz() {
                                 {quiz.questionCount} correct.
                             </CardDescription>
                             <Button className="mt-2" onClick={convo.next}>
-                                Next Step
+                                Finish Unit
                             </Button>
                         </CardContent>
                     </Card>

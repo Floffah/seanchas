@@ -58,7 +58,7 @@ export default function ConversationSummaryQuiz() {
                                 {quiz.questionCount} correct.
                             </CardDescription>
                             <Button className="mt-2" onClick={convo.next}>
-                                Finish Unit
+                                Next Step
                             </Button>
                         </CardContent>
                     </Card>

@@ -47,7 +47,7 @@ describe("ConvoProvider", () => {
         expect(view.getByTestId("state-value")).toHaveTextContent("intro");
     });
 
-    test("advances to translationQuiz with next()", () => {
+    test("advances to summaryQuiz with next()", () => {
         const view = render(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
@@ -56,7 +56,9 @@ describe("ConvoProvider", () => {
 
         fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent("summaryQuiz");
+        expect(view.getByTestId("state-value")).toHaveTextContent(
+            "summaryQuiz",
+        );
     });
 
     test("advances through summaryQuiz into complete and ignores extra NEXT events afterwards", () => {
@@ -92,9 +94,7 @@ describe("ConvoProvider", () => {
 
         fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent(
-            "complete",
-        );
+        expect(view.getByTestId("state-value")).toHaveTextContent("complete");
 
         fireEvent.click(view.getByRole("button", { name: "Next" }));
 

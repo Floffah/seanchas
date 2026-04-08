@@ -79,7 +79,7 @@ describe("ConversationSummaryQuiz", () => {
         fireEvent.click(view.getByRole("button", { name: "Finish" }));
 
         expect(view.getByText("Step Complete")).toBeInTheDocument();
-        fireEvent.click(view.getByRole("button", { name: "Finish Unit" }));
+        fireEvent.click(view.getByRole("button", { name: "Next Step" }));
 
         expect(view.getByTestId("state-value")).toHaveTextContent(
             "translationQuiz",
