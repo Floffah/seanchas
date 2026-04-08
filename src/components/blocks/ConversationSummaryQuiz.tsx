@@ -14,7 +14,6 @@ import {
     GenericQuizProgress,
     useQuiz,
 } from "@/components/GenericQuiz";
-import SourcePhrase from "@/components/blocks/SourcePhrase";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -24,21 +23,18 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {
-    buildSubstitutionQuizQuestions,
-    SubstitutionQuizOption,
-    SubstitutionQuizQuestion,
-} from "@/lib/language/quiz/substitutionQuiz";
+    buildSummaryQuizQuestions,
+    SummaryQuizOption,
+    SummaryQuizQuestion,
+} from "@/lib/language/quiz/summaryQuiz";
 import { cn } from "@/lib/utils";
 import { useConversation } from "@/providers/ConvoProvider";
 
-export default function ConversationSubstitutionQuiz() {
+export default function ConversationSummaryQuiz() {
     const convo = useConversation();
-    const questions = useMemo(
-        () => buildSubstitutionQuizQuestions(convo),
-        [convo],
-    );
+    const questions = useMemo(() => buildSummaryQuizQuestions(convo), [convo]);
 
-    const quiz = useQuiz<SubstitutionQuizQuestion, string | null>({
+    const quiz = useQuiz<SummaryQuizQuestion, string | null>({
         questions,
         createInitialAnswer: () => null,
         isAnswerReady: (_question, answer) => answer !== null,
@@ -62,7 +58,7 @@ export default function ConversationSubstitutionQuiz() {
                                 {quiz.questionCount} correct.
                             </CardDescription>
                             <Button className="mt-2" onClick={convo.next}>
-                                Next Step
+                                Finish Unit
                             </Button>
                         </CardContent>
                     </Card>
@@ -71,10 +67,8 @@ export default function ConversationSubstitutionQuiz() {
                 {!quiz.isComplete && (
                     <GenericQuiz quiz={quiz} className="w-full">
                         <GenericQuizHeader>
-                            <CardDescription>Phrase</CardDescription>
-                            <CardTitle>
-                                <SourcePhrase utterance={question.promptUtterance} />
-                            </CardTitle>
+                            <CardDescription>Summary</CardDescription>
+                            <CardTitle>{question.prompt}</CardTitle>
                             <CardAction>
                                 <GenericQuizProgress />
                             </CardAction>
@@ -83,10 +77,10 @@ export default function ConversationSubstitutionQuiz() {
                         <GenericQuizContent>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm font-medium">
-                                    Which alternative also works here?
+                                    Pick the best summary.
                                 </p>
                                 {question.options.map(
-                                    (option: SubstitutionQuizOption) => (
+                                    (option: SummaryQuizOption) => (
                                         <GenericQuizAnswerButton
                                             option={option}
                                             key={option.id}
@@ -109,8 +103,8 @@ export default function ConversationSubstitutionQuiz() {
                                     {quiz.isCorrect && "Correct."}
                                     {!quiz.isCorrect && (
                                         <>
-                                            Not quite. The correct alternative
-                                            is: {question.correctOption.value}
+                                            Not quite. The correct answer is:{" "}
+                                            {question.correctOption.value}
                                         </>
                                     )}
                                 </p>

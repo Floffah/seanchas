@@ -7,6 +7,7 @@ import Link from "next/link";
 import DynamicViewTransition from "@/components/DynamicViewTransition";
 import ConversationCorrectResponseQuiz from "@/components/blocks/ConversationCorrectResponseQuiz";
 import ConversationIntro from "@/components/blocks/ConversationIntro";
+import ConversationSummaryQuiz from "@/components/blocks/ConversationSummaryQuiz";
 import ConversationSubstitutionQuiz from "@/components/blocks/ConversationSubstitutionQuiz";
 import ConversationUnitComplete from "@/components/blocks/ConversationUnitComplete";
 import ConversationTranslationQuiz from "@/components/blocks/ConversationTranslationQuiz";
@@ -57,6 +58,9 @@ export default function ConversationUnit({}) {
                     )}
                     {convo.state.matches("substitutionQuiz") && (
                         <ConversationSubstitutionQuiz key="substitution-quiz" />
+                    )}
+                    {convo.state.matches("summaryQuiz") && (
+                        <ConversationSummaryQuiz key="summary-quiz" />
                     )}
                     {convo.state.matches("complete") && (
                         <ConversationUnitComplete key="complete" />
