@@ -82,7 +82,7 @@ export const gamesAndCoffee: Conversation = {
                 "games-and-coffee.u4",
             ],
             parts: [
-                { kind: "text", text: "’S toil leam e" },
+                { kind: "text", text: "Is toil leam e" },
                 { kind: "punct", text: "!" },
             ],
         },
