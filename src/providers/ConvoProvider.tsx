@@ -3,7 +3,6 @@
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useMachine } from "@xstate/react";
-import { makeFunctionReference } from "convex/server";
 import {
     PropsWithChildren,
     createContext,
@@ -13,8 +12,8 @@ import {
     useState,
 } from "react";
 import { StateFrom } from "xstate";
-import { api } from "~/convex/api";
 
+import { api } from "@/convex/api";
 import { Conversation, TokenPart, TokenRefPart } from "@/lib/language/convos";
 import { createConvoTokenStore } from "@/lib/state/convos";
 import { ConvoUnitStepId, createConvoUnitMachine } from "@/lib/state/units";

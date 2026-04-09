@@ -1,11 +1,10 @@
-import { ChevronRightIcon, LanguagesIcon } from "lucide-react";
+import { LanguagesIcon } from "lucide-react";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
+import UnitList from "@/components/blocks/UnitList";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { conversations } from "@/lib/language/convos";
-import { cn } from "@/lib/utils";
 
 export default function Page() {
     return (
@@ -27,48 +26,7 @@ export default function Page() {
                     </nav>
                 </aside>
                 <main className="flex flex-1 basis-auto flex-col items-center gap-6">
-                    <h2 className="text-3xl font-bold">Continue Learning</h2>
-                    <div className="flex max-w-100 flex-col gap-4">
-                        {conversations.map((convo, idx) => (
-                            <ViewTransition
-                                name={`convo-${convo.id}`}
-                                key={convo.id}
-                            >
-                                <Link
-                                    className={cn(
-                                        "flex cursor-pointer items-center rounded-lg bg-card p-4 transition-transform hover:scale-105",
-                                        idx === 0 && "border border-muted",
-                                    )}
-                                    href={`/${convo.id}`}
-                                >
-                                    <div className="flex flex-col items-start gap-2 text-left">
-                                        <ViewTransition
-                                            name={`convo-${convo.id}-title`}
-                                        >
-                                            <h3 className="text-xl font-semibold">
-                                                {convo.name}
-                                            </h3>
-                                        </ViewTransition>
-                                        <ViewTransition
-                                            name={`convo-${convo.id}-description`}
-                                        >
-                                            <p className="text-sm">
-                                                {convo.description}
-                                            </p>
-                                        </ViewTransition>
-                                        <p className="text-sm text-muted-foreground">
-                                            {convo.utterances.length} phrases
-                                        </p>
-                                    </div>
-                                    <ViewTransition
-                                        name={`convo-${convo.id}-navicon`}
-                                    >
-                                        <ChevronRightIcon className="size-6 text-muted-foreground" />
-                                    </ViewTransition>
-                                </Link>
-                            </ViewTransition>
-                        ))}
-                    </div>
+                    <UnitList />
                 </main>
                 <aside className="flex max-w-100 min-w-48 basis-1/4 flex-col gap-2">
                     <div className="items-center rounded-lg bg-card p-4">
