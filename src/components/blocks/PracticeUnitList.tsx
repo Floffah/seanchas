@@ -2,6 +2,7 @@
 
 import { useQuery } from "convex/react";
 import { BookOpenCheckIcon } from "lucide-react";
+import { useMemo } from "react";
 
 import UnitCard from "@/components/blocks/UnitCard";
 import {
@@ -54,11 +55,15 @@ function PracticeSection({
 
 export default function PracticeUnitList() {
     const practiceQueue = useQuery(api.units.getPracticeQueue);
-    const groupedQueue = {
-        due: practiceQueue?.filter((item) => item.status === "due") ?? [],
-        new: practiceQueue?.filter((item) => item.status === "new") ?? [],
-        later: practiceQueue?.filter((item) => item.status === "later") ?? [],
-    };
+    const groupedQueue = useMemo(
+        () => ({
+            due: practiceQueue?.filter((item) => item.status === "due") ?? [],
+            new: practiceQueue?.filter((item) => item.status === "new") ?? [],
+            later:
+                practiceQueue?.filter((item) => item.status === "later") ?? [],
+        }),
+        [practiceQueue],
+    );
 
     if (practiceQueue === undefined) {
         return null;

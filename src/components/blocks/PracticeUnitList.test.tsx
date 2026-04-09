@@ -4,6 +4,8 @@ import type { ComponentProps } from "react";
 import { Rating } from "ts-fsrs";
 
 import { conversations } from "@/lib/language/convos";
+import { greeting } from "@/lib/language/convos/data/greeting";
+import { introductions } from "@/lib/language/convos/data/introductions";
 import type { PracticeQueueItem } from "@/lib/util/practice";
 
 const useQueryMock = mock(() => [] as PracticeQueueItem[]);
@@ -36,8 +38,6 @@ mock.module("@/components/blocks/UnitCard", () => ({
 const { default: PracticeUnitList } =
     await import("@/components/blocks/PracticeUnitList");
 
-const [firstConversation, secondConversation] = conversations;
-
 beforeEach(() => {
     useQueryMock.mockImplementation(() => []);
 });
@@ -53,13 +53,13 @@ describe("PracticeUnitList", () => {
             () =>
                 [
                     {
-                        unitId: secondConversation.id,
+                        unitId: introductions.id,
                         status: "due",
                         due: Date.now() - 1_000,
                         lastRating: Rating.Hard,
                     },
                     {
-                        unitId: firstConversation.id,
+                        unitId: greeting.id,
                         status: "new",
                     },
                 ] satisfies PracticeQueueItem[],
@@ -72,20 +72,18 @@ describe("PracticeUnitList", () => {
         expect(view.queryByText("Later")).not.toBeInTheDocument();
 
         expect(
-            view.getByTestId(`unit-card-${secondConversation.id}`),
-        ).toHaveAttribute(
+            view.getByTestId(`unit-card-${introductions.id}`),
+        ).toHaveAttribute("href", `/${introductions.id}?returnTo=practice`);
+        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
             "href",
-            `/${secondConversation.id}?returnTo=practice`,
+            `/${greeting.id}?returnTo=practice`,
         );
-        expect(
-            view.getByTestId(`unit-card-${firstConversation.id}`),
-        ).toHaveAttribute("href", `/${firstConversation.id}?returnTo=practice`);
 
         const practiceLinks = view.getAllByRole("link");
 
         expect(practiceLinks.map((link) => link.getAttribute("href"))).toEqual([
-            `/${secondConversation.id}?returnTo=practice`,
-            `/${firstConversation.id}?returnTo=practice`,
+            `/${introductions.id}?returnTo=practice`,
+            `/${greeting.id}?returnTo=practice`,
         ]);
     });
 
@@ -94,11 +92,11 @@ describe("PracticeUnitList", () => {
             () =>
                 [
                     {
-                        unitId: firstConversation.id,
+                        unitId: greeting.id,
                         status: "new",
                     },
                     {
-                        unitId: secondConversation.id,
+                        unitId: introductions.id,
                         status: "new",
                     },
                 ] satisfies PracticeQueueItem[],
@@ -107,15 +105,13 @@ describe("PracticeUnitList", () => {
         const view = render(<PracticeUnitList />);
 
         expect(view.getByText("New")).toBeInTheDocument();
-        expect(
-            view.getByTestId(`unit-card-${firstConversation.id}`),
-        ).toHaveAttribute("href", `/${firstConversation.id}?returnTo=practice`);
-        expect(
-            view.getByTestId(`unit-card-${secondConversation.id}`),
-        ).toHaveAttribute(
+        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
             "href",
-            `/${secondConversation.id}?returnTo=practice`,
+            `/${greeting.id}?returnTo=practice`,
         );
+        expect(
+            view.getByTestId(`unit-card-${introductions.id}`),
+        ).toHaveAttribute("href", `/${introductions.id}?returnTo=practice`);
     });
 
     test("shows the empty state when the practice queue is empty", () => {
