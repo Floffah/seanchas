@@ -12,7 +12,10 @@ const schema = defineSchema({
         phone: v.optional(v.string()),
         phoneVerificationTime: v.optional(v.number()),
         isAnonymous: v.optional(v.boolean()),
-        // other "users" fields...
+
+        // non convex auth user fields
+        currentStreak: v.optional(v.number()),
+        lastActiveAt: v.optional(v.number()),
     }).index("email", ["email"]),
 
     unitCompletions: defineTable({

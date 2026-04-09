@@ -2,9 +2,9 @@ import { LanguagesIcon } from "lucide-react";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
+import HomeProgressWidgets from "@/components/blocks/HomeProgressWidgets";
 import UnitList from "@/components/blocks/UnitList";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 
 export default function Page() {
     return (
@@ -29,28 +29,7 @@ export default function Page() {
                     <UnitList />
                 </main>
                 <aside className="flex max-w-100 min-w-48 basis-1/4 flex-col gap-2">
-                    <div className="items-center rounded-lg bg-card p-4">
-                        <div className="flex items-center gap-2">
-                            <p className="text-xl">🔥</p>
-                            <p>10</p>
-                            <Progress value={70} className="h-2 grow" />
-                            <p>14</p>
-                        </div>
-                        <p className="text-center text-sm text-muted-foreground">
-                            Come back every day to increase your streak!
-                        </p>
-                    </div>
-                    <div className="items-center rounded-lg bg-card p-4">
-                        <div className="flex items-center gap-2">
-                            <p className="text-xl">✅</p>
-                            <p>5</p>
-                            <Progress value={2} className="h-2 grow" />
-                            <p>200</p>
-                        </div>
-                        <p className="text-center text-sm text-muted-foreground">
-                            Keep doing units to increase your completion!
-                        </p>
-                    </div>
+                    <HomeProgressWidgets />
                 </aside>
             </div>
         </ViewTransition>
