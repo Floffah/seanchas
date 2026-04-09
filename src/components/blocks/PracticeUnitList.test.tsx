@@ -1,4 +1,4 @@
-import { cleanup, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import type { ComponentProps } from "react";
 import { Rating } from "ts-fsrs";
@@ -40,11 +40,6 @@ const { default: PracticeUnitList } =
 
 beforeEach(() => {
     useQueryMock.mockImplementation(() => []);
-});
-
-afterEach(() => {
-    mock.clearAllMocks();
-    cleanup();
 });
 
 describe("PracticeUnitList", () => {

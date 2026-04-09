@@ -1,7 +1,10 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { fireEvent, render } from "@testing-library/react";
+import { beforeEach, describe, expect, mock, test } from "bun:test";
 
+import UnitList from "@/components/blocks/UnitList";
+import { conversations } from "@/lib/language/convos";
 import { greeting } from "@/lib/language/convos/data/greeting";
+import { introductions } from "@/lib/language/convos/data/introductions";
 
 const useQueryMock = mock(() => [] as string[] | undefined);
 
@@ -38,27 +41,10 @@ mock.module("@/components/blocks/UnitCard", () => ({
     ),
 }));
 
-mock.module("@/lib/language/convos", () => ({
-    conversations: [
-        greeting,
-        {
-            ...greeting,
-            id: "follow-up",
-            name: "Follow-up Greeting",
-            description: "Continue the greeting conversation.",
-        },
-    ],
-}));
-
-import UnitList from "@/components/blocks/UnitList";
+const completedConversationIds = conversations.map((convo) => convo.id);
 
 beforeEach(() => {
     useQueryMock.mockImplementation(() => []);
-});
-
-afterEach(() => {
-    mock.clearAllMocks();
-    cleanup();
 });
 
 describe("UnitList", () => {
@@ -66,29 +52,27 @@ describe("UnitList", () => {
         const view = render(<UnitList />);
 
         expect(view.getByText("Continue Learning")).toBeInTheDocument();
-        expect(view.getByTestId("unit-card-greeting")).toHaveAttribute(
+        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
             "data-active",
             "true",
         );
-        expect(view.getByTestId("unit-card-follow-up")).toHaveAttribute(
-            "data-active",
-            "false",
-        );
+        expect(
+            view.getByTestId(`unit-card-${introductions.id}`),
+        ).toHaveAttribute("data-active", "false");
         expect(
             view.queryByRole("button", { name: "Revisit Units" }),
         ).not.toBeInTheDocument();
     });
 
     test("moves completed units into the revisit section and lets that section be expanded and collapsed", () => {
-        useQueryMock.mockImplementation(() => ["greeting"]);
+        useQueryMock.mockImplementation(() => [greeting.id]);
 
         const view = render(<UnitList />);
 
-        expect(view.getByTestId("unit-card-follow-up")).toHaveAttribute(
-            "data-active",
-            "true",
-        );
-        expect(view.getByTestId("unit-card-greeting")).toHaveAttribute(
+        expect(
+            view.getByTestId(`unit-card-${introductions.id}`),
+        ).toHaveAttribute("data-active", "true");
+        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
             "data-active",
             "false",
         );
@@ -114,7 +98,7 @@ describe("UnitList", () => {
         expect(revisitContent?.hasAttribute("hidden")).not.toBe(initialHidden);
 
         if (revisitTrigger.getAttribute("aria-expanded") === "true") {
-            expect(view.getByTestId("unit-card-greeting")).toBeVisible();
+            expect(view.getByTestId(`unit-card-${greeting.id}`)).toBeVisible();
         }
 
         fireEvent.click(revisitTrigger);
@@ -125,12 +109,12 @@ describe("UnitList", () => {
         expect(revisitContent?.hasAttribute("hidden")).toBe(initialHidden);
 
         if (revisitTrigger.getAttribute("aria-expanded") === "true") {
-            expect(view.getByTestId("unit-card-greeting")).toBeVisible();
+            expect(view.getByTestId(`unit-card-${greeting.id}`)).toBeVisible();
         }
     });
 
     test("shows the empty state and practice CTA when every unit is completed", () => {
-        useQueryMock.mockImplementation(() => ["greeting", "follow-up"]);
+        useQueryMock.mockImplementation(() => completedConversationIds);
 
         const view = render(<UnitList />);
 
