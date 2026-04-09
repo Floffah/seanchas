@@ -9,10 +9,12 @@ import { conversations } from "@/lib/language/convos";
 export default function HomeProgressWidgets() {
     const progress = useQuery(api.units.getHomeProgress);
 
-    const completedCount = progress?.completedUnitIds.length ?? 0;
+    const completedCount = progress?.completedCount ?? 0;
     const totalCount = conversations.length;
     const completionProgress =
-        totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
+        totalCount === 0
+            ? 0
+            : Math.min(Math.max((completedCount / totalCount) * 100, 0), 100);
 
     const streakDays = progress?.currentStreak ?? 0;
     const streakGoal = progress?.streakGoal ?? 7;

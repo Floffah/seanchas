@@ -65,6 +65,22 @@ describe("getUpdatedStreakState", () => {
         });
     });
 
+    test("defaults to a two-day streak when yesterday exists but the stored streak is missing", () => {
+        const now = new Date("2026-04-09T12:00:00.000Z");
+
+        expect(
+            getUpdatedStreakState(
+                {
+                    lastActiveAt: new Date("2026-04-08T12:00:00.000Z").getTime(),
+                },
+                now,
+            ),
+        ).toEqual({
+            currentStreak: 2,
+            lastActiveAt: now.getTime(),
+        });
+    });
+
     test("resets the streak to 1 after a gap of more than one day", () => {
         const now = new Date("2026-04-09T12:00:00.000Z");
 

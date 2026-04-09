@@ -3,17 +3,15 @@ import { beforeEach, describe, expect, mock, test } from "bun:test";
 import type { ComponentProps } from "react";
 
 import { conversations } from "@/lib/language/convos";
-import { greeting } from "@/lib/language/convos/data/greeting";
-import { introductions } from "@/lib/language/convos/data/introductions";
 
 const useQueryMock = mock(
     () =>
         ({
-            completedUnitIds: [],
+            completedCount: 0,
             currentStreak: 0,
             streakGoal: 7,
         }) as {
-            completedUnitIds: string[];
+            completedCount: number;
             currentStreak: number;
             streakGoal: number;
         },
@@ -40,16 +38,16 @@ const { default: HomeProgressWidgets } = await import(
 
 beforeEach(() => {
     useQueryMock.mockImplementation(() => ({
-        completedUnitIds: [],
+        completedCount: 0,
         currentStreak: 0,
         streakGoal: 7,
     }));
 });
 
 describe("HomeProgressWidgets", () => {
-    test("renders completed units using completed ids and the authored unit count", () => {
+    test("renders completed units using the completed count and the authored unit count", () => {
         useQueryMock.mockImplementation(() => ({
-            completedUnitIds: [greeting.id, introductions.id],
+            completedCount: 2,
             currentStreak: 3,
             streakGoal: 7,
         }));
@@ -68,9 +66,24 @@ describe("HomeProgressWidgets", () => {
         );
     });
 
+    test("clamps completion progress to 100 when completed count exceeds the authored unit count", () => {
+        useQueryMock.mockImplementation(() => ({
+            completedCount: conversations.length + 5,
+            currentStreak: 3,
+            streakGoal: 7,
+        }));
+
+        const view = render(<HomeProgressWidgets />);
+
+        expect(view.getByTestId("home-completion-progress")).toHaveAttribute(
+            "data-value",
+            "100",
+        );
+    });
+
     test("renders the streak widget using the stored streak and fixed goal", () => {
         useQueryMock.mockImplementation(() => ({
-            completedUnitIds: [greeting.id],
+            completedCount: 1,
             currentStreak: 3,
             streakGoal: 7,
         }));

@@ -51,7 +51,7 @@ export function getUpdatedStreakState(
         getDayStart(streakState.lastActiveAt) === getDayStart(nowTimestamp, 1)
     ) {
         return {
-            currentStreak: (streakState.currentStreak ?? 0) + 1,
+            currentStreak: (streakState.currentStreak ?? 1) + 1,
             lastActiveAt: nowTimestamp,
         };
     }

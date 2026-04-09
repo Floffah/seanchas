@@ -42,9 +42,7 @@ export const getHomeProgress = query({
             .collect();
 
         return {
-            completedUnitIds: completions.map(
-                (completion) => completion.unitId,
-            ),
+            completedCount: completions.length,
             currentStreak: user.currentStreak ?? 0,
             streakGoal: getStreakGoal(user.currentStreak ?? 0),
         };

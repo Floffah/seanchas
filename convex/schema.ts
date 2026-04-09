@@ -13,7 +13,7 @@ const schema = defineSchema({
         phoneVerificationTime: v.optional(v.number()),
         isAnonymous: v.optional(v.boolean()),
 
-        // non convex user fields
+        // non convex auth user fields
         currentStreak: v.optional(v.number()),
         lastActiveAt: v.optional(v.number()),
     }).index("email", ["email"]),
