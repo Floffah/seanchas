@@ -1,5 +1,6 @@
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { Rating } from "ts-fsrs";
 
 import { greeting } from "@/lib/language/convos/data/greeting";
 import { PracticeQueueItem } from "@/lib/util/practice";
@@ -50,17 +51,15 @@ describe("PracticeUnitList", () => {
         useQueryMock.mockImplementation(() => [
             {
                 unitId: "follow-up",
-                name: "Follow-up Greeting",
-                description: "Continue the greeting conversation.",
-                status: "due" as const,
+                status: "due",
+                due: Date.now() - 1_000,
+                lastRating: Rating.Hard,
             },
             {
                 unitId: "greeting",
-                name: "Greeting",
-                description: greeting.description,
-                status: "new" as const,
+                status: "new",
             },
-        ]);
+        ] satisfies PracticeQueueItem[]);
 
         const view = render(<PracticeUnitList />);
 
@@ -76,7 +75,34 @@ describe("PracticeUnitList", () => {
         ]);
     });
 
-    test("shows an empty state when there are no practice units", () => {
+    test("shows new units when there is no saved practice state yet", () => {
+        useQueryMock.mockImplementation(() => [
+            {
+                unitId: "greeting",
+                status: "new",
+            },
+            {
+                unitId: "follow-up",
+                status: "new",
+            },
+        ] satisfies PracticeQueueItem[]);
+
+        const view = render(<PracticeUnitList />);
+
+        expect(view.getByText("New")).toBeInTheDocument();
+        expect(
+            view.getByRole("link", {
+                name: /^Greeting A simple greeting conversation\. An introduction to Gaidhlig\. 4 phrases$/i,
+            }),
+        ).toHaveAttribute("href", "/greeting?returnTo=practice");
+        expect(
+            view.getByRole("link", {
+                name: /^Follow-up Greeting Continue the greeting conversation\. 4 phrases$/i,
+            }),
+        ).toHaveAttribute("href", "/follow-up?returnTo=practice");
+    });
+
+    test("shows the empty state when the practice queue is empty", () => {
         useQueryMock.mockImplementation(() => []);
 
         const view = render(<PracticeUnitList />);
