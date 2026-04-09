@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { Rating } from "ts-fsrs";
 
 import { greeting } from "@/lib/language/convos/data/greeting";
-import { PracticeQueueItem } from "@/lib/util/practice";
+import type { PracticeQueueItem } from "@/lib/util/practice";
 
 const useQueryMock = mock(() => [] as PracticeQueueItem[]);
 
