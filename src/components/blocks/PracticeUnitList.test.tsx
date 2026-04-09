@@ -1,8 +1,9 @@
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import type { ComponentProps } from "react";
 import { Rating } from "ts-fsrs";
 
-import { greeting } from "@/lib/language/convos/data/greeting";
+import { conversations } from "@/lib/language/convos";
 import type { PracticeQueueItem } from "@/lib/util/practice";
 
 const useQueryMock = mock(() => [] as PracticeQueueItem[]);
@@ -11,31 +12,31 @@ mock.module("convex/react", () => ({
     useQuery: useQueryMock,
 }));
 
-mock.module("next/link", () => ({
+mock.module("@/components/blocks/UnitCard", () => ({
     default: ({
-        children,
-        href,
-        ...props
-    }: React.PropsWithChildren<{ href: string }>) => (
-        <a href={href} {...props}>
-            {children}
+        convo,
+        returnTo,
+    }: {
+        convo: (typeof conversations)[number];
+        returnTo?: ComponentProps<
+            typeof import("@/components/blocks/UnitCard").default
+        >["returnTo"];
+    }) => (
+        <a
+            data-testid={`unit-card-${convo.id}`}
+            href={
+                returnTo ? `/${convo.id}?returnTo=${returnTo}` : `/${convo.id}`
+            }
+        >
+            {convo.name}
         </a>
     ),
 }));
 
-mock.module("@/lib/language/convos", () => ({
-    conversations: [
-        greeting,
-        {
-            ...greeting,
-            id: "follow-up",
-            name: "Follow-up Greeting",
-            description: "Continue the greeting conversation.",
-        },
-    ],
-}));
+const { default: PracticeUnitList } =
+    await import("@/components/blocks/PracticeUnitList");
 
-import PracticeUnitList from "@/components/blocks/PracticeUnitList";
+const [firstConversation, secondConversation] = conversations;
 
 beforeEach(() => {
     useQueryMock.mockImplementation(() => []);
@@ -48,18 +49,21 @@ afterEach(() => {
 
 describe("PracticeUnitList", () => {
     test("renders due, new, and later sections using the practice queue order", () => {
-        useQueryMock.mockImplementation(() => [
-            {
-                unitId: "follow-up",
-                status: "due",
-                due: Date.now() - 1_000,
-                lastRating: Rating.Hard,
-            },
-            {
-                unitId: "greeting",
-                status: "new",
-            },
-        ] satisfies PracticeQueueItem[]);
+        useQueryMock.mockImplementation(
+            () =>
+                [
+                    {
+                        unitId: secondConversation.id,
+                        status: "due",
+                        due: Date.now() - 1_000,
+                        lastRating: Rating.Hard,
+                    },
+                    {
+                        unitId: firstConversation.id,
+                        status: "new",
+                    },
+                ] satisfies PracticeQueueItem[],
+        );
 
         const view = render(<PracticeUnitList />);
 
@@ -67,39 +71,51 @@ describe("PracticeUnitList", () => {
         expect(view.getByText("New")).toBeInTheDocument();
         expect(view.queryByText("Later")).not.toBeInTheDocument();
 
+        expect(
+            view.getByTestId(`unit-card-${secondConversation.id}`),
+        ).toHaveAttribute(
+            "href",
+            `/${secondConversation.id}?returnTo=practice`,
+        );
+        expect(
+            view.getByTestId(`unit-card-${firstConversation.id}`),
+        ).toHaveAttribute("href", `/${firstConversation.id}?returnTo=practice`);
+
         const practiceLinks = view.getAllByRole("link");
 
         expect(practiceLinks.map((link) => link.getAttribute("href"))).toEqual([
-            "/follow-up?returnTo=practice",
-            "/greeting?returnTo=practice",
+            `/${secondConversation.id}?returnTo=practice`,
+            `/${firstConversation.id}?returnTo=practice`,
         ]);
     });
 
-    test("shows new units when there is no saved practice state yet", () => {
-        useQueryMock.mockImplementation(() => [
-            {
-                unitId: "greeting",
-                status: "new",
-            },
-            {
-                unitId: "follow-up",
-                status: "new",
-            },
-        ] satisfies PracticeQueueItem[]);
+    test("renders new units from the returned practice queue", () => {
+        useQueryMock.mockImplementation(
+            () =>
+                [
+                    {
+                        unitId: firstConversation.id,
+                        status: "new",
+                    },
+                    {
+                        unitId: secondConversation.id,
+                        status: "new",
+                    },
+                ] satisfies PracticeQueueItem[],
+        );
 
         const view = render(<PracticeUnitList />);
 
         expect(view.getByText("New")).toBeInTheDocument();
         expect(
-            view.getByRole("link", {
-                name: /^Greeting A simple greeting conversation\. An introduction to Gaidhlig\. 4 phrases$/i,
-            }),
-        ).toHaveAttribute("href", "/greeting?returnTo=practice");
+            view.getByTestId(`unit-card-${firstConversation.id}`),
+        ).toHaveAttribute("href", `/${firstConversation.id}?returnTo=practice`);
         expect(
-            view.getByRole("link", {
-                name: /^Follow-up Greeting Continue the greeting conversation\. 4 phrases$/i,
-            }),
-        ).toHaveAttribute("href", "/follow-up?returnTo=practice");
+            view.getByTestId(`unit-card-${secondConversation.id}`),
+        ).toHaveAttribute(
+            "href",
+            `/${secondConversation.id}?returnTo=practice`,
+        );
     });
 
     test("shows the empty state when the practice queue is empty", () => {
