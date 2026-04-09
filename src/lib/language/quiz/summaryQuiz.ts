@@ -1,8 +1,5 @@
 import { GenericQuizOption } from "@/components/GenericQuiz";
-import {
-    Conversation,
-    SummaryQuestion,
-} from "@/lib/language/convos/types";
+import { Conversation, SummaryQuestion } from "@/lib/language/convos/types";
 import { shuffleArray } from "@/lib/util/array";
 
 export interface SummaryQuizOption extends GenericQuizOption {

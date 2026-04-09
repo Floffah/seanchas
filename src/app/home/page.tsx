@@ -23,8 +23,6 @@ export default function Page() {
                         <Button variant="ghost" asChild>
                             <Link href="/practice">Practice</Link>
                         </Button>
-                        <Button variant="ghost">News</Button>
-                        <Button variant="ghost">Account</Button>
                     </nav>
                 </aside>
                 <main className="flex flex-1 basis-auto flex-col items-center gap-6">

@@ -1,12 +1,6 @@
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-
-const saveCompletionMock = mock(async () => "completion-id");
-
-mock.module("@convex-dev/react-query", () => ({
-    useConvexMutation: () => saveCompletionMock,
-}));
 
 import ConversationUnit from "@/components/blocks/ConversationUnit";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,13 +8,14 @@ import { greeting } from "@/lib/language/convos/data/greeting";
 import { ConvoUnitStepId } from "@/lib/state/units";
 import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
 
+const saveCompletionMock = mock(async () => "completion-id");
+
+mock.module("@convex-dev/react-query", () => ({
+    useConvexMutation: () => saveCompletionMock,
+}));
+
 beforeEach(() => {
     saveCompletionMock.mockImplementation(async () => "completion-id");
-});
-
-afterEach(() => {
-    mock.clearAllMocks();
-    cleanup();
 });
 
 function renderWithQueryClient(children: React.ReactNode) {
@@ -74,7 +69,11 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.SummaryQuiz, 1, 1)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.SummaryQuiz,
+                        1,
+                        1,
+                    )
                 }
             >
                 Record summary
@@ -82,7 +81,11 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.TranslationQuiz, 2, 3)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.TranslationQuiz,
+                        2,
+                        3,
+                    )
                 }
             >
                 Record translation
@@ -90,7 +93,11 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.ResponseQuiz, 3, 3)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.ResponseQuiz,
+                        3,
+                        3,
+                    )
                 }
             >
                 Record response
@@ -98,23 +105,24 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.SubstitutionQuiz, 1, 2)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.SubstitutionQuiz,
+                        1,
+                        2,
+                    )
                 }
             >
                 Record substitution
             </button>
-            <button
-                type="button"
-                onClick={() => void convo.finishUnit()}
-            >
+            <button type="button" onClick={() => void convo.finishUnit()}>
                 Finish unit
             </button>
         </>
     );
 }
 
-describe("ConvoProvider", () => {
-    test("initializes on the intro state", () => {
+describe.serial("ConvoProvider", () => {
+    test.serial("initializes on the intro state", () => {
         const view = renderWithQueryClient(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
@@ -124,7 +132,7 @@ describe("ConvoProvider", () => {
         expect(view.getByTestId("state-value")).toHaveTextContent("intro");
     });
 
-    test("advances to summaryQuiz with next()", () => {
+    test.serial("advances to summaryQuiz with next()", () => {
         const view = renderWithQueryClient(
             <ConvoProvider conversation={greeting} index={0}>
                 <UseConversationHarness />
@@ -138,146 +146,167 @@ describe("ConvoProvider", () => {
         );
     });
 
-    test("advances through summaryQuiz into complete and ignores extra NEXT events afterwards", () => {
-        const view = renderWithQueryClient(
-            <ConvoProvider conversation={greeting} index={0}>
-                <UseConversationHarness />
-            </ConvoProvider>,
-        );
+    test.serial(
+        "advances through summaryQuiz into complete and ignores extra NEXT events afterwards",
+        () => {
+            const view = renderWithQueryClient(
+                <ConvoProvider conversation={greeting} index={0}>
+                    <UseConversationHarness />
+                </ConvoProvider>,
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent(
-            "summaryQuiz",
-        );
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "summaryQuiz",
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent(
-            "translationQuiz",
-        );
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "translationQuiz",
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent(
-            "responseQuiz",
-        );
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "responseQuiz",
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent(
-            "substitutionQuiz",
-        );
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "substitutionQuiz",
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent("complete");
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "complete",
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent("complete");
-    });
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "complete",
+            );
+        },
+    );
 
-    test("aggregates scored steps and saves one completion record while staying on complete", async () => {
-        const view = renderWithQueryClient(
-            <ConvoProvider conversation={greeting} index={0}>
-                <CompletionHarness />
-            </ConvoProvider>,
-        );
+    test.serial(
+        "aggregates scored steps and saves one completion record while staying on complete",
+        async () => {
+            const view = renderWithQueryClient(
+                <ConvoProvider conversation={greeting} index={0}>
+                    <CompletionHarness />
+                </ConvoProvider>,
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent(
-            "substitutionQuiz",
-        );
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "substitutionQuiz",
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Record summary" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record translation" }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Record response" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record substitution" }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Finish unit" }));
+            fireEvent.click(
+                view.getByRole("button", { name: "Record summary" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record translation" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record response" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record substitution" }),
+            );
+            fireEvent.click(view.getByRole("button", { name: "Finish unit" }));
 
-        await waitFor(() => {
-            expect(saveCompletionMock).toHaveBeenCalledTimes(1);
-        });
-        const firstSaveCall = saveCompletionMock.mock.calls.at(0) as
-            | [Record<string, unknown>, ...unknown[]]
-            | undefined;
-        expect(firstSaveCall?.[0]).toEqual({
-            unitId: "greeting",
-            correctAnswers: 7,
-            questionCount: 9,
-        });
+            await waitFor(() => {
+                expect(saveCompletionMock).toHaveBeenCalledTimes(1);
+            });
+            const firstSaveCall = saveCompletionMock.mock.calls.at(0) as
+                | [Record<string, unknown>, ...unknown[]]
+                | undefined;
+            expect(firstSaveCall?.[0]).toEqual({
+                unitId: "greeting",
+                correctAnswers: 7,
+                questionCount: 9,
+            });
 
-        expect(view.getByTestId("state-value")).toHaveTextContent("substitutionQuiz");
-        expect(view.getByTestId("completion-error")).toHaveTextContent("");
-    });
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "substitutionQuiz",
+            );
+            expect(view.getByTestId("completion-error")).toHaveTextContent("");
+        },
+    );
 });
 
-describe("ConversationUnit", () => {
-    test("renders intro, then summary quiz, then translation quiz, then response quiz, then substitution quiz as the unit advances", async () => {
-        const view = renderWithQueryClient(
-            <TooltipProvider>
-                <ConvoProvider conversation={greeting} index={0}>
-                    <ConversationUnitHarness />
-                </ConvoProvider>
-            </TooltipProvider>,
-        );
+describe.serial("ConversationUnit", () => {
+    test.serial(
+        "renders intro, then summary quiz, then translation quiz, then response quiz, then substitution quiz as the unit advances",
+        async () => {
+            const view = renderWithQueryClient(
+                <TooltipProvider>
+                    <ConvoProvider conversation={greeting} index={0}>
+                        <ConversationUnitHarness />
+                    </ConvoProvider>
+                </TooltipProvider>,
+            );
 
-        expect(
-            view.queryByText("Which is the correct translation?"),
-        ).not.toBeInTheDocument();
-        expect(view.getByText("Press space to advance")).toBeInTheDocument();
+            expect(
+                view.queryByText("Which is the correct translation?"),
+            ).not.toBeInTheDocument();
+            expect(
+                view.getByText("Press space to advance"),
+            ).toBeInTheDocument();
 
-        fireEvent.click(
-            view.getByRole("button", {
-                name: "Advance unit",
-                hidden: true,
-            }),
-        );
+            fireEvent.click(
+                view.getByRole("button", {
+                    name: "Advance unit",
+                    hidden: true,
+                }),
+            );
 
-        expect(
-            await view.findByText("What was the conversation about?"),
-        ).toBeInTheDocument();
+            expect(
+                await view.findByText("What was the conversation about?"),
+            ).toBeInTheDocument();
 
-        fireEvent.click(
-            view.getByRole("button", {
-                name: "Advance unit",
-                hidden: true,
-            }),
-        );
+            fireEvent.click(
+                view.getByRole("button", {
+                    name: "Advance unit",
+                    hidden: true,
+                }),
+            );
 
-        expect(
-            await view.findByText("Which is the correct translation?"),
-        ).toBeInTheDocument();
+            expect(
+                await view.findByText("Which is the correct translation?"),
+            ).toBeInTheDocument();
 
-        fireEvent.click(
-            view.getByRole("button", {
-                name: "Advance unit",
-                hidden: true,
-            }),
-        );
+            fireEvent.click(
+                view.getByRole("button", {
+                    name: "Advance unit",
+                    hidden: true,
+                }),
+            );
 
-        expect(
-            await view.findByText("Which response comes next?"),
-        ).toBeInTheDocument();
+            expect(
+                await view.findByText("Which response comes next?"),
+            ).toBeInTheDocument();
 
-        fireEvent.click(
-            view.getByRole("button", {
-                name: "Advance unit",
-                hidden: true,
-            }),
-        );
+            fireEvent.click(
+                view.getByRole("button", {
+                    name: "Advance unit",
+                    hidden: true,
+                }),
+            );
 
-        expect(
-            await view.findByText("Which alternative also works here?"),
-        ).toBeInTheDocument();
-    });
+            expect(
+                await view.findByText("Which alternative also works here?"),
+            ).toBeInTheDocument();
+        },
+    );
 });

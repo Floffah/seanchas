@@ -1,8 +1,12 @@
-import { cleanup, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import type { ComponentProps } from "react";
+import { Rating } from "ts-fsrs";
 
+import { conversations } from "@/lib/language/convos";
 import { greeting } from "@/lib/language/convos/data/greeting";
-import { PracticeQueueItem } from "@/lib/util/practice";
+import { introductions } from "@/lib/language/convos/data/introductions";
+import type { PracticeQueueItem } from "@/lib/util/practice";
 
 const useQueryMock = mock(() => [] as PracticeQueueItem[]);
 
@@ -10,57 +14,51 @@ mock.module("convex/react", () => ({
     useQuery: useQueryMock,
 }));
 
-mock.module("next/link", () => ({
+mock.module("@/components/blocks/UnitCard", () => ({
     default: ({
-        children,
-        href,
-        ...props
-    }: React.PropsWithChildren<{ href: string }>) => (
-        <a href={href} {...props}>
-            {children}
+        convo,
+        returnTo,
+    }: {
+        convo: (typeof conversations)[number];
+        returnTo?: ComponentProps<
+            typeof import("@/components/blocks/UnitCard").default
+        >["returnTo"];
+    }) => (
+        <a
+            data-testid={`unit-card-${convo.id}`}
+            href={
+                returnTo ? `/${convo.id}?returnTo=${returnTo}` : `/${convo.id}`
+            }
+        >
+            {convo.name}
         </a>
     ),
 }));
 
-mock.module("@/lib/language/convos", () => ({
-    conversations: [
-        greeting,
-        {
-            ...greeting,
-            id: "follow-up",
-            name: "Follow-up Greeting",
-            description: "Continue the greeting conversation.",
-        },
-    ],
-}));
-
-import PracticeUnitList from "@/components/blocks/PracticeUnitList";
+const { default: PracticeUnitList } =
+    await import("@/components/blocks/PracticeUnitList");
 
 beforeEach(() => {
     useQueryMock.mockImplementation(() => []);
 });
 
-afterEach(() => {
-    mock.clearAllMocks();
-    cleanup();
-});
-
 describe("PracticeUnitList", () => {
     test("renders due, new, and later sections using the practice queue order", () => {
-        useQueryMock.mockImplementation(() => [
-            {
-                unitId: "follow-up",
-                name: "Follow-up Greeting",
-                description: "Continue the greeting conversation.",
-                status: "due" as const,
-            },
-            {
-                unitId: "greeting",
-                name: "Greeting",
-                description: greeting.description,
-                status: "new" as const,
-            },
-        ]);
+        useQueryMock.mockImplementation(
+            () =>
+                [
+                    {
+                        unitId: introductions.id,
+                        status: "due",
+                        due: Date.now() - 1_000,
+                        lastRating: Rating.Hard,
+                    },
+                    {
+                        unitId: greeting.id,
+                        status: "new",
+                    },
+                ] satisfies PracticeQueueItem[],
+        );
 
         const view = render(<PracticeUnitList />);
 
@@ -68,15 +66,50 @@ describe("PracticeUnitList", () => {
         expect(view.getByText("New")).toBeInTheDocument();
         expect(view.queryByText("Later")).not.toBeInTheDocument();
 
+        expect(
+            view.getByTestId(`unit-card-${introductions.id}`),
+        ).toHaveAttribute("href", `/${introductions.id}?returnTo=practice`);
+        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
+            "href",
+            `/${greeting.id}?returnTo=practice`,
+        );
+
         const practiceLinks = view.getAllByRole("link");
 
         expect(practiceLinks.map((link) => link.getAttribute("href"))).toEqual([
-            "/follow-up?returnTo=practice",
-            "/greeting?returnTo=practice",
+            `/${introductions.id}?returnTo=practice`,
+            `/${greeting.id}?returnTo=practice`,
         ]);
     });
 
-    test("shows an empty state when there are no practice units", () => {
+    test("renders new units from the returned practice queue", () => {
+        useQueryMock.mockImplementation(
+            () =>
+                [
+                    {
+                        unitId: greeting.id,
+                        status: "new",
+                    },
+                    {
+                        unitId: introductions.id,
+                        status: "new",
+                    },
+                ] satisfies PracticeQueueItem[],
+        );
+
+        const view = render(<PracticeUnitList />);
+
+        expect(view.getByText("New")).toBeInTheDocument();
+        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
+            "href",
+            `/${greeting.id}?returnTo=practice`,
+        );
+        expect(
+            view.getByTestId(`unit-card-${introductions.id}`),
+        ).toHaveAttribute("href", `/${introductions.id}?returnTo=practice`);
+    });
+
+    test("shows the empty state when the practice queue is empty", () => {
         useQueryMock.mockImplementation(() => []);
 
         const view = render(<PracticeUnitList />);

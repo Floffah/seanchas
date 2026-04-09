@@ -1,6 +1,11 @@
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+
+import ConversationUnitComplete from "@/components/blocks/ConversationUnitComplete";
+import { greeting } from "@/lib/language/convos/data/greeting";
+import { ConvoUnitStepId } from "@/lib/state/units";
+import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
 
 const saveCompletionMock = mock(async () => true);
 const pushMock = mock(() => {});
@@ -25,19 +30,9 @@ mock.module("next/navigation", () => ({
     }),
 }));
 
-import ConversationUnitComplete from "@/components/blocks/ConversationUnitComplete";
-import { greeting } from "@/lib/language/convos/data/greeting";
-import { ConvoUnitStepId } from "@/lib/state/units";
-import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
-
 beforeEach(() => {
     saveCompletionMock.mockImplementation(async () => true);
     getSearchParamMock.mockImplementation(() => null);
-});
-
-afterEach(() => {
-    mock.clearAllMocks();
-    cleanup();
 });
 
 function renderWithQueryClient(children: React.ReactNode) {
@@ -62,7 +57,11 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.SummaryQuiz, 1, 1)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.SummaryQuiz,
+                        1,
+                        1,
+                    )
                 }
             >
                 Record summary
@@ -70,7 +69,11 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.TranslationQuiz, 2, 3)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.TranslationQuiz,
+                        2,
+                        3,
+                    )
                 }
             >
                 Record translation
@@ -78,7 +81,11 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.ResponseQuiz, 3, 3)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.ResponseQuiz,
+                        3,
+                        3,
+                    )
                 }
             >
                 Record response
@@ -86,7 +93,11 @@ function CompletionHarness() {
             <button
                 type="button"
                 onClick={() =>
-                    convo.recordStepCompletion(ConvoUnitStepId.SubstitutionQuiz, 1, 2)
+                    convo.recordStepCompletion(
+                        ConvoUnitStepId.SubstitutionQuiz,
+                        1,
+                        2,
+                    )
                 }
             >
                 Record substitution
@@ -96,117 +107,142 @@ function CompletionHarness() {
     );
 }
 
-describe("ConversationUnitComplete", () => {
-    test("saves completion and redirects home from the complete screen", async () => {
-        const view = renderWithQueryClient(
-            <ConvoProvider conversation={greeting} index={0}>
-                <CompletionHarness />
-            </ConvoProvider>,
-        );
+describe.serial("ConversationUnitComplete", () => {
+    test.serial(
+        "saves completion and redirects home from the complete screen",
+        async () => {
+            const view = renderWithQueryClient(
+                <ConvoProvider conversation={greeting} index={0}>
+                    <CompletionHarness />
+                </ConvoProvider>,
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        expect(view.getByTestId("state-value")).toHaveTextContent("complete");
+            expect(view.getByTestId("state-value")).toHaveTextContent(
+                "complete",
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Record summary" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record translation" }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Record response" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record substitution" }),
-        );
-        fireEvent.click(
-            view.getByRole("button", { name: "Save and return home" }),
-        );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record summary" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record translation" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record response" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record substitution" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Save and return home" }),
+            );
 
-        await waitFor(() => {
-            expect(saveCompletionMock).toHaveBeenCalledTimes(1);
-        });
-        const firstSaveCall = saveCompletionMock.mock.calls.at(0) as
-            | [Record<string, unknown>, ...unknown[]]
-            | undefined;
-        expect(firstSaveCall?.[0]).toEqual({
-            unitId: "greeting",
-            correctAnswers: 7,
-            questionCount: 9,
-        });
+            await waitFor(() => {
+                expect(saveCompletionMock).toHaveBeenCalledTimes(1);
+            });
+            const firstSaveCall = saveCompletionMock.mock.calls.at(0) as
+                | [Record<string, unknown>, ...unknown[]]
+                | undefined;
+            expect(firstSaveCall?.[0]).toEqual({
+                unitId: "greeting",
+                correctAnswers: 7,
+                questionCount: 9,
+            });
 
-        await waitFor(() => {
-            expect(pushMock).toHaveBeenCalledWith("/home");
-        });
-    });
+            await waitFor(() => {
+                expect(pushMock).toHaveBeenCalledWith("/home");
+            });
+        },
+    );
 
-    test("redirects back to practice when the completion screen is reached from practice", async () => {
-        getSearchParamMock.mockImplementation((param: string) =>
-            param === "returnTo" ? "practice" : null,
-        );
+    test.serial(
+        "redirects back to practice when the completion screen is reached from practice",
+        async () => {
+            getSearchParamMock.mockImplementation((param: string) =>
+                param === "returnTo" ? "practice" : null,
+            );
 
-        const view = renderWithQueryClient(
-            <ConvoProvider conversation={greeting} index={0}>
-                <CompletionHarness />
-            </ConvoProvider>,
-        );
+            const view = renderWithQueryClient(
+                <ConvoProvider conversation={greeting} index={0}>
+                    <CompletionHarness />
+                </ConvoProvider>,
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        fireEvent.click(view.getByRole("button", { name: "Record summary" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record translation" }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Record response" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record substitution" }),
-        );
-        fireEvent.click(
-            view.getByRole("button", { name: "Save and return home" }),
-        );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record summary" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record translation" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record response" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record substitution" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Save and return home" }),
+            );
 
-        await waitFor(() => {
-            expect(pushMock).toHaveBeenCalledWith("/practice");
-        });
-    });
+            await waitFor(() => {
+                expect(pushMock).toHaveBeenCalledWith("/practice");
+            });
+        },
+    );
 
-    test("shows an inline error and does not redirect when saving fails", async () => {
-        saveCompletionMock.mockImplementationOnce(async () => {
-            throw new Error("save failed");
-        });
+    test.serial(
+        "shows an inline error and does not redirect when saving fails",
+        async () => {
+            saveCompletionMock.mockImplementationOnce(async () => {
+                throw new Error("save failed");
+            });
 
-        const view = renderWithQueryClient(
-            <ConvoProvider conversation={greeting} index={0}>
-                <CompletionHarness />
-            </ConvoProvider>,
-        );
+            const view = renderWithQueryClient(
+                <ConvoProvider conversation={greeting} index={0}>
+                    <CompletionHarness />
+                </ConvoProvider>,
+            );
 
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
-        fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
+            fireEvent.click(view.getByRole("button", { name: "Next" }));
 
-        fireEvent.click(view.getByRole("button", { name: "Record summary" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record translation" }),
-        );
-        fireEvent.click(view.getByRole("button", { name: "Record response" }));
-        fireEvent.click(
-            view.getByRole("button", { name: "Record substitution" }),
-        );
-        fireEvent.click(
-            view.getByRole("button", { name: "Save and return home" }),
-        );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record summary" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record translation" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record response" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Record substitution" }),
+            );
+            fireEvent.click(
+                view.getByRole("button", { name: "Save and return home" }),
+            );
 
-        await waitFor(() => {
-            expect(view.getByText("Error: save failed")).toBeInTheDocument();
-        });
-        expect(pushMock).not.toHaveBeenCalled();
-    });
+            await waitFor(() => {
+                expect(
+                    view.getByText("Error: save failed"),
+                ).toBeInTheDocument();
+            });
+            expect(pushMock).not.toHaveBeenCalled();
+        },
+    );
 });

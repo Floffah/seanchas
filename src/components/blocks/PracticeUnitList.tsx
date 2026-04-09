@@ -55,7 +55,6 @@ function PracticeSection({
 
 export default function PracticeUnitList() {
     const practiceQueue = useQuery(api.units.getPracticeQueue);
-
     const groupedQueue = useMemo(
         () => ({
             due: practiceQueue?.filter((item) => item.status === "due") ?? [],

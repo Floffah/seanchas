@@ -1,31 +1,9 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { Rating, State } from "ts-fsrs";
 
-const authoredConversations = [
-    {
-        id: "greeting",
-        name: "Greeting",
-        description: "A simple greeting conversation. An introduction to Gaidhlig.",
-        utterances: [],
-    },
-    {
-        id: "follow-up",
-        name: "Follow-up Greeting",
-        description: "Continue the greeting conversation.",
-        utterances: [],
-    },
-    {
-        id: "weather",
-        name: "Weather Chat",
-        description: "Talk about the weather.",
-        utterances: [],
-    },
-];
-
-mock.module("@/lib/language/convos", () => ({
-    conversations: authoredConversations,
-}));
-
+import { gamesAndCoffee } from "@/lib/language/convos/data/gamesAndCoffee";
+import { greeting } from "@/lib/language/convos/data/greeting";
+import { introductions } from "@/lib/language/convos/data/introductions";
 import {
     buildPracticeQueue,
     deserializeFsrsCard,
@@ -33,14 +11,6 @@ import {
     percentageCorrectToRating,
     serializeFsrsCard,
 } from "@/lib/util/practice";
-
-beforeEach(() => {
-    mock.clearAllMocks();
-});
-
-afterEach(() => {
-    mock.clearAllMocks();
-});
 
 describe("percentageCorrectToRating", () => {
     test("maps percentage bands to the expected FSRS ratings", () => {
@@ -113,12 +83,12 @@ describe("buildPracticeQueue", () => {
             buildPracticeQueue(
                 [
                     {
-                        unitId: "follow-up",
+                        unitId: greeting.id,
                         due: now - 1_000,
                         lastRating: Rating.Hard,
                     },
                     {
-                        unitId: "weather",
+                        unitId: gamesAndCoffee.id,
                         due: now + 86_400_000,
                         lastRating: Rating.Good,
                     },
@@ -127,17 +97,17 @@ describe("buildPracticeQueue", () => {
             ),
         ).toEqual([
             {
-                unitId: "follow-up",
+                unitId: greeting.id,
                 due: now - 1_000,
                 lastRating: Rating.Hard,
                 status: "due",
             },
             {
-                unitId: "greeting",
+                unitId: introductions.id,
                 status: "new",
             },
             {
-                unitId: "weather",
+                unitId: gamesAndCoffee.id,
                 due: now + 86_400_000,
                 lastRating: Rating.Good,
                 status: "later",
