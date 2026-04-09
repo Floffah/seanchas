@@ -1,7 +1,21 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 
-import { mutation } from "./_generated/server";
+import { mutation, query } from "@/convex/server";
+
+import { getCurrentUserOrThrow } from "./lib/auth";
+
+export const getCompletedUnitIds = query({
+    handler: async (ctx) => {
+        const user = await getCurrentUserOrThrow(ctx);
+
+        const completions = await ctx.db
+            .query("unitCompletions")
+            .withIndex("userId_unitId", (q) => q.eq("userId", user._id))
+            .collect();
+
+        return completions.map((c) => c.unitId);
+    },
+});
 
 export const upsertCompletion = mutation({
     args: {
@@ -10,21 +24,17 @@ export const upsertCompletion = mutation({
         questionCount: v.number(),
     },
     handler: async (ctx, args) => {
-        const userId = await getAuthUserId(ctx);
-
-        if (userId === null) {
-            throw new Error("Not authenticated");
-        }
+        const user = await getCurrentUserOrThrow(ctx);
 
         const existingCompletion = await ctx.db
             .query("unitCompletions")
             .withIndex("userId_unitId", (q) =>
-                q.eq("userId", userId).eq("unitId", args.unitId),
+                q.eq("userId", user._id).eq("unitId", args.unitId),
             )
             .unique();
 
         const completion = {
-            userId,
+            userId: user._id,
             unitId: args.unitId,
             correctAnswers: args.correctAnswers,
             questionCount: args.questionCount,
