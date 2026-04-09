@@ -1,12 +1,10 @@
-import { ChevronRightIcon, LanguagesIcon } from "lucide-react";
+import { LanguagesIcon } from "lucide-react";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
 import UnitList from "@/components/blocks/UnitList";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { conversations } from "@/lib/language/convos";
-import { cn } from "@/lib/utils";
 
 export default function Page() {
     return (

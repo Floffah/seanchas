@@ -1,7 +1,11 @@
 "use client";
 
 import { useQuery } from "convex/react";
-import { BookCheckIcon, ChevronsDownUpIcon } from "lucide-react";
+import {
+    BookCheckIcon,
+    ChevronsDownUpIcon,
+    ChevronsUpDownIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -43,7 +47,7 @@ export default function UnitList() {
         [completedUnitsQuery],
     );
 
-    const [incompletedCollapsed, setIncompleteCollapsed] = useState(true);
+    const [completedOpen, setCompletedOpen] = useState(true);
 
     return (
         <div className="flex flex-1 basis-auto flex-col items-center gap-12">
@@ -84,15 +88,20 @@ export default function UnitList() {
 
             {completedUnits.length > 0 && (
                 <Collapsible
-                    open={incompletedCollapsed}
-                    onOpenChange={setIncompleteCollapsed}
+                    open={completedOpen}
+                    onOpenChange={setCompletedOpen}
                     className="flex flex-1 basis-auto flex-col items-center gap-6"
                 >
                     <CollapsibleTrigger asChild>
-                        <h2 className="flex items-center gap-4 text-3xl font-bold">
+                        <button className="flex items-center gap-4 text-3xl font-bold">
                             Revisit Units
-                            <ChevronsDownUpIcon className="ml-auto size-5" />
-                        </h2>
+                            {completedOpen && (
+                                <ChevronsDownUpIcon className="ml-auto size-5" />
+                            )}
+                            {!completedOpen && (
+                                <ChevronsUpDownIcon className="ml-auto size-5" />
+                            )}
+                        </button>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="flex max-w-100 flex-col gap-4">
                         {completedUnits.map((convo) => (
