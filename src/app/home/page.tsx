@@ -20,7 +20,9 @@ export default function Page() {
                         <Button variant="secondary" asChild>
                             <Link href="/home">Units</Link>
                         </Button>
-                        <Button variant="ghost">Practice</Button>
+                        <Button variant="ghost" asChild>
+                            <Link href="/practice">Practice</Link>
+                        </Button>
                         <Button variant="ghost">News</Button>
                         <Button variant="ghost">Account</Button>
                     </nav>

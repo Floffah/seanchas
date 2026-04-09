@@ -27,6 +27,7 @@
         "react-dom": "19.2.4",
         "react-hook-form": "^7.72.1",
         "tailwind-merge": "^3.5.0",
+        "ts-fsrs": "^5.3.2",
         "valtio": "^2.3.1",
         "xstate": "^5.30.0",
         "zod": "^4.3.6",
@@ -1582,6 +1583,8 @@
     "tough-cookie": ["tough-cookie@6.0.0", "", { "dependencies": { "tldts": "^7.0.5" } }, "sha512-kXuRi1mtaKMrsLUxz3sQYvVl37B0Ns6MzfrtV5DvJceE9bPyspOqk9xxv7XbZWcfLWbFmm997vl83qUWVJA64w=="],
 
     "ts-api-utils": ["ts-api-utils@2.5.0", "", { "peerDependencies": { "typescript": ">=4.8.4" } }, "sha512-OJ/ibxhPlqrMM0UiNHJ/0CKQkoKF243/AEmplt3qpRgkW8VG7IfOS41h7V8TjITqdByHzrjcS/2si+y4lIh8NA=="],
+
+    "ts-fsrs": ["ts-fsrs@5.3.2", "", {}, "sha512-moJJfYAeG9ynyyGCNaQPUloi0sspTMHFtgCvsx2wDchELu3O2c513/7fp+6PxsGth0ztxNjEtG8d85gX4ce0og=="],
 
     "ts-morph": ["ts-morph@26.0.0", "", { "dependencies": { "@ts-morph/common": "~0.27.0", "code-block-writer": "^13.0.3" } }, "sha512-ztMO++owQnz8c/gIENcM9XfCEzgoGphTv+nKpYNM1bgsdOVC/jRZuEBf6N+mLLDNg68Kl+GgUZfOySaRiG1/Ug=="],
 

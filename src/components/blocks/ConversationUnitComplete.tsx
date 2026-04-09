@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
 
 import LoadingButton from "@/components/ui/button-loading";
 import {
@@ -15,10 +15,21 @@ import { useConversation } from "@/providers/ConvoProvider";
 export default function ConversationUnitComplete() {
     const convo = useConversation();
     const router = useRouter();
+    const params = useSearchParams();
+
+    const returnUrl = useMemo(() => {
+        const returnTo = params.get("returnTo");
+
+        if (returnTo === "practice") {
+            return "/practice";
+        }
+
+        return "/home";
+    }, [params]);
 
     useEffect(() => {
-        router.prefetch("/home");
-    }, [router]);
+        router.prefetch(returnUrl);
+    }, [returnUrl, router]);
 
     return (
         <div className="mx-auto mt-20 flex w-full max-w-lg grow flex-col items-center p-4">
@@ -39,7 +50,7 @@ export default function ConversationUnitComplete() {
                                 return;
                             }
 
-                            router.push("/home");
+                            router.push(returnUrl);
                         }}
                     >
                         Save and return home
