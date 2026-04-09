@@ -22,6 +22,22 @@ const schema = defineSchema({
         questionCount: v.number(),
         completedAt: v.number(),
     }).index("userId_unitId", ["userId", "unitId"]),
+
+    unitPracticeStates: defineTable({
+        userId: v.id("users"),
+        unitId: v.string(),
+        due: v.number(),
+        stability: v.number(),
+        difficulty: v.number(),
+        elapsedDays: v.number(),
+        scheduledDays: v.number(),
+        reps: v.number(),
+        lapses: v.number(),
+        state: v.number(),
+        lastReview: v.optional(v.number()),
+        lastRating: v.optional(v.number()),
+        updatedAt: v.number(),
+    }).index("userId_unitId", ["userId", "unitId"]),
 });
 
 export default schema;

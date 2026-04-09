@@ -5,6 +5,11 @@ import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 const saveCompletionMock = mock(async () => true);
 const pushMock = mock(() => {});
 const prefetchMock = mock(() => {});
+const getSearchParamMock = mock((param: string) => {
+    void param;
+
+    return null as string | null;
+});
 
 mock.module("@convex-dev/react-query", () => ({
     useConvexMutation: () => saveCompletionMock,
@@ -15,6 +20,9 @@ mock.module("next/navigation", () => ({
         push: pushMock,
         prefetch: prefetchMock,
     }),
+    useSearchParams: () => ({
+        get: getSearchParamMock,
+    }),
 }));
 
 import ConversationUnitComplete from "@/components/blocks/ConversationUnitComplete";
@@ -24,6 +32,7 @@ import ConvoProvider, { useConversation } from "@/providers/ConvoProvider";
 
 beforeEach(() => {
     saveCompletionMock.mockImplementation(async () => true);
+    getSearchParamMock.mockImplementation(() => null);
 });
 
 afterEach(() => {
@@ -129,6 +138,40 @@ describe("ConversationUnitComplete", () => {
 
         await waitFor(() => {
             expect(pushMock).toHaveBeenCalledWith("/home");
+        });
+    });
+
+    test("redirects back to practice when the completion screen is reached from practice", async () => {
+        getSearchParamMock.mockImplementation((param: string) =>
+            param === "returnTo" ? "practice" : null,
+        );
+
+        const view = renderWithQueryClient(
+            <ConvoProvider conversation={greeting} index={0}>
+                <CompletionHarness />
+            </ConvoProvider>,
+        );
+
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+        fireEvent.click(view.getByRole("button", { name: "Next" }));
+
+        fireEvent.click(view.getByRole("button", { name: "Record summary" }));
+        fireEvent.click(
+            view.getByRole("button", { name: "Record translation" }),
+        );
+        fireEvent.click(view.getByRole("button", { name: "Record response" }));
+        fireEvent.click(
+            view.getByRole("button", { name: "Record substitution" }),
+        );
+        fireEvent.click(
+            view.getByRole("button", { name: "Save and return home" }),
+        );
+
+        await waitFor(() => {
+            expect(pushMock).toHaveBeenCalledWith("/practice");
         });
     });
 
