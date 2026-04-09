@@ -1,7 +1,7 @@
 import { Conversation, ConversationSpeaker } from "@/lib/language/convos/types";
 
 export const gamesAndCoffee: Conversation = {
-    id: "gamesAndCoffee",
+    id: "games-and-coffee",
     name: "Games and Coffee",
     description:
         "Talking about video game preferences and asking if someone wants a coffee.",
@@ -17,22 +17,26 @@ export const gamesAndCoffee: Conversation = {
     ],
     utterances: [
         {
-            id: "gamesAndCoffee.u0",
+            id: "games-and-coffee.u0",
             speaker: ConversationSpeaker.A,
             translationFormat:
-                "Do $gamesAndCoffee.you$ like Breath of the Wild?",
+                "Do $games-and-coffee.you$ like Breath of the Wild?",
             incorrectTranslations: [
                 "Do I like Breath of the Wild?",
                 "Do you want Breath of the Wild?",
             ],
-            incorrectResponseIds: ["gamesAndCoffee.u2", "gamesAndCoffee.u4"],
+            incorrectResponseIds: [
+                "games-and-coffee.u2",
+                "games-and-coffee.u4",
+            ],
             substitutionQuestion: {
                 correctOverrides: {
-                    "gamesAndCoffee.you": "gamesAndCoffee.you.formal",
+                    "games-and-coffee.you": "games-and-coffee.you.formal",
                 },
                 incorrectOverrides: [
                     {
-                        "gamesAndCoffee.you": "gamesAndCoffee.you.incorrect",
+                        "games-and-coffee.you":
+                            "games-and-coffee.you.incorrect",
                     },
                 ],
             },
@@ -41,12 +45,12 @@ export const gamesAndCoffee: Conversation = {
                 { kind: "text", text: " " },
                 {
                     kind: "token",
-                    id: "gamesAndCoffee.you",
+                    id: "games-and-coffee.you",
                     base: "leat",
                     translation: "you",
                     variants: [
                         {
-                            id: "gamesAndCoffee.you.formal",
+                            id: "games-and-coffee.you.formal",
                             text: "leibh",
                             translation: "you",
                             features: {
@@ -54,7 +58,7 @@ export const gamesAndCoffee: Conversation = {
                             },
                         },
                         {
-                            id: "gamesAndCoffee.you.incorrect",
+                            id: "games-and-coffee.you.incorrect",
                             text: "leam",
                             translation: "me",
                         },
@@ -69,25 +73,31 @@ export const gamesAndCoffee: Conversation = {
             ],
         },
         {
-            id: "gamesAndCoffee.u1",
+            id: "games-and-coffee.u1",
             speaker: ConversationSpeaker.B,
             translationFormat: "Yes, I like it.",
             incorrectTranslations: ["No, I do not like it.", "Yes, I want it."],
-            incorrectResponseIds: ["gamesAndCoffee.u3", "gamesAndCoffee.u4"],
+            incorrectResponseIds: [
+                "games-and-coffee.u3",
+                "games-and-coffee.u4",
+            ],
             parts: [
                 { kind: "text", text: "’S toil leam e" },
                 { kind: "punct", text: "!" },
             ],
         },
         {
-            id: "gamesAndCoffee.u2",
+            id: "games-and-coffee.u2",
             speaker: ConversationSpeaker.A,
             translationFormat: "I do not like Tears of the Kingdom.",
             incorrectTranslations: [
                 "I like Tears of the Kingdom.",
                 "I do not want Tears of the Kingdom.",
             ],
-            incorrectResponseIds: ["gamesAndCoffee.u0", "gamesAndCoffee.u1"],
+            incorrectResponseIds: [
+                "games-and-coffee.u0",
+                "games-and-coffee.u1",
+            ],
             parts: [
                 { kind: "text", text: "Cha toil leam" },
                 { kind: "text", text: " " },
@@ -96,24 +106,27 @@ export const gamesAndCoffee: Conversation = {
             ],
         },
         {
-            id: "gamesAndCoffee.u3",
+            id: "games-and-coffee.u3",
             speaker: ConversationSpeaker.B,
             translationFormat:
-                "Really? Do $gamesAndCoffee.coffeeYou$ want a coffee?",
+                "Really? Do $games-and-coffee.coffeeYou$ want a coffee?",
             incorrectTranslations: [
                 "Really? Do you like coffee?",
                 "Really? Are you making coffee?",
             ],
-            incorrectResponseIds: ["gamesAndCoffee.u1", "gamesAndCoffee.u2"],
+            incorrectResponseIds: [
+                "games-and-coffee.u1",
+                "games-and-coffee.u2",
+            ],
             substitutionQuestion: {
                 correctOverrides: {
-                    "gamesAndCoffee.coffeeYou":
-                        "gamesAndCoffee.coffeeYou.formal",
+                    "games-and-coffee.coffeeYou":
+                        "games-and-coffee.coffeeYou.formal",
                 },
                 incorrectOverrides: [
                     {
-                        "gamesAndCoffee.coffeeYou":
-                            "gamesAndCoffee.coffeeYou.incorrect",
+                        "games-and-coffee.coffeeYou":
+                            "games-and-coffee.coffeeYou.incorrect",
                     },
                 ],
             },
@@ -125,12 +138,12 @@ export const gamesAndCoffee: Conversation = {
                 { kind: "text", text: " " },
                 {
                     kind: "token",
-                    id: "gamesAndCoffee.coffeeYou",
+                    id: "games-and-coffee.coffeeYou",
                     base: "thu",
                     translation: "you",
                     variants: [
                         {
-                            id: "gamesAndCoffee.coffeeYou.formal",
+                            id: "games-and-coffee.coffeeYou.formal",
                             text: "sibh",
                             translation: "you",
                             features: {
@@ -138,7 +151,7 @@ export const gamesAndCoffee: Conversation = {
                             },
                         },
                         {
-                            id: "gamesAndCoffee.coffeeYou.incorrect",
+                            id: "games-and-coffee.coffeeYou.incorrect",
                             text: "iad",
                             translation: "they",
                         },
@@ -153,14 +166,17 @@ export const gamesAndCoffee: Conversation = {
             ],
         },
         {
-            id: "gamesAndCoffee.u4",
+            id: "games-and-coffee.u4",
             speaker: ConversationSpeaker.A,
             translationFormat: "Yes, thank you. With milk. No sugar.",
             incorrectTranslations: [
                 "Yes, thank you. With sugar. No milk.",
                 "No, thank you. With milk.",
             ],
-            incorrectResponseIds: ["gamesAndCoffee.u0", "gamesAndCoffee.u2"],
+            incorrectResponseIds: [
+                "games-and-coffee.u0",
+                "games-and-coffee.u2",
+            ],
             parts: [
                 { kind: "text", text: "Tha" },
                 { kind: "punct", text: "," },
