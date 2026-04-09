@@ -72,10 +72,9 @@ describe("UnitList", () => {
         expect(
             view.getByTestId(`unit-card-${introductions.id}`),
         ).toHaveAttribute("data-active", "true");
-        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
-            "data-active",
-            "false",
-        );
+        expect(
+            view.queryByTestId(`unit-card-${greeting.id}`),
+        ).not.toBeInTheDocument();
 
         const revisitTrigger = view.getByRole("button", {
             name: "Revisit Units",
@@ -86,31 +85,25 @@ describe("UnitList", () => {
 
         expect(revisitTrigger).toBeInTheDocument();
         expect(revisitContent).not.toBeNull();
-
-        const initialExpanded = revisitTrigger.getAttribute("aria-expanded");
-        const initialHidden = revisitContent?.hasAttribute("hidden");
-
-        fireEvent.click(revisitTrigger);
-
-        expect(revisitTrigger.getAttribute("aria-expanded")).not.toBe(
-            initialExpanded,
-        );
-        expect(revisitContent?.hasAttribute("hidden")).not.toBe(initialHidden);
-
-        if (revisitTrigger.getAttribute("aria-expanded") === "true") {
-            expect(view.getByTestId(`unit-card-${greeting.id}`)).toBeVisible();
-        }
+        expect(revisitTrigger).toHaveAttribute("aria-expanded", "false");
+        expect(revisitContent?.hasAttribute("hidden")).toBe(true);
+        expect(
+            view.queryByTestId(`unit-card-${greeting.id}`),
+        ).not.toBeInTheDocument();
 
         fireEvent.click(revisitTrigger);
 
-        expect(revisitTrigger.getAttribute("aria-expanded")).toBe(
-            initialExpanded,
-        );
-        expect(revisitContent?.hasAttribute("hidden")).toBe(initialHidden);
+        expect(revisitTrigger).toHaveAttribute("aria-expanded", "true");
+        expect(revisitContent?.hasAttribute("hidden")).toBe(false);
+        expect(view.getByTestId(`unit-card-${greeting.id}`)).toBeVisible();
 
-        if (revisitTrigger.getAttribute("aria-expanded") === "true") {
-            expect(view.getByTestId(`unit-card-${greeting.id}`)).toBeVisible();
-        }
+        fireEvent.click(revisitTrigger);
+
+        expect(revisitTrigger).toHaveAttribute("aria-expanded", "false");
+        expect(revisitContent?.hasAttribute("hidden")).toBe(true);
+        expect(
+            view.queryByTestId(`unit-card-${greeting.id}`),
+        ).not.toBeInTheDocument();
     });
 
     test("shows the empty state and practice CTA when every unit is completed", () => {
