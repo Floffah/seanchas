@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { beforeEach, describe, expect, mock, test } from "bun:test";
 
 import ConversationUnit from "@/components/blocks/ConversationUnit";
 import { TooltipProvider } from "@/components/ui/tooltip";

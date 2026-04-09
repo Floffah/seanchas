@@ -47,7 +47,7 @@ export default function UnitList() {
         [completedUnitsQuery],
     );
 
-    const [completedOpen, setCompletedOpen] = useState(true);
+    const [completedOpen, setCompletedOpen] = useState(false);
 
     return (
         <div className="flex flex-1 basis-auto flex-col items-center gap-12">

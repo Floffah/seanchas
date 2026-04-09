@@ -2,6 +2,7 @@ import { v } from "convex/values";
 
 import { mutation, query } from "@/convex/server";
 import { buildPracticeQueue, getUnitPracticeState } from "@/lib/util/practice";
+import { getStreakGoal, getUpdatedStreakState } from "@/lib/util/streak";
 
 import { getCurrentUserOrThrow } from "./lib/auth";
 
@@ -28,6 +29,25 @@ export const getPracticeQueue = query({
             .collect();
 
         return buildPracticeQueue(practiceStates, Date.now());
+    },
+});
+
+export const getHomeProgress = query({
+    handler: async (ctx) => {
+        const user = await getCurrentUserOrThrow(ctx);
+
+        const completions = await ctx.db
+            .query("unitCompletions")
+            .withIndex("userId_unitId", (q) => q.eq("userId", user._id))
+            .collect();
+
+        return {
+            completedUnitIds: completions.map(
+                (completion) => completion.unitId,
+            ),
+            currentStreak: user.currentStreak ?? 0,
+            streakGoal: getStreakGoal(user.currentStreak ?? 0),
+        };
     },
 });
 
@@ -89,5 +109,16 @@ export const upsertCompletion = mutation({
         } else {
             await ctx.db.insert("unitPracticeStates", practiceState);
         }
+
+        await ctx.db.patch(
+            user._id,
+            getUpdatedStreakState(
+                {
+                    currentStreak: user.currentStreak,
+                    lastActiveAt: user.lastActiveAt,
+                },
+                now,
+            ),
+        );
     },
 });

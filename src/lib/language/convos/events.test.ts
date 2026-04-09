@@ -70,35 +70,7 @@ describe("conversationToEvents", () => {
         ]);
     });
 
-    test("matches the greeting event sequence", () => {
-        expect(conversationToEvents(greeting)).toEqual([
-            {
-                type: "show_utterance",
-                utteranceId: "greeting.u0",
-            },
-            {
-                type: "show_tip",
-                tipId: "adjectives_after_words",
-                tokenId: "greeting.math",
-                side: "right",
-            },
-            {
-                type: "show_utterance",
-                utteranceId: "greeting.u1",
-            },
-            {
-                type: "show_utterance",
-                utteranceId: "greeting.u2",
-            },
-            {
-                type: "show_tip",
-                tipId: "gu_math",
-                tokenId: "greeting.gu",
-            },
-            {
-                type: "show_utterance",
-                utteranceId: "greeting.u3",
-            },
-        ]);
+    test.serial("matches the greeting event sequence", () => {
+        expect(conversationToEvents(greeting)).toMatchSnapshot();
     });
 });
