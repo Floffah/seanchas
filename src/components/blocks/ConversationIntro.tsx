@@ -91,6 +91,9 @@ export default function ConversationIntro() {
             </Dialog>
 
             <motion.div
+                initial={{
+                    opacity: 1,
+                }}
                 animate={{
                     opacity: 1,
                 }}

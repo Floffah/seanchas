@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, mock, test } from "bun:test";
-import type { ComponentProps } from "react";
+import type { PropsWithChildren } from "react";
 import { Rating } from "ts-fsrs";
 
 import { conversations } from "@/lib/language/convos";
@@ -14,29 +14,30 @@ mock.module("convex/react", () => ({
     useQuery: useQueryMock,
 }));
 
-mock.module("@/components/blocks/UnitCard", () => ({
+mock.module("next/link", () => ({
     default: ({
-        convo,
-        returnTo,
-    }: {
-        convo: (typeof conversations)[number];
-        returnTo?: ComponentProps<
-            typeof import("@/components/blocks/UnitCard").default
-        >["returnTo"];
-    }) => (
-        <a
-            data-testid={`unit-card-${convo.id}`}
-            href={
-                returnTo ? `/${convo.id}?returnTo=${returnTo}` : `/${convo.id}`
-            }
-        >
-            {convo.name}
+        children,
+        href,
+        ...props
+    }: PropsWithChildren<{ href: string }>) => (
+        <a href={href} {...props}>
+            {children}
         </a>
     ),
 }));
 
+mock.module("@/components/DynamicViewTransition", () => ({
+    default: ({ children }: PropsWithChildren) => <>{children}</>,
+}));
+
 const { default: PracticeUnitList } =
     await import("@/components/blocks/PracticeUnitList");
+
+function getLinkByHref(view: ReturnType<typeof render>, href: string) {
+    return view
+        .getAllByRole("link")
+        .find((link) => link.getAttribute("href") === href);
+}
 
 beforeEach(() => {
     useQueryMock.mockImplementation(() => []);
@@ -67,12 +68,14 @@ describe("PracticeUnitList", () => {
         expect(view.queryByText("Later")).not.toBeInTheDocument();
 
         expect(
-            view.getByTestId(`unit-card-${introductions.id}`),
-        ).toHaveAttribute("href", `/${introductions.id}?returnTo=practice`);
-        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
-            "href",
-            `/${greeting.id}?returnTo=practice`,
-        );
+            getLinkByHref(
+                view,
+                `/${introductions.id}?returnTo=practice`,
+            ),
+        ).toBeInTheDocument();
+        expect(
+            getLinkByHref(view, `/${greeting.id}?returnTo=practice`),
+        ).toBeInTheDocument();
 
         const practiceLinks = view.getAllByRole("link");
 
@@ -100,13 +103,15 @@ describe("PracticeUnitList", () => {
         const view = render(<PracticeUnitList />);
 
         expect(view.getByText("New")).toBeInTheDocument();
-        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
-            "href",
-            `/${greeting.id}?returnTo=practice`,
-        );
         expect(
-            view.getByTestId(`unit-card-${introductions.id}`),
-        ).toHaveAttribute("href", `/${introductions.id}?returnTo=practice`);
+            getLinkByHref(view, `/${greeting.id}?returnTo=practice`),
+        ).toBeInTheDocument();
+        expect(
+            getLinkByHref(
+                view,
+                `/${introductions.id}?returnTo=practice`,
+            ),
+        ).toBeInTheDocument();
     });
 
     test("shows the empty state when the practice queue is empty", () => {

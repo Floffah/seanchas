@@ -1,5 +1,6 @@
 import { fireEvent, render } from "@testing-library/react";
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+import type { PropsWithChildren } from "react";
 
 import UnitList from "@/components/blocks/UnitList";
 import { conversations } from "@/lib/language/convos";
@@ -17,31 +18,24 @@ mock.module("next/link", () => ({
         children,
         href,
         ...props
-    }: React.PropsWithChildren<{ href: string }>) => (
+    }: PropsWithChildren<{ href: string }>) => (
         <a href={href} {...props}>
             {children}
         </a>
     ),
 }));
 
-mock.module("@/components/blocks/UnitCard", () => ({
-    default: ({
-        convo,
-        active,
-    }: {
-        convo: { id: string; name: string };
-        active?: boolean;
-    }) => (
-        <div
-            data-active={active ? "true" : "false"}
-            data-testid={`unit-card-${convo.id}`}
-        >
-            {convo.name}
-        </div>
-    ),
+mock.module("@/components/DynamicViewTransition", () => ({
+    default: ({ children }: PropsWithChildren) => <>{children}</>,
 }));
 
 const completedConversationIds = conversations.map((convo) => convo.id);
+
+function getLinkByHref(view: ReturnType<typeof render>, href: string) {
+    return view
+        .getAllByRole("link")
+        .find((link) => link.getAttribute("href") === href);
+}
 
 beforeEach(() => {
     useQueryMock.mockImplementation(() => []);
@@ -50,15 +44,14 @@ beforeEach(() => {
 describe("UnitList", () => {
     test("shows all units in Continue Learning and hides Revisit Units when nothing is completed", () => {
         const view = render(<UnitList />);
+        const greetingLink = getLinkByHref(view, `/${greeting.id}`);
+        const introductionsLink = getLinkByHref(view, `/${introductions.id}`);
 
         expect(view.getByText("Continue Learning")).toBeInTheDocument();
-        expect(view.getByTestId(`unit-card-${greeting.id}`)).toHaveAttribute(
-            "data-active",
-            "true",
-        );
-        expect(
-            view.getByTestId(`unit-card-${introductions.id}`),
-        ).toHaveAttribute("data-active", "false");
+        expect(greetingLink).toBeInTheDocument();
+        expect(introductionsLink).toBeInTheDocument();
+        expect(greetingLink?.className).toContain("border");
+        expect(introductionsLink?.className).not.toContain("border");
         expect(
             view.queryByRole("button", { name: "Revisit Units" }),
         ).not.toBeInTheDocument();
@@ -70,11 +63,9 @@ describe("UnitList", () => {
         const view = render(<UnitList />);
 
         expect(
-            view.getByTestId(`unit-card-${introductions.id}`),
-        ).toHaveAttribute("data-active", "true");
-        expect(
-            view.queryByTestId(`unit-card-${greeting.id}`),
-        ).not.toBeInTheDocument();
+            getLinkByHref(view, `/${introductions.id}`)?.className,
+        ).toContain("border");
+        expect(getLinkByHref(view, `/${greeting.id}`)).toBeUndefined();
 
         const revisitTrigger = view.getByRole("button", {
             name: "Revisit Units",
@@ -87,23 +78,19 @@ describe("UnitList", () => {
         expect(revisitContent).not.toBeNull();
         expect(revisitTrigger).toHaveAttribute("aria-expanded", "false");
         expect(revisitContent?.hasAttribute("hidden")).toBe(true);
-        expect(
-            view.queryByTestId(`unit-card-${greeting.id}`),
-        ).not.toBeInTheDocument();
+        expect(getLinkByHref(view, `/${greeting.id}`)).toBeUndefined();
 
         fireEvent.click(revisitTrigger);
 
         expect(revisitTrigger).toHaveAttribute("aria-expanded", "true");
         expect(revisitContent?.hasAttribute("hidden")).toBe(false);
-        expect(view.getByTestId(`unit-card-${greeting.id}`)).toBeVisible();
+        expect(getLinkByHref(view, `/${greeting.id}`)).toBeVisible();
 
         fireEvent.click(revisitTrigger);
 
         expect(revisitTrigger).toHaveAttribute("aria-expanded", "false");
         expect(revisitContent?.hasAttribute("hidden")).toBe(true);
-        expect(
-            view.queryByTestId(`unit-card-${greeting.id}`),
-        ).not.toBeInTheDocument();
+        expect(getLinkByHref(view, `/${greeting.id}`)).toBeUndefined();
     });
 
     test("shows the empty state and practice CTA when every unit is completed", () => {
