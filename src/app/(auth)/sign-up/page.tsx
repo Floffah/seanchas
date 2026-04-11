@@ -4,6 +4,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ViewTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -35,6 +36,8 @@ const formSchema = z.object({
 });
 
 export default function Page() {
+    const router = useRouter();
+
     const { signIn } = useAuthActions();
 
     const form = useForm({
@@ -42,10 +45,22 @@ export default function Page() {
     });
 
     const onSubmit = form.handleSubmit(async (data) => {
-        await signIn("password", {
-            ...data,
-            flow: "signUp",
-        });
+        try {
+            await signIn("password", {
+                ...data,
+                flow: "signUp",
+            });
+        } catch (error) {
+            form.setError("root", {
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : "An unknown error occurred",
+            });
+            return;
+        }
+
+        router.push("/home");
     });
 
     return (
