@@ -11,7 +11,7 @@
 #pagebreak(weak: true)
 
 #show: project.with(
-  title: [Teaching Scottish Gaidhlig Through Mobile Learning With Pre-Scripted Conversations],
+  title: [A Conversation-Based Approach to Mobile Learning for Scottish Gaelic],
   logo: "napier",
   authors: (
     (name: "Ramsay Foy (40646655@live.napier.ac.uk)", affiliation: "Author"),
@@ -20,7 +20,17 @@
   ),
   authorsVertical: true,
   date: datetime.today().display("[day] [month repr:long] [year]"),
-  abstract: "placeholder",
+  abstract: [
+    This project investigates how Mobile-Assisted Language Learning (MALL) frameworks can be applied to the learning of Scottish Gaelic (Gaidhlig) in a space where there are limited accessible learning resources and support for differing learning styles. Existing solutions such as Duolingo and SpeakGaelic provide structured content but do not cater to all learning styles, particularly those requiring contextual and interactive approaches.
+
+    In response, a web application was designed and implemented around pre-scripted conversation-based units. These units present users with contextualised dialog and then tests users with various quizzes related to translation, response selection, substitution, and summarisation.
+
+    The application incorporates techniques such as spaced repetition, constructive feedback, and mistake tracking which are informed by literature on second language acquisition, motivation, and mobile learning frameworks.
+
+    The application was evaluated through user testing and analysis using the PF4M framework, alongside comparison with existing language learning tools. Results indicate that users found the system intuitive and engaging, with the conversation-based format supporting comprehension and pacing. However, some limitations were identified in promoting deeper language understanding and learner confidence.
+
+    The findings suggest that contextualised and mobile-first learning systems can provide an effective and accessible supplement to existing Gaelic learning resources.
+  ],
 
   formal: true,
   figure-index: (

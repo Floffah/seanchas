@@ -1,8 +1,5 @@
 #import "@preview/wordometer:0.1.4": word-count
 
-#word-count(exclude: <no-wc>, total => [
-#total.words
-  
 = Research
 
 == Literature Review
@@ -88,4 +85,41 @@ Based on previous surveys and a new survey, #cite(<ekiz_factors_2016>, form: "pr
 
 == Review of Existing Materials
 
-])
+#[
+  #set heading(outlined: false) 
+
+  === Duolingo
+
+  Duolingo#footnote[https://www.duolingo.com/] is a widely used online SaaS product that aims to teach people a variety of languages in an accessible manner. It relies heavily on gamification in its exercises, where users are encouraged to learn by competing in competitions, with limited "resources" like losing a "life" when they fail a quiz. It also has a social side, where users are encouraged to add friends on the platform with whom they can complete "friend quests" and compare scores. It employs heavy repetition and streak tactics.
+
+  Duolingo has a wide catalogue of languages it supports, with many endangered languages supported including Gaidhlig, Navajo, Hawaiian, Irish, Welsh, Yiddish, Maori and more.
+  Duolingo excels in habit-building, accessibility, and engagement. Where users are more inclined to keep using it, with it also supporting several device types.
+
+  Duolingo has several disadvantages, however. It lacks good context-aware exercises as its exercises are not always utilising common words, realistic phrases, or grammatical insight. Duolingo seems to be more interested in teaching people vocabulary and how to read the language. 
+  
+  The platform's consistency is also small. In its more mainstream languages, they employ machine learning for generating and recognising speech, whereas for more endangered languages, they employ a wide range of voice actors who don't necessarily use the same dialect, which disadvantages users who wish to learn good pronunciation.
+
+  Some research also shows that students are sceptical about the effectiveness of Duolingo at higher levels. Also saying that it has poor authenticity, lacks contextual exercises, and lacks proper grammar teaching @poveda-balbuena_digital_2024.
+
+  === SpeakGaelic
+
+  SpeakGaelic#footnote[https://speakgaelic.scot/] is a television Gaidhlig course made by BBC Alba. It uses structured lessons in a visual form with online quizzes per episode. Their content is high quality, very culturally grounded, and has a strict progression. 
+
+  SpeakGaelic is not very interactive and requires passive consumption. It is less likely to work in a mobile form factor. This resource is great and works for a specific group of people, but may benefit from being supplemented with a more interactive and bite-sized format.
+
+  === LearnGaelic
+
+  LearnGaelic#footnote[https://learngaelic.net/] is a large resource hub that includes a dictonary, lessons, compilations of decades of media, and lots of reference documents. It is substantially comprehensive, authoritative, and useful for reference. It can be overwhelming to learners seeking to solely use it for learning, as it doesn't provide a singular progression path or structure, and isn't very engaging.
+
+  Similar to SpeakGaelic, this is a useful resource for a lot of people, but would benefit from being used alongside a more interactive resource with set progression.
+
+  === Falou
+
+  Falou#footnote[https://falou.com/] is a language learning application for mobile phones that focuses specifically on speaking and conversational practice. It uses simulated and pre-scripted conversations along side speech recognition to create a phrase-based learning approach. It excels in real-world dialogue, aligns far more with communicative language use, and is one of the most interactive learning MALL learning applications.
+
+  It can often lack progressive narrative across the set conversation, and conversations are largely reactive rather than being structured. It is also not very transparent in its use of pedagogy to back its design. It only focuses on very mainstream languages and lacks a large list of languages ranging from endangered to even widely used.
+  
+  === Conclusion
+
+  Across these platforms, common strengths include accessibility, structured content, and availability of learning materials. However limitations are present in areas such as context-aware learning and interactivity. Specifically, few platforms provide a digital-first, conversation-based, context-aware approach that integrates research-backed learning techniques (or don't support endangered languages such as Gaidhlig). This gap is the reason for the proposed system.
+]

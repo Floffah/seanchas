@@ -6,17 +6,13 @@ In the space, there are only a few resources for learning Gaidhlig, with only a 
 
 The core purpose of this application is to provide a learning experience to users who want to learn Gaidhlig, in a manner that is curated, linear, easy to follow, and easy to integrate into day to day life. There are several features that are required to provide this.
 
-The features that surround but are not specific to language learning are related to authentication. The site must allow users to register and log in, providing the core foundation for the system to save and locate information related to the user's learning journey, which paves the way for most other features. Registration and login must provide a way for the user to enter an email address and password, to create or log into their account. The site must provide a way to reset the password of the user's account.
+The features that surround but are not specific to language learning are related to authentication. The site must allow users to register and log in, providing the core foundation for the system to save and locate information related to the user's learning journey, which paves the way for most other features. Registration and login must provide a way for the user to enter an email address and password, to create or log into their account. The site must provide a way to reset the password of the user's account. The authentication system must be secure and prevent user information from being accessible to unauthorised parties.
 
-The site must present to the user a list of ordered units, ranging from lowest to greatest difficulty. Within each unit is a pre-scripted conversation that the user will be presented with and then asked questions on. The activity types are as follows in no particular order:
-- Of the conversation itself:
-  - Choose the correct response
-  - Type the correct response
-  - What word is missing
-  - What word might also work in place of another
-- Around the conversation:
-  - What was discussed in the conversation
-  - Choose the correct word definition
+The site must present to the user a list of ordered units, ranging from lowest to greatest difficulty. Within each unit is a pre-scripted conversation that the user will be presented with and then asked questions on. The activity types are as follows, in no particular order:
+- What was discussed in the conversation?
+- Choose the correct response.
+- Choose the correct translation
+- What word might also work in place of another?
 
 In future versions of this software, the questions and activities will also be audio-based, using technologies such as speech recognition, text-to-speech, and AI-generated conversations based on user mistakes. As the technology required to implement these future ideas is limited or unavailable in Gaidhlig, it is out of scope for this project and is a prompt for future research.
 
@@ -26,7 +22,7 @@ The site will give constructive feedback when the user gets something wrong, whi
 
 === Reasoning and Thinking
 
-The initial reason why I considered the conversation-based design is that similar applications I have previously used employ this. But during research, this decision was solidified by several theoretical approaches and prior research pointing to this being effective. 
+The initial reason why I considered the conversation-based design is that similar applications I have previously used employ this, with non targeting Gaidhlig. But during research, this decision was solidified by several theoretical approaches and prior research pointing to this being effective. 
 
 Several researchers point towards two learning theories that are effective: Mobile-Assisted Language Learning (MALL) and Situated Learning Theory (SLT).
 
@@ -165,8 +161,6 @@ The front-end code will use a custom or provided CD pipeline where every success
 
 The back-end will use a very similar approach, with the crucial piece being that both the front-end and back-end CI/CD pipelines should deploy at the same time to minimise service disruption.
 
-
-
 == Evaluation Methodology
 
 To evaluate this project implementation, I will conduct several analysis processes.
@@ -244,13 +238,134 @@ After applying and considering all of these questions, we should have a comprehe
 
 = Implementation
 
+This section provides evidence that my implementation meets the functional and non-functional requirements set out in the methodology section. It also outlines and evidences the testing strategy and executes the evaluation plan outlined in the methodology section.
+
+== User Interface
+
+Firstly, related to authentication, I implemented a simple UI for signing in and out that is backed by Convex and their official authentication adapter, seen below.
+
+#figure(
+  image("../images/impl-sign-in.png", width: 70%),
+  caption: [Implemented Sign In UI],
+)
+
+The Convex authentication adapter considers security standards as part of the package, in this case utilising hashing algorithms for passwords, where passwords are not stored in plain text but rather hashed into an irreversible secret that is compared during login. For this prototype, the ability to reset passwords was omitted to focus on the application's main content, but is easily implementable using the backend provided by Convex's authentication adapter.
+
+When logged in, the user is presented with a unit list which is ordered from easiest to hardest and in the intended progression path.
+
+#figure(
+  image("../images/impl-home-page.png", width: 70%),
+  caption: [Implemented Unit List UI],
+)
+
+When clicking on a unit card, the user is presented with the unit page, which uses a finite-state-backed list of steps: including an introduction, summary quiz, translation quiz, response quiz, and substitution quiz.
+
+#figure(
+  image("../images/impl-unit-intro.png", width: 70%),
+  caption: [Implemented Unit Page: Introduction]
+) <impl-unit-intro>
+
+This page presents the user with the scripted conversation, but only shows one message at a time. Almost like a slide show, the state of the conversation can be advanced by hitting the space bar. Beyond the functional requirements, I also implemented a "tips" system, where instead of just showing the messages in order, sometimes it will pause to explain a feature of the language as shown in @impl-unit-intro. The messages show their Gaidhlig content and the English translation below.
+
+After the user studies the presented conversation, they are shown a button to advance to the quiz portions of the site. Below are four figures showing example questions from each step. Each image shows the various states the quizzes can be in. They use the same generic quiz component. When the user selects the correct answer, it displays "Correct." and highlights their answer in green. When they get it wrong, their answer is highlighted in red and the correct answer is highlighted in green with a caption explaining what the correct answer was.
+
+#grid(
+  columns: (auto, auto),
+  gutter: 1em,
+  figure(image("../images/impl-unit-summary.png"), caption: [Implemented Unit Page: Summary Quiz]),
+  figure(image("../images/impl-unit-translation.png"), caption: [Implemented Unit Page: Translation Quiz]),
+  figure(image("../images/impl-unit-response.png"), caption: [Implemented Unit Page: Response Quiz]),
+  figure(image("../images/impl-unit-substitution.png"), caption: [Implemented Unit Page: Substitution Quiz]),
+)
+
+When the user completes a unit, their home page will change shape. Completed units are hidden under a collapsible heading so the main list only includes units they haven't attempted.
+
+#figure(
+  image("../images/impl-home-completion.png", width: 70%),
+  caption: [Implemented Unit List w/ Units Completed]
+)
+
+The practice page is a simple reordering of the unit list, where the list of units is ordered and grouped based on the output of the FSRS scheduler. Units are grouped into "New", "Due", and "Later". "New" means the unit hasn't been attempted, "Due" means the user needs to attempt it soon, and "Later" means the unit doesn't need attention right now. As previously explained, FSRS creates data points from all attempts to gauge users confidence and decide when to schedule new attempts.
+
+#figure(
+  image("../images/impl-practice.png", width: 70%),
+  caption: [Implemented Practice Page]
+)
+
+Further implementation related to account management and site news were omitted for this first prototype as the main site value is in the unit and content.
+
+== Internal Systems
+
+When the user has fully completes a unit, two things are saved:
+- A record showing that they have completed the unit.
+- A record showing their practice rep related to the FSRS algorithm.
+
+Below is an example record for the FSRS practice record:
+
+```json
+{
+  _creationTime: 1775997140538.753,
+  _id: "k57fm1r550c3btfjjy144vjahx84pyg2",
+  difficulty: 2.11810397,
+  due: 1776256340538,
+  elapsedDays: 0,
+  lapses: 0,
+  lastRating: 3,
+  lastReview: 1775997140538,
+  reps: 1,
+  scheduledDays: 3,
+  stability: 2.3065,
+  state: 2,
+  unitId: "greeting",
+  updatedAt: 1775997140538,
+  userId: "jx7cm28x95s5sm4hg45s5ddjj584qzkk",
+}
+```
+
+An interesting piece of internal implementation is related to how the conversations are stored. It is not as simple as hard coded conversations and questions, but rather a slighly complex format for showing the conversations in a dynamic format. The questions are created based on this format, but a lot of the question discovery is not fully heuristic.
+
+You can see an example of this format in #link(<convo-format>)[Appendix 5].
+
+Inside each message in the conversation, the format splits a message's content into parts. Each part can be plain text, punctuation, or a token. A token contains information about what it represents. Tokens have a translation, variants (with metadata such as gender for lenition calculation), and identifier. Variants in tokens are mainly used for the substitution quiz step, but can represent states such as informal or formal word variants. Some variants also represent times of day, for example with "afternoon" being the default, but "night" and "morning" could be valid too. The format supports changing these variants and synchronising grammar so it still works.
+
+By using a "token reference" part, token variant states can be synchronised across messages. This enables more dynamic conversation representations, for example, where in the future an entire conversation can be switched to a formal state by just switching the variant state in memory.
+
 == Testing
 
 This project employs a combination of manual testing and unit testing. 
 
-I have used the unit testing system built into the Bun runtime and target non-UI surfaces that include logic that may contain regressions on future changes.
+On every new feature or change, I manually tested the user interface in my browser using a development server. I also wrote and ran tests for every new change, which would also run inside CI on every commit, push, or pull request, and no pull request would be merged without the tests working locally or the GitHub CI displaying a green tick for the unit tests.
+
+The unit tests used raw logic testing, either comparing function outputs with literal `expect(something)` calls or snapshot comparisons (where the runtime will store a complex object in a file and compare it on subsequent test runs). All of the UI code was tested using a server-side DOM implementation called `happy-dom` with the rendering and comparison checks being done by `testing-library`. The UI tests render each UI component, then interact with the UI (by clicking or else), and compare visual outputs or data outputs.
+
+Below is a #link("https://bun.com/docs/test/reporters#dots-reporter")[Dot Summary] of the entire test suite. A period indicates a passing test, and an F indicates a failing test.
+
+#figure(
+  image("../images/tests-dots.png"),
+  caption: [Unit Test Suite Dot Summary]
+)
+
+To see the full summary of the test suite for the latest CI run, you can #link("https://github.com/Floffah/seanchas/actions/runs/24285687766/job/70914554196")[view it on GitHub here]
 
 == Evaluation
+
+=== Survey Results
+
+As described in the methodology section, I sent the application along with a survey to a group of users to test it and gather feedback. The groups of users were: family, friends in Scotland, friends in Ireland, and more international friends.
+
+For the Likert scale, the results indicate that users found it easy to sign in, locate units, to understand units and their content, and users indicated that the conversation format helped them learn more effectively than memorisation would.
+
+All the respondents answered either slightly or largely agree to the Likert questions, except for the question asking if the units were relevant. Some respondents slightly disagreed with this point.
+
+For the list of statements, none of the statements have zero points, so someone agreed with them all, however users disagreed with the statement "I feel more confident recognising or using some of the language after using the site" significantly more than the other points, where the other points gained evenly high scores.
+
+For the freeform "pros question", most people commented on the ease of use and good user experience. Users liked how they could move at their own pace and weren't pressured to continue through. Some users liked the "questions about the order of the messages".
+
+The freeform "cons question", the main point users picked up on was their dislike of the substitution quiz, saying that they weren't given enough context clues to complete it effectively. Some users commented that they felt they were memorising phrases rather than understanding the language, which although it is a valid response, is partly the aim of the application.
+
+Further to this, some users pointed out that the application could more appropriately point out what to pay attention to during the conversation introduction, so that the quiz (especially substitution quiz) can be answered more effectively.
+
+About 60% of users progressed onto the survey language quiz, where all respondents got all three questions correct.
 
 === PF4M Evaluation
 
