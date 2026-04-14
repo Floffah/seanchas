@@ -18,7 +18,9 @@ In future versions of this software, the questions and activities will also be a
 
 There are several more subtle features that are required. During the course of the user participating in the above units and their activities, data will be saved about their mistakes and strengths. This information will provide the basis for spaced repetition, which will alter the questions and answers for future activities to show mistaken words to the user more often than words and phrases they are good at, based on research reviewed in the literature review.
 
-The site will give constructive feedback when the user gets something wrong, which will be designed in subsequent sections based on research to ensure the user isn't overwhelmed or demotivated to continue, but still adequately notifying them when they got something wrong.
+As mentioned, the site will implement a spaced-repetition system built using Free Spaced Repetition Scheduler (FSRS), designed for use in Anki, and made available for most languages by the Open Spaced Repetition#footnote[https://github.com/open-spaced-repetition] foundation. The site will feature a practice page which surfaces specific learning units based on the FSRS algorithm, using the tracking information outlined above.
+
+The site should give constructive feedback when the user gets something wrong, which will be designed in subsequent sections based on research to ensure the user isn't overwhelmed or demotivated to continue, but still adequately notifying them when they got something wrong.
 
 === Reasoning and Thinking
 
@@ -26,7 +28,9 @@ The initial reason why I considered the conversation-based design is that simila
 
 Several researchers point towards two learning theories that are effective: Mobile-Assisted Language Learning (MALL) and Situated Learning Theory (SLT).
 
-Firstly, PF4M @wang_designing_2024 places strong emphasis on content, its context, and its application to real-world scenarios. We don't want to create an application that teaches learners solely vocabulary, but rather one that truly can contribute to a learner's true understanding and communicative potential of the language.
+PF4M @wang_designing_2024 places strong emphasis on content, its context, and its application to real-world scenarios. We don't want to create an application that teaches learners solely vocabulary, but rather one that truly can contribute to a learner's true understanding and communicative potential of the language.
+
+An interesting product of the conversation-and-quiz-style approach designed, is that we get the immediate benefits of recall, where users have to remember the conversation and consider certain activities based on it. This means the user performs a recall rep within the first hour, as outlined by the literature review. Subsequently, based on the FSRS algorithm, users will perform another rep with the same recall the next day, ideally within 24 hours.
 
 == Non-functional Requirements
 
@@ -57,6 +61,14 @@ I have created a diagram that explains all the use cases in the system and which
   image("../images/use-case.drawio.png", width: 60%),
   caption: [Use case diagram]
 )
+
+=== Unit Design
+
+In order to decide what units to implement for the first prototype, I opted to look at existing materials for how they progress through topics. LearnGaelic and SpeakGaelic seem to start with greetings in most of their resources, followed by various methods of introductions, and soon later likes and dislikes.
+
+These three units: greetings, introductions, likes/dislikes, I found the easiest to hand-craft a conversation around, and immediately provide grammar and understanding challenges while being common phrases.
+
+I discovered a dataset#footnote[https://github.com/innesmck/GaelicFrequencyLists] where various resources linked to LearnGaelic were scraped to find the most common words. I tried to craft the conversations to include common words in this dataset such as: "tha", "gu math", "is", "e"/"i", "thu"/"sibh", etc. However, it proved difficult to fully incorporate all of the top most common words. The dataset is general and non-contextualised so these aren't necessarily the most common in real-world conversations, but also in documents and speeches. Potential future work could be analysing or surveying real Gaidhlig speakers to find out what words they use on a day-to-day basis.
 
 === Data Design
 
@@ -234,6 +246,34 @@ Furthermore, PF4M models that the intersections between these pillars and attrib
 
 After applying and considering all of these questions, we should have a comprehensive analysis of how the site performs in potential real-world scenarios based on the PF4M framework.
 
+Furthermore, the site will be presented to users. Users will be instructed to use the site to try all units and the practice page once. After doing so, a survey will be conducted.
+
+The survey starts off with a Likert scale set of questions asking users to what capacity they agree with the questions on a scale including disagree, slightly disagree, neutral, slightly agree, and agree. The questions to be asked are as follows:
+- It was easy to sign in
+- It was easy to complete units
+- It was easy complete practice reps
+- It was easy to understand the content of each unit and appropriately answer each question
+- The units were relevant
+- The conversation based format helped me learn more effectively than memorisation would
+
+Next, there is a multiple-choice list where the user is asked which statements they agree with. These questions are more boolean than the above:
+- I found the experience engaging
+- I would use something like this again
+- The conversation format felt natural and helpful
+- The format kept my attention
+- I feel more confident recognising or using some of the language after using the site
+- The activity helped me understand the meaning of the phrases
+- None of these statements
+
+To conclude the survey's main content, the users will be asked free-form questions to gauge the things they liked and disliked about the experience.
+
+Finally, to avoid needing to chase up every respondent and allow truly anonymous data, there will be three questions related to how much of the language they picked up. These will be:
+- How do you ask someone how they are?
+- How do you say "good afternoon"?
+- How do you say "I am well"?
+
+It is intended that these phrases should be used in the units in a way that users will be able to pick them up.
+
 #pagebreak(weak: true)
 
 = Implementation
@@ -347,9 +387,9 @@ Below is a #link("https://bun.com/docs/test/reporters#dots-reporter")[Dot Summar
 
 To see the full summary of the test suite for the latest CI run, you can #link("https://github.com/Floffah/seanchas/actions/runs/24285687766/job/70914554196")[view it on GitHub here]
 
-== Evaluation
+= Application Evaluation
 
-=== Survey Results
+== Survey Results
 
 As described in the methodology section, I sent the application along with a survey to a group of users to test it and gather feedback. The groups of users were: family, friends in Scotland, friends in Ireland, and more international friends.
 
@@ -365,9 +405,9 @@ The freeform "cons question", the main point users picked up on was their dislik
 
 Further to this, some users pointed out that the application could more appropriately point out what to pay attention to during the conversation introduction, so that the quiz (especially substitution quiz) can be answered more effectively.
 
-About 60% of users progressed onto the survey language quiz, where all respondents got all three questions correct.
+About 50% of users progressed onto the survey language quiz, where all respondents got the final two questions correct, and most got the first correct.
 
-=== PF4M Evaluation
+== PF4M Evaluation
 
 #[
 #set heading(outlined: false)
@@ -408,7 +448,7 @@ In the future. LLMs may be used to create more dynamic challenges, units, and pr
 
 ===== Is learning relevant to learners?
 
-Yes. The content is specific to beginners of the language Scottish Gaidhlig.
+Yes. The content is specific to beginners of the language Gaidhlig.
 
 ===== Does it apply difficulty matching?
 
@@ -444,73 +484,141 @@ No. If the user closes the site, we don't call them back. It is difficult to app
 
 ===== Is the experience mobile-first?
 
+The prototype does not work on touchscreen mobile phones due to a lack of time, but it can easily support them and was designed to support them. It can be used on any device with a screen and a keyboard, but the full design and potential full version would work well on any mobile device.
+
 ===== Does it support interruptions?
+
+It does not support interruptions while in a unit. E.g., if the user closes a tab while completing a quiz, they will be sent back to the start when they reopen the site. However, once you complete a quiz, this persists for the lifetime of the user's account. This balance works well for the application as if there is a large gap between looking at the conversation and completing the various quizzes, the user's perceived context may be lost.
 
 ===== Can it be used offline?
 
+It cannot be used offline, but may be able to be in the future.
+
 ===== Can learning happen in short bursts?
+
+Yes, a unit takes less than 5 minutes to complete, so the site can be used for short periods.
 
 ===== Are independent sessions cumulative?
 
+Yes, upon completing a unit, all of that data is consolidated into various records for analysing user confidence and adds up over time.
+
 ===== Does it consider accessibility?
+
+Yes, the site doesn't rely on audio queues and uses industry-standard component libraries that automatically work with screen readers and other accessibility features. It requires minimal use of the mouse and can be used with any accessible adapter supported by the browser.
  
 ===== How usable is the site?
 
+The site is very usable, and the user experience is concluded to be good based on survey results and personal usage. It can be improved by fully supporting touchscreens.
+
 ===== Does the platform leverage mobile affordances (audio recording, camera, location)?
+
+No, it only supports visual (or screen reader) affordances.
 
 ===== Is session continuity seamless across devices?
 
+Yes, as long as the user logs in with the same account, their progress is synchronised across all devices. This is improved by the use of the Convex backend, where if the user has the site open on two devices, progress is synchronised without the need for a refresh.
+
 ===== Does the platform support context-aware learning?
+
+Somewhat, it provides a contextualised pre-scripted conversation and quiz questions all in the same context. However, it doesn't account for external factors such as speech, pronunciation, talking with a real person, etc.
  
 ===== Is performance stable under poor connectivity?
 
+Somewhat, there is minimal bandwidth usage, but very low connectivity may impact the user's experience.
+
 ===== Does the UI support cognitive load minimisation on small screens?
+
+Yes, even on big screens, it does not show much at a time, usually only showing the sole content intended for that page.
 
 ==== Teacher / Formality
  
 ===== Are tasks sequenced meaningfully?
 
+Yes, quiz tasks are in a consistent order and ranges from least difficult to most difficult.
+
 ===== Is feedback instructional or solely corrective?
+
+For the prototype, solely corrective, but due to the nature of the dynamic conversation format, it can be easily improved.
 
 ===== Is there a curriculum structure or autonomous exploration?
 
+The site employs a curriculum structure.
+
 ===== Are learning objectives explicit?
+
+Yes, users are given specific units to complete and an indication of how many they have completed.
 
 ===== Does task difficulty align with skill development?
 
+Currently, units are basic and beginner friendly, but as the content grows, progression can be made more constructive and better for skills development.
+
 ===== Are tasks designed around learning theory (even implicitly)?
+
+Yes, there are factors of learning theory involved. Specifically related to spaced repetition and MALL.
 
 ===== Does the system model a pedagogical rationale?
 
+Yes, it is influenced by existing resources and the PF4M MALL framework.
+
 ===== Does the platform support teacher oversight or authoring?
+
+Not at the moment, but support could be added.
  
 ===== Does instruction transition from guided to independent practice?
 
+Somewhat, there is a separate practice feature that uses spaced repetition to allow users to practice freely.
+
 ===== Is there integration between formal and informal learning activities?
+
+The site is generally more aligned with informal learning, so there is little integration.
 
 ==== Content / Authenticity
 
 ===== Is the content designed for language acquisition or practice?
 
+It supports both, with main units and practice backed by spaced repetition.
+
 ===== Does difficulty scale meaningfully?
+
+Due to the lack of content at the moment, no. But the nature of the application will inherently support this as more units are added.
 
 ===== Is the language use contextualised?
 
+Yes, instead of phrases or words, units teach based on scripted realistic conversations.
+
 ===== Are learners solving real communicative tasks?
+
+Somewhat. Quizzes are surrounding a communication format, but aren't necessarily full puzzles or tasks.
 
 ===== Does it simulate reality?
 
+No. It does not simulate reality, but conversations aim to be realistic.
+
 ===== Is the content multimodal (audio, visual, text) in meaningful ways?
+
+Not at the moment. Content is text-only, but audio and visual formats can be added in the future #footnote[Adding this would have been a whole project in itself].
 
 ===== Are tasks outcome-oriented rather than drill-oriented?
 
+Outcome-oriented. The aim of the user is to complete set units.
+
 ===== Does content reflect real linguistic variation?
+
+Some units do, and the underlying complex conversation format supports variation inherently. Some of this variation is present in the quizzes, but supports more complex activities or teaching tasks.
 
 ===== Does content support pragmatic competence (tone, register, culture)?
 
+Not specifically at the moment. Conversations are meant to be realistic and understandable to a large group of people, but further units can integrate cultural features.
+
 ===== Are learners exposed to authentic discourse structures?
+
+No. They are not able to talk to real learners or native speakers.
 
 ===== Does content support interaction with real language users?
 
+No. They are not able to talk to real learners or native speakers.
+
 ===== Are tasks situated in believable contexts?
+
+Yes, units are based around contextualised and realistic scripted conversations.
 ]

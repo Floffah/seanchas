@@ -13,7 +13,6 @@ This literature review explores and compares documented language-learning theory
 A well-known digital language learning (DLL) approach, mobile-assisted language learning (MALL), has become increasingly prevalent in recent years, especially as more people own and use a mobile device in their day-to-day lives. MALL resources are a specific type of resource that provide convenience to L2 language acquisition by enabling learning anywhere, not just in the classroom. MALL resources typically will use the real world as context for learning and improving immersion @li_digital_2022. Furthermore, a theoretical learning model that is often related to MALL is called Situated Learning Theory (SLT). It points to language learners being taught with in-context materials and situations. Specifically, it covers collaboration and peer interaction in realistic, in-context conditions, in a guided fashion using learning resources. In some situations, it may also be moderated by another person @li_mobile-assisted_2022 @lantolf_sociocultural_1994.
 
 After a concern in limited theoretical and practical frameworks related to MALL, and how existing MALL pedagogy lags behind technological innovation (crucial to effectiveness), #cite(<wang_designing_2024>, form: "prose") proposes a new practical theoretical framework for implementing MALL called "PF4M". PF4M uses Technological Pedagogical Content Knowledge (TPACK) as a basis. They define the pillars of PF4M as Learner, which focuses on the participation of the learner and their competency, determination, and other factors. Device, which covers the hardware capabilities of their mobile device and whether or not they own one. 
-// meanings include learner participation, determination, "digital literacy", and language competency.
 Teacher, which is described as "the administrator and facilitator of learning", also covers the designer and a provider of language-specific calibre. Finally, Content, which includes the content and material that the learner uses, with some specific attributes such as how much it satisfies the "learning objectives", "quality", "usability", among others.
 
 As well as these pillars, PF4M has specific attributes that should be taken into account when designing and implementing a MALL-supported solution. First is Mobility, which includes "temporal" and "spatial" mobility. Formality, including "formal" and "informal" learning. Authenticity, which includes "authentic task" and "authentic context". Finally, Personalisation, including "agency" and "customisation". Given these pillars and attributes, this is a framework for MALL that will stand the test of time and provide a sufficient basis to design technologies and solutions using MALL theory @wang_designing_2024.
@@ -29,8 +28,6 @@ A survey was conducted to better understand users' perspectives on MALL in pract
 
 A researcher proposes that the concept of Metaverse is related to language learning. Metaverse is a concept that was first seen in the book Snow Crash by Neal Stephenson, which describes a "virtual city" and utopia #footnote[It has also been described as a "place where morality and justice" are crucial to its performance @boehm_hiro_2004, however, this aspect is possibly irrelevant to the correlation with social language learning.] @boehm_hiro_2004. It is proposed that modern Metaverse-inspired products could be related to language learning due to their social-centred experience, ability to expose users to cultural differences firsthand, potential to address overpopulation (within a given learning group), personalisation, ability to create communities, and possibility to elicit motivation. Consequently, it also has issues related to "security, privacy", "accessibility", developmental problems, and "social awareness", especially since it is available to most age groups @istanbul_medeniyet_university_metaverse_2022.
 
----
-
 === Features of Language Learning
 
 A topic that is well studied among language learning researchers is the extent to which vocabulary expansion occurs when presented with "L2 input". Individuals learning a second language must give enough focus to a word to insert it into their knowledge of the language. It has been found that learning from input alone is an errant and laborious process, but learners aren't absolutely likely to notice "novel words" and commit them to memory. When attempting to infer their meaning, this may not "lead to correct form-meaning links" @montero_perez_vocabulary_2018.
@@ -45,9 +42,19 @@ The idea of "corrective feedback" on a language learner's written mistakes is a 
 
 It has also been proposed that a "telecollaboration" approach could be used, where students are paired with both other students and speakers of the target language. A study using this idea found that, regardless of the type of partner, the students benefited. As well as improving their skills in using the language, it improved their opinion towards the target language @lewis_creating_2016.
 
-// === Digitally Assisted Learning
+==== Spaced Repetition
 
-// === Corrective Feedback
+It is well documented in pedagogy that distributing learning over specified periods of time is far better for improving memory retention and recall than simple cramming is. It is known that "massed" approaches are great for fast learning and short-term recall, but for longer term retention of knowledge, "spaced" approaches prove superior @walsh_evaluating_2018.
+
+When learning new knowledge, there is a "forgetting curve" that describes how the human brain begins to forget information over time. It is said that the most crucial time for reviewing and reinforcing information is within the first hour and 24 hours, this is because information is lost rapidly early on, following a non-linear and decelerating pattern @murre_replication_2015 @ebbinghaus_memory_1913 @wollstein_spaced_2022. When effectively implementing solutions to improve retention, especially during the first 24 hours after learning, retention can be increased by up to 80% @radhiatul_husna_simulation_2025. The timing of repetition for retention is not particularly arbitrary, but these intervals can be mathematically modelled and optimised based on observed memory decay patterns @radhiatul_husna_simulation_2025 @walsh_evaluating_2018. Although published centuries ago, the forgetting curve still holds up today @murre_replication_2015 @wollstein_spaced_2022. 
+
+Activities that promote recall are far better for retention than simple re-reading, even if recall is not perfect. Spaced-repetition systems rely on retrieval, as actively recalling information strengthens memory more effectively than just a review @wollstein_spaced_2022 @serra_use_2025. Given all of this, several algorithms and technologies have been designed to schedule reviews of learned information based on the forgetting curve, spaced learning theories, and combining this with the student's memory strength and confidence. 
+
+One such theory is the Leitner algorithm, which utilises five physical boxes of flashcards. When a student gets a flashcard question correct, the card moves one to the next box. When the student gets one wrong, the card is moved to the previous. Cards that are in the first box are reviewed more often @barghamadi_learning_2022. Leitner is a popular and cited approach. Heuristic rule-based systems like this were among the original spaced-learning solutions.
+
+While effective, these heuristic approaches do not explicitly model human memory, prompting the development of computational and optimisation-based spaced-repetition algorithms @walsh_evaluating_2018 @tabibian_enhancing_2019. In response, new algorithms have emerged that represent human memory mathematically through probabilistic or differential models of forgetting @tabibian_enhancing_2019 @radhiatul_husna_simulation_2025. They can schedule reviews right before the student may forget a piece of information. These algorithms aim to reduce the time spent on information that the learner is more comfortable with @tabibian_enhancing_2019. 
+
+Modern systems aim to personalise review intervals to the individual learner and improve efficiency by focusing on items at risk of being forgotten @tabibian_enhancing_2019 @radhiatul_husna_simulation_2025. Platforms like Anki and Memrise have implemented other newer algorithms like Free Spaced Repetition Scheduler ("FSRS"). There are very few existing systems that effectively combine conversation-based learning (including combining with large language models) with existing Free Spaced Repetition @ramadhan_conversational_2025.
 
 ==== Learning Endangered Languages
 
@@ -60,8 +67,6 @@ A study of motivation for learning the "indigenous Taiwanese (...) heritage lang
 These two previous findings @legutko_yiddish_2016 @huang_heritage_2024 point towards community and a positive image of self as being important in giving learners motivation when trying to learn an endangered language.
 
 For the endangered language Irish (Gaeilge), there have been significant digital developments in supplementing Irish language learning. One includes a natural language chatbot for interacting in Gaeilge @chiarain_chatbot_2016
-
-// === Modern Uptake of Scottish Gaidhlig
 
 === Blockages in Motivation to Learn a Language
 
@@ -78,10 +83,12 @@ LA in general, including pronunciation anxiety, is tied to self-image and self-e
 ==== External Factors
 
 Based on previous surveys and a new survey, #cite(<ekiz_factors_2016>, form: "prose") examined connections between certain factors and L2 learning motivation. These factors include: parental encouragement (in younger years), "realistic learner aims", participating in relevant activities with clear goals, and teacher behaviour. These factors are relevant to creating a good and motivating environment for students in education. The students in their study were also more motivated when given the opportunity to work with others, but if the class is "crowded" and "noisy", it can have a negative effect.
-
-
  
 === Evaluation
+
+The literature reviewed demonstrates that effective second language acquisition does not occur through a single approach, but rather by combining multiple cognitive, contextual, and emotional factors. Frameworks such as MALL and PF4M talk about the importance of accessibility, context, and personalisation, while studies on spaced repetition emphasise the role of long-term retention and designing appropriate memory-aware systems. Additionally, research into language anxiety and motivation indicates that learner confidence and identity play a critical role, particularly in the context of endangered languages such as Gaidhlig.
+
+A key finding across the literature is that while many individual techniques are well-supported, there is limited evidence of systems that properly integrate these approaches into a unified, conversation-based learning experience. This gap is particularly apparent in resources for endangered languages, where interactive and context-aware tools remain scarce.
 
 == Review of Existing Materials
 
@@ -119,7 +126,7 @@ Based on previous surveys and a new survey, #cite(<ekiz_factors_2016>, form: "pr
 
   It can often lack progressive narrative across the set conversation, and conversations are largely reactive rather than being structured. It is also not very transparent in its use of pedagogy to back its design. It only focuses on very mainstream languages and lacks a large list of languages ranging from endangered to even widely used.
   
-  === Conclusion
+  === Evaluation
 
   Across these platforms, common strengths include accessibility, structured content, and availability of learning materials. However limitations are present in areas such as context-aware learning and interactivity. Specifically, few platforms provide a digital-first, conversation-based, context-aware approach that integrates research-backed learning techniques (or don't support endangered languages such as Gaidhlig). This gap is the reason for the proposed system.
 ]

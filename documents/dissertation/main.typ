@@ -1,5 +1,5 @@
 // Markers, this import points to <https://github.com/Floffah/documents/blob/main/typst.toml>, where the template source exists. It is imported via Typst Web's private versioning to keep the dissertation & project repository as clean as possible (I use this template for other documents and coursework too). It was originally generated via Typst Web's template wizard and then adapted with inspiration from the template Ilm by Muhammad Talal Anwar (https://github.com/talal/ilm). Template is licensed pro forma under 'MIT No Attribution' in cooperation with inspired work
-#import "@local/napier-formal-template-base:0.1.4": *
+#import "@local/napier-formal-template-base:0.1.9": *
 #import "@preview/hydra:0.6.2": hydra, anchor
 
 // doc settings
@@ -29,7 +29,7 @@
 
     The application was evaluated through user testing and analysis using the PF4M framework, alongside comparison with existing language learning tools. Results indicate that users found the system intuitive and engaging, with the conversation-based format supporting comprehension and pacing. However, some limitations were identified in promoting deeper language understanding and learner confidence.
 
-    The findings suggest that contextualised and mobile-first learning systems can provide an effective and accessible supplement to existing Gaelic learning resources.
+    The findings suggest that contextualised and mobile-first learning systems can provide an effective and accessible supplement to existing Gaidhlig learning resources.
   ],
 
   formal: true,
@@ -37,15 +37,15 @@
     enabled: true
   ),
   bibliography: none,
-  word-counter: true,
+  word-counter: ( enabled: true, auto-include-body: false ),
 )
 
 #set text(lang: "en", region: "gb")
+
+#[
 #set page(header: context {
   anchor()
   [Ramsay Foy]
-  // h(1fr)
-  // [BEng Software Engineering]
   h(1fr)
   [40646655]
 }, footer: context {
@@ -54,7 +54,6 @@
   counter(page).display()
 })
 
-#[
 #show: word-count.with(exclude: <no-wc>)
 
 #include "sections/introduction.typ"
@@ -70,8 +69,17 @@
 #pagebreak(weak: true)
 
 #include "sections/zconclusion.typ"
-
 ]
+
+
+#set page(header: context {
+  anchor()
+  [Ramsay Foy]
+  h(1fr)
+  [40646655]
+}, footer: context {
+  emph(hydra(1))
+})
 
 #set heading(numbering: none)
   

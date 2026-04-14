@@ -34,7 +34,7 @@ Throughout this project, I will develop a web application as described above, wh
 
 // Name the particular type of users, organisation, other researchers, people working the field, etc., -- not just “users.”
 
-The target audience for this project contains several distinct groups. The leading group will comprise learners of the Gaidhlig language, ranging from complete beginners to intermediate levels. The second is individuals who wish to practice their knowledge of the language with conversation, at an intermediate level. Furthermore, other researchers and advocates for Scottish Gaidhlig may be able to utilise some of the work and research done to build new technologies, tools, and materials to further the work of revitalising the language.
+The target audience for this project contains several distinct groups. The leading group will comprise learners of the Gaidhlig language, ranging from complete beginners to intermediate levels. The second is individuals who wish to practice their knowledge of the language with conversation, at an intermediate level. Furthermore, other researchers and advocates for Gaidhlig may be able to utilise some of the work and research done to build new technologies, tools, and materials to further the work of revitalising the language.
 
 == The Work to be Undertaken
 
@@ -65,7 +65,7 @@ Information related to existing and related solutions:
 - #link("https://speakgaelic.scot")[SpeakGaelic] - language reference
 - #link("https://learngaelic.scot/index.jsp")[LearnGaelic] - language reference
 
-I will review articles, journals, and other published academic literature to gain a deeper understanding of the current state of technology in Scottish Gaidhlig and other endangered languages.
+I will review articles, journals, and other published academic literature to gain a deeper understanding of the current state of technology in Gaidhlig and other endangered languages.
 
 == The Importance of the Project
 

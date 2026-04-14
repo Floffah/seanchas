@@ -1,2 +1,11 @@
-
 = Conclusion
+
+This project set out to investigate how Mobile-Assisted Language Learning (MALL) and Computer-Assisted Language Learning (CALL) frameworks could be applied to learning Gaidhlig through a pre-scripted conversation-based online application. The project aimed to create an accessible and engaging learning experience for people wanting to learn the language, supported by combinations of pedagogical approaches such as spaced repetition retrieval practice and context-aware learning.
+
+The built application successfully implemented a structured, conversation-based system that uses contextualised interactive exercises based on realistic, pre-scripted conversations to help the learner get more immersed in the language. The evaluation through user testing and the PF4M framework indicated that the system is intuitive, engaging, and effective in supporting comprehension and pacing. Specifically, the use of contextualised dialogue appears to aid understanding more effectively than isolated vocabulary learning.
+
+However, the findings also highlight several limitations. While the system supports recognition and recall, it is less effective in developing deeper language understanding and learner confidence, particularly because it doesn't support speaking and real-time interaction. Additionally, the evaluation was limited, and the system currently relies on manually written content rather than generation methods. Even given this, the project can be considered successful as a proof of concept or prototype and as a supplementary learning resource, but not as a complete solution for second language acquisition.
+
+Future work could explore adding speech recognition, AI-generated content, or more advanced spaced repetition algorithms, along with improved personalisation. Expanding the system to include social or community features may also reduce motivational and communicative gaps identified in the literature.
+
+Overall, this project demonstrates that a pre-scripted conversation-based and mobile-supporting approach has strong potential to support the learning of Gaidhlig, particularly in addressing gaps left by existing resources. The project definitely contributes, even if minimally, to the growing community of work exploring how digital applications and CALL solutions can support endangered language revitalisation in an era where we have access to more resources than ever.

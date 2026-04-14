@@ -346,4 +346,62 @@
   === Supervisor Comments
 
   - Will review draft, to send new draft with missing diagrams in the mean time
+
+  #line(length: 100%)
+
+  == Tuesday 24 March
+
+  === Objectives
+
+  - Continue on implementation and write-up
+
+  === Progress
+
+  - Implementation is getting closer to the finish line
+  - Diagrams fixed in the report
+
+  === Supervisor Comments
+
+  - Either “Scottish Gaelic” or “Gaidhlig”, you don’t need “Scottish Gaidhlig”
+  - Lit. review is good, but :
+    1. Lots of language refs, focus more on computer aided learning refs;
+    2. There are some well known references from Edinburgh/Scotland that don’t appear; and
+    3. Try to show how the lit. review feeds into your methodology
+  - If other apps claim to embody MALL or SLT, review them
+  - Are you using spaced rep? if yes cover in lit. rev.
+  - I’d maybe expect to see a mention of faclair mor, faclair beag, as online resources and a-rithist as a related app
+  - 3. Methodology – maybe include schematic for the learning workflow (maybe covered by Fig 2, make the text bigger)
+  - You can justify what are “common” words and phrases (eg present in Wiktionary, freq list from GitHub or our local repository)
+  - Separate section for eval
+  - Explain PF4M a bit – perhaps mention earlier before the details
+  - You have a lot of questions here! Pp 24, 25
+
+  == Tuesday 31 March
+
+  === Objectives
+
+  - Continue finishing off implementation
+  - Send out survey to test users
+  - Get first final draft completed by next meeting
+
+  === Progress
+
+  - Implementation close to complete
+
+  === Supervisor Comments
+
+  - Need to just continue on
+  - Expect to see final draft by next meeting
+
+  == Tuesday 14 March
+
+  === Objectives
+
+  === Progress
+
+  - Implementation complete
+  - Got survey results back
+  - First final draft of report done
+
+  === Supervisor Comments
 ]
