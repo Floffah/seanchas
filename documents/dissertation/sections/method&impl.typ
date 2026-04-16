@@ -414,211 +414,211 @@ About 50% of users progressed onto the survey language quiz, where all responden
 
 In this evaluation step, boolean questions are answered with either yes, no, or somewhat, and with an appropriate description and evidence. Questions that require more explanation will respond and analyse appropriately. Where applicable, answers will explain how the answer to the question can be changed in a future version of the application.
 
-==== Learner / Personalisation
+=== Learner / Personalisation
 
-===== Does the system adapt to the learner?
+==== Does the system adapt to the learner?
 
 Somewhat. The application learns what units the learner previously struggled with and gives a way to reattempt them. It does not personalise the content within units to each learner.
 
 In the future, as technology advances, specialised LLMs may be used to personalise each unit and create new practice sessions based on the user's previous interactions.
 
-===== Can learners control pacing?
+==== Can learners control pacing?
 
 Yes. Units can tackle each unit whenever they like without a time limit, giving them the space to learn at whatever pace they like.
 
-===== How does it consider knowledge gaps?
+==== How does it consider knowledge gaps?
 
 The application will periodically display tooltips above a given word or phrase in a conversation and explain the context about common knowledge gaps.
 
-===== Does it report progress?
+==== Does it report progress?
 
 Yes. When a unit is completed, it is moved to the bottom of the units list. When the user fails a unit, it can be seen in the practice tab.
 
-===== Can learners choose paths?
+==== Can learners choose paths?
 
 No. The application defines a linear progression of units.
 
 In the future, LLMs may be used to personalise the user and lead them down paths specialised to their learning challenges.
 
-===== Are learning trajectories dynamic?
+==== Are learning trajectories dynamic?
 
 No. The progression of learning is linear and predefined.
 
 In the future. LLMs may be used to create more dynamic challenges, units, and practice sessions for users, where they may be able to define more custom trajectories.
 
-===== Is learning relevant to learners?
+==== Is learning relevant to learners?
 
 Yes. The content is specific to beginners of the language Gaidhlig.
 
-===== Does it apply difficulty matching?
+==== Does it apply difficulty matching?
 
 Somewhat. Within the bounds of pre-written conversation units, each unit builds on the last with slightly more difficulty and less helpful harnesses.
 
-===== Does it help learners understand why they made mistakes?
+==== Does it help learners understand why they made mistakes?
 
 Yes. When they choose the wrong option in the quiz, it will explain what was the correct answer and why they might have gotten it wrong.
 
-===== Does it promote reflection?
+==== Does it promote reflection?
 
 Yes. When a learner gets a quiz question wrong, the quiz pauses, shows the correct answer, and only advances once they click next.
 
-===== Can learners set goals or learning intentions?
+==== Can learners set goals or learning intentions?
 
 No. There is no functionality to do so within the application, but space is given for the user to pick whichever unit they like and pick it up whenever they like, so freedom to set intentional goals is still possible outside of the application.
 
 In the future, LLMs involved in personalisation of units may help with a first-class goal-setting ability.
 
-===== Does personalisation affect pedagogy or only surface features?
+==== Does personalisation affect pedagogy or only surface features?
 
-===== Does it support different learning styles or preferences?
+==== Does it support different learning styles or preferences?
 
 No. This application is specific to a particular type of in-context learning with conversations, for people who want to use it more in context than just learning vocabulary.
 
 In the future, LLM personalisation may help with this.
 
-===== Does it respond to disengagement or frustration?
+==== Does it respond to disengagement or frustration?
 
 No. If the user closes the site, we don't call them back. It is difficult to appropriately gauge how the user feels while using the site in a web format.
 
-==== Device / Mobility
+=== Device / Mobility
 
-===== Is the experience mobile-first?
+==== Is the experience mobile-first?
 
 The prototype does not work on touchscreen mobile phones due to a lack of time, but it can easily support them and was designed to support them. It can be used on any device with a screen and a keyboard, but the full design and potential full version would work well on any mobile device.
 
-===== Does it support interruptions?
+==== Does it support interruptions?
 
 It does not support interruptions while in a unit. E.g., if the user closes a tab while completing a quiz, they will be sent back to the start when they reopen the site. However, once you complete a quiz, this persists for the lifetime of the user's account. This balance works well for the application as if there is a large gap between looking at the conversation and completing the various quizzes, the user's perceived context may be lost.
 
-===== Can it be used offline?
+==== Can it be used offline?
 
 It cannot be used offline, but may be able to be in the future.
 
-===== Can learning happen in short bursts?
+==== Can learning happen in short bursts?
 
 Yes, a unit takes less than 5 minutes to complete, so the site can be used for short periods.
 
-===== Are independent sessions cumulative?
+==== Are independent sessions cumulative?
 
 Yes, upon completing a unit, all of that data is consolidated into various records for analysing user confidence and adds up over time.
 
-===== Does it consider accessibility?
+==== Does it consider accessibility?
 
 Yes, the site doesn't rely on audio queues and uses industry-standard component libraries that automatically work with screen readers and other accessibility features. It requires minimal use of the mouse and can be used with any accessible adapter supported by the browser.
  
-===== How usable is the site?
+==== How usable is the site?
 
 The site is very usable, and the user experience is concluded to be good based on survey results and personal usage. It can be improved by fully supporting touchscreens.
 
-===== Does the platform leverage mobile affordances (audio recording, camera, location)?
+==== Does the platform leverage mobile affordances (audio recording, camera, location)?
 
 No, it only supports visual (or screen reader) affordances.
 
-===== Is session continuity seamless across devices?
+==== Is session continuity seamless across devices?
 
 Yes, as long as the user logs in with the same account, their progress is synchronised across all devices. This is improved by the use of the Convex backend, where if the user has the site open on two devices, progress is synchronised without the need for a refresh.
 
-===== Does the platform support context-aware learning?
+==== Does the platform support context-aware learning?
 
 Somewhat, it provides a contextualised pre-scripted conversation and quiz questions all in the same context. However, it doesn't account for external factors such as speech, pronunciation, talking with a real person, etc.
  
-===== Is performance stable under poor connectivity?
+==== Is performance stable under poor connectivity?
 
 Somewhat, there is minimal bandwidth usage, but very low connectivity may impact the user's experience.
 
-===== Does the UI support cognitive load minimisation on small screens?
+==== Does the UI support cognitive load minimisation on small screens?
 
 Yes, even on big screens, it does not show much at a time, usually only showing the sole content intended for that page.
 
-==== Teacher / Formality
+=== Teacher / Formality
  
-===== Are tasks sequenced meaningfully?
+==== Are tasks sequenced meaningfully?
 
 Yes, quiz tasks are in a consistent order and ranges from least difficult to most difficult.
 
-===== Is feedback instructional or solely corrective?
+==== Is feedback instructional or solely corrective?
 
 For the prototype, solely corrective, but due to the nature of the dynamic conversation format, it can be easily improved.
 
-===== Is there a curriculum structure or autonomous exploration?
+==== Is there a curriculum structure or autonomous exploration?
 
 The site employs a curriculum structure.
 
-===== Are learning objectives explicit?
+==== Are learning objectives explicit?
 
 Yes, users are given specific units to complete and an indication of how many they have completed.
 
-===== Does task difficulty align with skill development?
+==== Does task difficulty align with skill development?
 
 Currently, units are basic and beginner friendly, but as the content grows, progression can be made more constructive and better for skills development.
 
-===== Are tasks designed around learning theory (even implicitly)?
+==== Are tasks designed around learning theory (even implicitly)?
 
 Yes, there are factors of learning theory involved. Specifically related to spaced repetition and MALL.
 
-===== Does the system model a pedagogical rationale?
+==== Does the system model a pedagogical rationale?
 
 Yes, it is influenced by existing resources and the PF4M MALL framework.
 
-===== Does the platform support teacher oversight or authoring?
+==== Does the platform support teacher oversight or authoring?
 
 Not at the moment, but support could be added.
  
-===== Does instruction transition from guided to independent practice?
+==== Does instruction transition from guided to independent practice?
 
 Somewhat, there is a separate practice feature that uses spaced repetition to allow users to practice freely.
 
-===== Is there integration between formal and informal learning activities?
+==== Is there integration between formal and informal learning activities?
 
 The site is generally more aligned with informal learning, so there is little integration.
 
-==== Content / Authenticity
+=== Content / Authenticity
 
-===== Is the content designed for language acquisition or practice?
+==== Is the content designed for language acquisition or practice?
 
 It supports both, with main units and practice backed by spaced repetition.
 
-===== Does difficulty scale meaningfully?
+==== Does difficulty scale meaningfully?
 
 Due to the lack of content at the moment, no. But the nature of the application will inherently support this as more units are added.
 
-===== Is the language use contextualised?
+==== Is the language use contextualised?
 
 Yes, instead of phrases or words, units teach based on scripted realistic conversations.
 
-===== Are learners solving real communicative tasks?
+==== Are learners solving real communicative tasks?
 
 Somewhat. Quizzes are surrounding a communication format, but aren't necessarily full puzzles or tasks.
 
-===== Does it simulate reality?
+==== Does it simulate reality?
 
 No. It does not simulate reality, but conversations aim to be realistic.
 
-===== Is the content multimodal (audio, visual, text) in meaningful ways?
+==== Is the content multimodal (audio, visual, text) in meaningful ways?
 
 Not at the moment. Content is text-only, but audio and visual formats can be added in the future #footnote[Adding this would have been a whole project in itself].
 
-===== Are tasks outcome-oriented rather than drill-oriented?
+==== Are tasks outcome-oriented rather than drill-oriented?
 
 Outcome-oriented. The aim of the user is to complete set units.
 
-===== Does content reflect real linguistic variation?
+==== Does content reflect real linguistic variation?
 
 Some units do, and the underlying complex conversation format supports variation inherently. Some of this variation is present in the quizzes, but supports more complex activities or teaching tasks.
 
-===== Does content support pragmatic competence (tone, register, culture)?
+==== Does content support pragmatic competence (tone, register, culture)?
 
 Not specifically at the moment. Conversations are meant to be realistic and understandable to a large group of people, but further units can integrate cultural features.
 
-===== Are learners exposed to authentic discourse structures?
+==== Are learners exposed to authentic discourse structures?
 
 No. They are not able to talk to real learners or native speakers.
 
-===== Does content support interaction with real language users?
+==== Does content support interaction with real language users?
 
 No. They are not able to talk to real learners or native speakers.
 
-===== Are tasks situated in believable contexts?
+==== Are tasks situated in believable contexts?
 
 Yes, units are based around contextualised and realistic scripted conversations.
 ]
