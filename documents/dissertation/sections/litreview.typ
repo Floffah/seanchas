@@ -1,4 +1,5 @@
 #import "@preview/wordometer:0.1.4": word-count
+#import "@local/napier-formal-template-base:0.1.9": cite-via
 
 = Research
 
@@ -6,23 +7,36 @@
 
 The study of language learning has existed for centuries, as language is the basis of human communication. Anyone can learn a second language (L2) and be able to reach more people, but finding the correct method is crucial to progressing from conversational to fluency. A "routine approach" isn't quite enough; instead, other factors such as motivation, aptitude, personality, anxiety, the emotional reaction, their feelings towards speakers of the language, and understanding of the language speaker's culture are also significant factors in obtaining an L2 @piechurska-kuciel_at_2017. We need to design solutions in language learning courses that make it more accessible to learn an L2 while easing some of these blockers, and use a medium that works for language learners.
 
-This literature review explores and compares documented language-learning theory and techniques, along with related ideas that help learners excel in second-language learning. It delves into literature on the emotional aspects of language learning and potential barriers to language learning, which may be helpful when designing the techniques mentioned in a digital application. It also reviews literature on language learning and endangered languages, with and without reference to LLMs, providing a baseline understanding that can serve as inspiration when implementing an application that uses these technologies and techniques.
+This literature review explores and compares documented language-learning theory and techniques, along with related ideas that help learners excel in second-language learning. It delves into literature on the emotional aspects of language learning and potential barriers to language learning, which may be helpful when designing the techniques mentioned in a digital application. It also reviews literature on language learning and endangered languages, providing a baseline understanding that can serve as inspiration when implementing an application that uses these technologies and techniques.
 
 === Mobile-Assisted Language Learning
 
 A well-known digital language learning (DLL) approach, mobile-assisted language learning (MALL), has become increasingly prevalent in recent years, especially as more people own and use a mobile device in their day-to-day lives. MALL resources are a specific type of resource that provide convenience to L2 language acquisition by enabling learning anywhere, not just in the classroom. MALL resources typically will use the real world as context for learning and improving immersion @li_digital_2022. Furthermore, a theoretical learning model that is often related to MALL is called Situated Learning Theory (SLT). It points to language learners being taught with in-context materials and situations. Specifically, it covers collaboration and peer interaction in realistic, in-context conditions, in a guided fashion using learning resources. In some situations, it may also be moderated by another person @li_mobile-assisted_2022 @lantolf_sociocultural_1994.
 
-After a concern in limited theoretical and practical frameworks related to MALL, and how existing MALL pedagogy lags behind technological innovation (crucial to effectiveness), #cite(<wang_designing_2024>, form: "prose") proposes a new practical theoretical framework for implementing MALL called "PF4M". PF4M uses Technological Pedagogical Content Knowledge (TPACK) as a basis. They define the pillars of PF4M as Learner, which focuses on the participation of the learner and their competency, determination, and other factors. Device, which covers the hardware capabilities of their mobile device and whether or not they own one. 
-Teacher, which is described as "the administrator and facilitator of learning", also covers the designer and a provider of language-specific calibre. Finally, Content, which includes the content and material that the learner uses, with some specific attributes such as how much it satisfies the "learning objectives", "quality", "usability", among others.
+#cite(<wang_designing_2024>, form: "prose") identifies that there are limited theoretical and practical frameworks related to MALL, and existing MALL pedagogy lags behind technological innovation (crucial to effectiveness). In response, they
+propose a new practical theoretical framework for implementing MALL called Pedagogical Framework for MALL (PF4M). PF4M uses Technological Pedagogical Content Knowledge (TPACK) as a basis. PF4M is structured around four core pillars: the learner, device, teacher, and content. 
 
-As well as these pillars, PF4M has specific attributes that should be taken into account when designing and implementing a MALL-supported solution. First is Mobility, which includes "temporal" and "spatial" mobility. Formality, including "formal" and "informal" learning. Authenticity, which includes "authentic task" and "authentic context". Finally, Personalisation, including "agency" and "customisation". Given these pillars and attributes, this is a framework for MALL that will stand the test of time and provide a sufficient basis to design technologies and solutions using MALL theory @wang_designing_2024.
+- Learner is central and represents a student-centred approach, especially concerning their existing competency and determination.
+- Teacher is the facilitator and designer of the learning experience.
+- Device is the physical technological medium through which the learning resource is accessed.
+- Content is the quality, usability, and relevance of the learning material.
+
+Importantly, these elements are not independent of each other, but are to function in an integrated manner. In addition to these pillars, PF4M has specific attributes that should be taken into account when designing and implementing a MALL-supported solution:
+- Mobility includes "temporal" and "spatial" mobility.
+- Formality, including "formal" and "informal" learning.
+- Authenticity is "authentic task" and "authentic context".
+- Personalisation, meaning "agency" and "customisation". 
+
+PF4M represents an attempt to build a framework that provides a more cohesive and balanced approach for MALL, addressing the disconnect between technological innovation and pedagogical practice identified in earlier research @wang_designing_2024.
+
+PF4M is particularly relevant to this project as it provides a structured approach to consider both the technological and pedagogical aspects of MALL design. The framework is designed to inform key design decisions, particularly the emphasis on learner-centred interaction, alongside the role of structured content in guiding language acquisition and an accessible form factor for flexible learning. Additionally, the pedagogical features of mobility, authenticity, and personalisation align closely with the project’s focus on conversational, context-based language learning. Given this, PF4M serves as a good guiding framework for the design and evaluation of the system.
 
 Furthermore, #cite(<cakmak_mobile_2019>, form: "prose") splits a list of attributes related to mobile learning (m-learning) as a whole, into three distinct categories: "process design, environmental design, and mobile
 interface design". They say that MALL is an evolution of combining computer-assisted language learning (CALL) with m-learning. M-learning, although not specifically related to language learning, aligns with many of the attributes that MALL and the PF4M framework seek. These include temporal and spatial attributes, mobility, personalisation, and more @cakmak_mobile_2019 @wang_designing_2024.
 
 Researchers have also developed a "three contexts" framework for different types of MALL. They are teacher-driven, community-driven, and learner-driven. They define scales of formality, regulation, autonomy vs teacher-guided, and specified vs proposed activity. Teacher-driven contexts are mainly "formally designed" and guided. Community-driven contexts can be both "formal and informal education" settings. Learner-driven is majorly "user-generated" and autonomous @cakmak_mobile_2019 @hulme_charting_2010
 
-A survey was conducted to better understand users' perspectives on MALL in practice. It found that users would use smartphones and laptops to improve their vocabulary, reading, listening, grammar, and writing skills, along with browsing dictionaries, consuming audiovisual media, browsing social media (for language learning purposes), and reading books. They ranked "good content" as the most important attribute, with "design and usability", and "free access" placed second and third. Elaborating on "good content" as "content delivered in an easy and catchy way". Very few learners use a mobile device every day for language learning, but most commonly do so at home autonomously. Some students noted that MALL technologies cannot replace a teacher, and that "compulsory lessons" are favoured @lenci_technology_2020.
+#cite(<lenci_technology_2020>, form: "prose") conducted a survey to better understand users' perspectives on MALL in practice. It found that users would use smartphones and laptops to improve their vocabulary, reading, listening, grammar, and writing skills, along with browsing dictionaries, consuming audiovisual media, browsing social media (for language learning purposes), and reading books. They ranked "good content" as the most important attribute, with "design and usability", and "free access" placed second and third. Elaborating on "good content" as "content delivered in an easy and catchy way". Very few learners use a mobile device every day for language learning, but most commonly do so at home autonomously. Some students noted that MALL technologies cannot replace a teacher, and that "compulsory lessons" are favoured @lenci_technology_2020.
 
 === Social Frameworks for Language Learning
 
@@ -30,7 +44,7 @@ A researcher proposes that the concept of Metaverse is related to language learn
 
 === Features of Language Learning
 
-A topic that is well studied among language learning researchers is the extent to which vocabulary expansion occurs when presented with "L2 input". Individuals learning a second language must give enough focus to a word to insert it into their knowledge of the language. It has been found that learning from input alone is an errant and laborious process, but learners aren't absolutely likely to notice "novel words" and commit them to memory. When attempting to infer their meaning, this may not "lead to correct form-meaning links" @montero_perez_vocabulary_2018.
+A topic that is well studied among language learning researchers is the extent to which vocabulary expansion occurs when presented with "L2 input". Individuals learning a second language must give enough focus to a word to insert it into their knowledge of the language. It has been found that learning from input alone is an error-prone and laborious process, but learners aren't absolutely likely to notice "novel words" and commit them to memory. When attempting to infer their meaning, this may not "lead to correct form-meaning links" @montero_perez_vocabulary_2018.
 
 Enhancement techniques are wise to use alongside L2 input media to help retain vocabulary during language learning. A study was conducted to examine how "retrieval practice" and "spacing" affect retention. These techniques involve studying "items" with a significant gap of time between them, and testing the learner's knowledge rather than just presenting items again, respectively @karatas_improving_2025. The study found that these techniques help with retention significantly more than "initial study and then cramming before an exam".
 
@@ -38,7 +52,10 @@ Some say enhancement techniques may be required to learn a language quickly and 
 
 The idea of "corrective feedback" on a language learner's written mistakes is a proven feature of structured language learning methods. But there are often disagreements on the best way to give this feedback. #cite(<la_russa_treating_2017>, form: "prose") goes on to outline that "written corrective feedback", where the learner is presented with corrections alongside their errors in writing, gives the learner sufficient time and attentional capabilities to analyse where in their thinking they have been mistaken and be able to move towards a better understanding of the L2. This contrasts with oral feedback, which may not provide sufficient cognitive resources to process the corrections and learn from them.
 
-#cite(<bodah_challenges_2016>, form: "prose") promoted the idea to move learning towards a Mobile Assisted Language Use (MALU) system, due to the uptake of "connectivism" in education. They found a couple of studies in which students were given mobile devices to supplement their learning, showing that students would use these tools outside of class. They noted that existing studies are limited by age range and by their focus on common foreign languages.
+#cite(<bodah_challenges_2016>, form: "prose") promotes the idea of moving towards Mobile Assisted Language Use (MALU) due to the uptake of "connectivism" in education. Connectivism is a learning theory that emphasises that knowledge is developed through information networks, digital tools, and social interaction, rather than solely through direct instruction #cite-via(<siemens_connectivism_2005>, <bodah_challenges_2016>)
+
+They identify studies in which students were provided with mobile devices to supplement their learning, finding that learners frequently used these tools outside of the classroom. However, they note that existing research is limited in both age range and its focus on commonly taught foreign languages.
+
 
 It has also been proposed that a "telecollaboration" approach could be used, where students are paired with both other students and speakers of the target language. A study using this idea found that, regardless of the type of partner, the students benefited. As well as improving their skills in using the language, it improved their opinion towards the target language @lewis_creating_2016.
 
@@ -46,7 +63,7 @@ It has also been proposed that a "telecollaboration" approach could be used, whe
 
 It is well documented in pedagogy that distributing learning over specified periods of time is far better for improving memory retention and recall than simple cramming is. It is known that "massed" approaches are great for fast learning and short-term recall, but for longer term retention of knowledge, "spaced" approaches prove superior @walsh_evaluating_2018.
 
-When learning new knowledge, there is a "forgetting curve" that describes how the human brain begins to forget information over time. It is said that the most crucial time for reviewing and reinforcing information is within the first hour and 24 hours, this is because information is lost rapidly early on, following a non-linear and decelerating pattern @murre_replication_2015 @ebbinghaus_memory_1913 @wollstein_spaced_2022. When effectively implementing solutions to improve retention, especially during the first 24 hours after learning, retention can be increased by up to 80% @radhiatul_husna_simulation_2025. The timing of repetition for retention is not particularly arbitrary, but these intervals can be mathematically modelled and optimised based on observed memory decay patterns @radhiatul_husna_simulation_2025 @walsh_evaluating_2018. Although published centuries ago, the forgetting curve still holds up today @murre_replication_2015 @wollstein_spaced_2022. 
+When learning new knowledge, there is a "forgetting curve" that describes how the human brain begins to forget information over time. Evidence shows that the most crucial time for reviewing and reinforcing information is within the first hour and 24 hours, this is because information is lost rapidly early on, following a non-linear and decelerating pattern @murre_replication_2015 @ebbinghaus_memory_1913 @wollstein_spaced_2022. When effectively implementing solutions to improve retention, especially during the first 24 hours after learning, retention can be increased by up to 80% @radhiatul_husna_simulation_2025. The timing of repetition for retention is not particularly arbitrary, but these intervals can be mathematically modelled and optimised based on observed memory decay patterns @radhiatul_husna_simulation_2025 @walsh_evaluating_2018. Although published a century ago, the forgetting curve still holds up today @murre_replication_2015 @wollstein_spaced_2022. 
 
 Activities that promote recall are far better for retention than simple re-reading, even if recall is not perfect. Spaced-repetition systems rely on retrieval, as actively recalling information strengthens memory more effectively than just a review @wollstein_spaced_2022 @serra_use_2025. Given all of this, several algorithms and technologies have been designed to schedule reviews of learned information based on the forgetting curve, spaced learning theories, and combining this with the student's memory strength and confidence. 
 
@@ -54,11 +71,11 @@ One such theory is the Leitner algorithm, which utilises five physical boxes of 
 
 While effective, these heuristic approaches do not explicitly model human memory, prompting the development of computational and optimisation-based spaced-repetition algorithms @walsh_evaluating_2018 @tabibian_enhancing_2019. In response, new algorithms have emerged that represent human memory mathematically through probabilistic or differential models of forgetting @tabibian_enhancing_2019 @radhiatul_husna_simulation_2025. They can schedule reviews right before the student may forget a piece of information. These algorithms aim to reduce the time spent on information that the learner is more comfortable with @tabibian_enhancing_2019. 
 
-Modern systems aim to personalise review intervals to the individual learner and improve efficiency by focusing on items at risk of being forgotten @tabibian_enhancing_2019 @radhiatul_husna_simulation_2025. Platforms like Anki and Memrise have implemented other newer algorithms like Free Spaced Repetition Scheduler ("FSRS"). There are very few existing systems that effectively combine conversation-based learning (including combining with large language models) with existing Free Spaced Repetition @ramadhan_conversational_2025.
+Modern systems aim to personalise review intervals to the individual learner and improve efficiency by focusing on items at risk of being forgotten @tabibian_enhancing_2019 @radhiatul_husna_simulation_2025. Platforms like Anki and Memrise have implemented other newer algorithms like Free Spaced Repetition Scheduler ("FSRS"). There are very few existing systems that effectively combine conversation-based or contextual learning with existing Free Spaced Repetition @ramadhan_conversational_2025.
 
 ==== Learning Endangered Languages
 
-In Brazil, they found that there is disproportionate access to learning materials all over the country for learning English compared to Portuguese. It has been noted that the implementation of technology to promote the learning of indigenous languages (such as endangered ones) must be placed in the proper context, with regard to the challenges and history @bodah_challenges_2016.
+In Brazil, researchers found that there is disproportionate access to learning materials all over the country for learning English compared to Portuguese. It has been noted that the implementation of technology to promote the learning of indigenous languages (such as endangered ones) must be placed in the proper context, with regard to the challenges and history @bodah_challenges_2016.
 
 A likely first-of-its-kind research project into Yiddish revitalisation in the digital age states that current students prefer "interactive and collaborative learning" alongside "online projects with a creative component". The conservation of endangered languages can include "virtual language" communities, and making such teaching tools more accessible to eager learners @legutko_yiddish_2016.
 
@@ -67,6 +84,10 @@ A study of motivation for learning the "indigenous Taiwanese (...) heritage lang
 These two previous findings @legutko_yiddish_2016 @huang_heritage_2024 point towards community and a positive image of self as being important in giving learners motivation when trying to learn an endangered language.
 
 For the endangered language Irish (Gaeilge), there have been significant digital developments in supplementing Irish language learning. One includes a natural language chatbot for interacting in Gaeilge @chiarain_chatbot_2016
+
+Minority and endangered languages present challenges for language learning technologies, especially due to limited available data and opportunities for real-world use. Gaidhlig is considered a low-resource language, which limits the effectiveness of using computational approaches @barclay_rule-based_2026. 
+
+Although Gaidhlig has seen some growth in learner numbers and in its use in educational settings, it is only spoken by a small portion of the population, and its use is often solely in formal settings like education rather than everyday communication  @birnie_gaidhlig_2025. This shows an increasing importance on the need for structured learning environments and resources even beyond Gaelic Medium Education. However, research suggests that these contexts may help develop learners' comprehension skills without confidence in speaking and informal use. As well as this, limited exposure outside of classrooms can negatively impact motivation and long-term retention @birnie_blended_2022. This indicates that there is a need for informal, accessible, engaging, and contextual resources that can be used outwith formal education.
 
 === Blockages in Motivation to Learn a Language
 
@@ -90,6 +111,16 @@ The literature reviewed demonstrates that effective second language acquisition 
 
 A key finding across the literature is that while many individual techniques are well-supported, there is limited evidence of systems that properly integrate these approaches into a unified, conversation-based learning experience. This gap is particularly apparent in resources for endangered languages, where interactive and context-aware tools remain scarce.
 
+=== Project Influence
+
+Given these findings, this project will use a design approach that integrates multiple techniques rather than relying on a single method. Specifically, the system focuses on a conversation-based structure to provide contextual and communicative exposure, combined with spaced repetition to support memory retention. 
+
+Additionally, the design incorporates learner-centred interaction and accessibility, informed by the MALL and PF4M principles which ensure the system can be used flexibly in everyday contexts. Consideration is also given to motivation and language anxiety, with the system aiming to provide a low-pressure learning environment with minimal distractions and cognitive overhead.
+
+These combined findings directly inform the methodology decisions in the following section, specifically in the design of learning units, interactions, and evaluation.
+
+Other findings, including connectivity and pronunciation anxiety, are relevant but beyond the scope of this project. These techniques are useful for incorporating into future work, particularly in extending the system to incorporate more features related to social learning and pronunciation.
+
 == Review of Existing Materials
 
 #[
@@ -97,7 +128,7 @@ A key finding across the literature is that while many individual techniques are
 
   === Duolingo
 
-  Duolingo#footnote[https://www.duolingo.com/] is a widely used online SaaS product that aims to teach people a variety of languages in an accessible manner. It relies heavily on gamification in its exercises, where users are encouraged to learn by competing in competitions, with limited "resources" like losing a "life" when they fail a quiz. It also has a social side, where users are encouraged to add friends on the platform with whom they can complete "friend quests" and compare scores. It employs heavy repetition and streak tactics.
+  Duolingo#footnote[https://www.duolingo.com/] is a widely used online Software as a Service (Saas) product that aims to teach people a variety of languages in an accessible manner. It relies heavily on gamification in its exercises, where users are encouraged to learn by competing in competitions, with limited "resources" like losing a "life" when they fail a quiz. It also has a social side, where users are encouraged to add friends on the platform with whom they can complete "friend quests" and compare scores. It employs heavy repetition and streak tactics.
 
   Duolingo has a wide catalogue of languages it supports, with many endangered languages supported including Gaidhlig, Navajo, Hawaiian, Irish, Welsh, Yiddish, Maori and more.
   Duolingo excels in habit-building, accessibility, and engagement. Where users are more inclined to keep using it, with it also supporting several device types.

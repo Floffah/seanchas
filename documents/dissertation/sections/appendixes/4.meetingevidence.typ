@@ -397,6 +397,9 @@
 
   === Objectives
 
+  - Finish dissertation report
+  - Complete poster
+
   === Progress
 
   - Implementation complete
@@ -404,4 +407,36 @@
   - First final draft of report done
 
   === Supervisor Comments
+  In meeting feedback:
+  - Had look over report, few comments mostly fine, notably:
+    - Left align the abstract
+    - Need to include GitHub links
+  - To complete report & poster for next week as described in objectives
+
+  Report written feedback:
+  - Left align abstract
+  - “tools do work for a large group of people, but some rely on more interactive and specialised learning techniques. Such tools are rare” => be clearer
+  - “with and without reference to LLMs” => first mention of llms, unclear what role they will play
+  - “After a concern in …” -> this could be more readable ; maybe itemize the pillars and explain how they influence your project
+  - “A survey was conducted …”  is this your survey or Lenci’s  ? Be clear.
+  - “errant and laborious” => error-prone and laborious
+  - of “connectivism” in education : what is this?
+  - It is said that => Evidence shows that
+  - centuries ago = > a century ago
+  - In Brazil, they found => In Brazil, researchers found
+  - At the end of section 2, summarise more what ideas you are taking forward into your own work, to lead into Methodology
+  - First person is okay, but don’t use it where unnecessary ; eg : which provides me with great primitives => which provides great primitives ‘;; handle most of the backend for me => handle most of the backend functionality
+  - You could write a sentence or two about Tailwilnd, ShadCN, and Convex
+  - You seem to have some implementation details before requirements clarification, better the other way around (around p34)
+  - “but a lot of the question discovery is not fully heuristic.” => be clearer
+  - “such as gender for lenition calculation” => you haven’t mentioned lenition; either explain it, or be mpore general “such as gender needed to select correct grammatical inflections”
+  - Sec. 4.2 seems a bit too compact/rushed
+  - Explain Dot Summary
+  - Perhaps chart survey responses (and admit you need more respondents for valid results)
+  - “About 50% of users progressed onto the survey language quiz, where all respondents got the final two questions correct, and most got the first correct” : sounds a bit vague
+  - What did you learn and what would you improve?
+  - PF4M Evaluation : summarise overall after the individual questions
+  - Make a subsection for Future Work and say a bit more about what to do, in what order, and why
+  - You mention LLMs a few times  but they play no role
+  - Include github and app links
 ]

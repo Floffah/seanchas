@@ -1,5 +1,4 @@
-
-= Appendix 1: Personal Appraisal
+#include "1.appraisal.typ"
 
 #pagebreak(weak: true)
 
@@ -16,7 +15,12 @@
 
 #pagebreak(weak: true)
 
-= Appendix 5: Example Internal Conversation Format <convo-format>
+= Appendix 5: Project Links
+
+- GitHub Repository: https://github.com/Floffah/seanchas
+- Deployment: https://seanchas.vercel.app/
+
+= Appendix 6: Example Internal Conversation Format <convo-format>
 
 #[
 #set text(size: 10pt)

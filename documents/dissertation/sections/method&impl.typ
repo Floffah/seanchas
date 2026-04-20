@@ -1,3 +1,5 @@
+#import "@preview/meander:0.4.2"
+
 = Methodology
 
 == Functional Requirements
@@ -79,7 +81,7 @@ The database will be very simple. The database will hold a user table for storin
   caption: [Database Design]
 )
 
-=== UI Design
+=== User Interface (UI) Design
 
 Some of these pages automatically work on mobile, but where necessary, a mobile variant is designed, and would need responsive layout code in the implementation stage to automatically switch between both versions.
 
@@ -151,11 +153,13 @@ The account page is also very simple. It provides the user with a way to sign ou
 
 I have identified a suite of technologies I will use to implement this site. A big factor in the choice of these tools is how comfortable I am with them already, but each have their own pros as to why it makes sense to use it here.
 
-To implement the frontend I will use the framework NextJS#footnote[https://nextjs.org/] (React) with Typescript#footnote[https://www.typescriptlang.org/] (JavaScript) which provides me with great primitives that help with the accessibility and performance aspects of the application, also minimising work needed to be done to get to a working prototype. The site has a lot of dynamic data across the application, and NextJS is the best JavaScript framework for coping with a dynamic site like this.
+To implement the frontend I will use the framework NextJS#footnote[https://nextjs.org/] (React) with Typescript#footnote[https://www.typescriptlang.org/] (JavaScript), which provides great primitives that help with the accessibility and performance aspects of the application, also minimising the work needed to be done to get to a working prototype. The site has a lot of dynamic data across the application, and NextJS is the best JavaScript framework for coping with a dynamic site like this due to its industry-standard hybrid server-side and static generation approach.
 
-In the frontend I will use the TailwindCSS#footnote[https://tailwindcss.com/] styling system and ShadCN#footnote[https://ui.shadcn.com/] component library so that a design system is already established and I can focus on layout and functionality. The Figma designs below uses the Figma version of ShadCN. Both of these tools work very well with NextJS and provide a solid foundation for a good user and developer experience.
+In the frontend I will use the TailwindCSS#footnote[https://tailwindcss.com/] styling system and ShadCN#footnote[https://ui.shadcn.com/] component library so that a design system is already established and I can focus on layout and functionality. TailwindCSS is a CSS framework that provides utilities as CSS classes for every feature in the browser's styling system, ensuring that styling is better co-located with the UI code. It works particularly well with React applications, as the styles can still be written once, but with the benefit of co-location. ShadCN is a component library built on top of the UI logic primitives provided by RadixUI and styled with a consistent design system using TailwindCSS.
 
-For the backend I have decided to use Convex#footnote[https://www.convex.dev/] as it provides me with everything I need to make a working application. It provides a database, RPC API, file storage, and authentication solution, all with real-time capabilities. Convex will handle most of the backend for me, with my implementation focusing on database schema and backend logic.
+The Figma designs below uses the Figma version of ShadCN. Both of these tools work very well with NextJS and provide a solid foundation for a good user and developer experience.
+
+For the backend I have decided to use Convex#footnote[https://www.convex.dev/] as it provides everything necessary to make a working application. Convex provides a database, RPC API, file storage, and authentication solution, all with real-time capabilities. Convex tightly integrates its database and backend functions solution to provide a comprehensive end-to-end sync engine for data. Convex handles most of the backend functionality, while my implementation focuses on database schema and backend logic. Every time I push code containing desired backend functions to my repository, Convex automatically builds and deploys the code to its designated deployment.
 
 == Software Development Methodology
 
@@ -336,56 +340,60 @@ Further implementation related to account management and site news were omitted 
 
 == Internal Systems
 
-When the user has fully completes a unit, two things are saved:
-- A record showing that they have completed the unit.
-- A record showing their practice rep related to the FSRS algorithm.
+There are several peculiarities to how the system works internally.
 
-Below is an example record for the FSRS practice record:
+#[
+  #set heading(outlined: false)
 
-```json
-{
-  _creationTime: 1775997140538.753,
-  _id: "k57fm1r550c3btfjjy144vjahx84pyg2",
-  difficulty: 2.11810397,
-  due: 1776256340538,
-  elapsedDays: 0,
-  lapses: 0,
-  lastRating: 3,
-  lastReview: 1775997140538,
-  reps: 1,
-  scheduledDays: 3,
-  stability: 2.3065,
-  state: 2,
-  unitId: "greeting",
-  updatedAt: 1775997140538,
-  userId: "jx7cm28x95s5sm4hg45s5ddjj584qzkk",
-}
-```
+  === Spaced Repetition Scheduler
+  
+  When the user has fully completed a unit, two things are saved: a record noting that they have completed the unit and another record storing the current state of the FSRS scheduler for that particular unit.
+  
+  Below is an example record for the FSRS practice record:
+  
+  ```json
+  {
+    _creationTime: 1775997140538.753,
+    _id: "k57fm1r550c3btfjjy144vjahx84pyg2",
+    difficulty: 2.11810397,
+    due: 1776256340538,
+    elapsedDays: 0,
+    lapses: 0,
+    lastRating: 3,
+    lastReview: 1775997140538,
+    reps: 1,
+    scheduledDays: 3,
+    stability: 2.3065,
+    state: 2,
+    unitId: "greeting",
+    updatedAt: 1775997140538,
+    userId: "jx7cm28x95s5sm4hg45s5ddjj584qzkk",
+  }
+  ```
 
-An interesting piece of internal implementation is related to how the conversations are stored. It is not as simple as hard coded conversations and questions, but rather a slighly complex format for showing the conversations in a dynamic format. The questions are created based on this format, but a lot of the question discovery is not fully heuristic.
-
-You can see an example of this format in #link(<convo-format>)[Appendix 5].
-
-Inside each message in the conversation, the format splits a message's content into parts. Each part can be plain text, punctuation, or a token. A token contains information about what it represents. Tokens have a translation, variants (with metadata such as gender for lenition calculation), and identifier. Variants in tokens are mainly used for the substitution quiz step, but can represent states such as informal or formal word variants. Some variants also represent times of day, for example with "afternoon" being the default, but "night" and "morning" could be valid too. The format supports changing these variants and synchronising grammar so it still works.
-
-By using a "token reference" part, token variant states can be synchronised across messages. This enables more dynamic conversation representations, for example, where in the future an entire conversation can be switched to a formal state by just switching the variant state in memory.
+  === Unit Format
+  
+  Another notable implementation feature concerns how the conversations are stored for each unit. It is not as simple as hard-coded conversations and questions, but rather a slightly complex format for displaying conversations dynamically. The questions are created based on this format in a manner that is semi-heuristic. The site will pick random phrases from which to create questions, however the format allows providing IDs and answers for populating more questions, especially if necessary to program incorrect answer options where they are not obviously derivable. However the programmable questions can still be dynamic, especially when word variants are present #footnote[You can see an example of this format in #link(<convo-format>)[Appendix 6].].
+  
+  Inside each message in the conversation, the format splits a message's content into parts. Each part can be plain text, punctuation, or a token. A token contains information about what it can represent. Tokens have a translation, variants (with metadata such as gender for appropriately displaying the correct grammatical forms and inflexions), and an identifier. Variants in tokens are mainly used for the substitution quiz step, but can represent states such as informal or formal word variants. Some variants also represent times of day, for example with "afternoon" being the default, but "night" and "morning" could be valid too. The format is intended to allow changing various token variants while keeping grammar correct for both the Gaidhlig phrases and English translations.
+  
+  By using a "token reference" part, token variant states can be synchronised across messages. This enables more dynamic conversation representations, for example, where in the future an entire conversation can be switched to a formal state by just switching the variant state in memory. 
+]
 
 == Testing
 
 This project employs a combination of manual testing and unit testing. 
 
-On every new feature or change, I manually tested the user interface in my browser using a development server. I also wrote and ran tests for every new change, which would also run inside CI on every commit, push, or pull request, and no pull request would be merged without the tests working locally or the GitHub CI displaying a green tick for the unit tests.
+On every new feature or change, I manually tested the user interface in my browser using a development server. I also wrote and ran tests for every new change, which would also run inside CI on every commit, push, or pull request. No pull request would be merged without the tests passing locally or the GitHub CI displaying a green tick for the unit tests.
 
-The unit tests used raw logic testing, either comparing function outputs with literal `expect(something)` calls or snapshot comparisons (where the runtime will store a complex object in a file and compare it on subsequent test runs). All of the UI code was tested using a server-side DOM implementation called `happy-dom` with the rendering and comparison checks being done by `testing-library`. The UI tests render each UI component, then interact with the UI (by clicking or else), and compare visual outputs or data outputs.
+The unit tests used raw logic testing, either comparing function outputs with literal `expect(something)` calls or snapshot comparisons (where the runtime will store a complex value in a file and compare it on subsequent test runs). All of the UI code was tested using a server-side DOM implementation called `happy-dom` with the rendering and comparison checks being done by `testing-library`. The UI tests render each UI component, then interact with the UI (by clicking or else), and compare visual outputs or data outputs.
 
-Below is a #link("https://bun.com/docs/test/reporters#dots-reporter")[Dot Summary] of the entire test suite. A period indicates a passing test, and an F indicates a failing test.
+Below is a #link("https://bun.com/docs/test/reporters#dots-reporter")[Dot Summary] of the entire test suite#footnote[A full summary of the test suite for the latest CI run is visible here: https://github.com/Floffah/seanchas/actions/runs/24285687766/job/70914554196]. A Dot Summary is a concise way to represent the result of an entire suite of unit tests. When a test passes, the runtime will write a green period to the screen. If a test fails, the runtime will instead interrupt the stream of periods with an error message. The test suite for this project is large and does not fit on a single screen by default. A Dot Summary is favourable for summarising the test suite.
 
 #figure(
   image("../images/tests-dots.png"),
   caption: [Unit Test Suite Dot Summary]
 )
-
-To see the full summary of the test suite for the latest CI run, you can #link("https://github.com/Floffah/seanchas/actions/runs/24285687766/job/70914554196")[view it on GitHub here]
 
 = Application Evaluation
 
@@ -395,24 +403,43 @@ As described in the methodology section, I sent the application along with a sur
 
 For the Likert scale, the results indicate that users found it easy to sign in, locate units, to understand units and their content, and users indicated that the conversation format helped them learn more effectively than memorisation would.
 
-All the respondents answered either slightly or largely agree to the Likert questions, except for the question asking if the units were relevant. Some respondents slightly disagreed with this point.
+All the respondents answered either slightly or largely agree to the Likert questions, except for the question asking if the units were relevant. Some respondents slightly disagreed with this point. Below is a chart showing the results for the Likert scale.
 
-For the list of statements, none of the statements have zero points, so someone agreed with them all, however users disagreed with the statement "I feel more confident recognising or using some of the language after using the site" significantly more than the other points, where the other points gained evenly high scores.
+#figure(
+  image("../images/graphs/statement-likert.png"),
+  caption: [Likert Scale Chart]
+)
 
-For the freeform "pros question", most people commented on the ease of use and good user experience. Users liked how they could move at their own pace and weren't pressured to continue through. Some users liked the "questions about the order of the messages".
+For the list of statements, none of the statements have zero points, so someone agreed with them all, however users disagreed with the statement "I feel more confident recognising or using some of the language after using the site" significantly more than the other points, where the other points gained evenly high scores. Below is a chart showing the results of each statement.
+
+#figure(
+  image("../images/graphs/statement-checklist.png"),
+  caption: [Multiple Choice Statements Chart]
+)
+
+For the freeform "pros question", most people commented on the ease of use and good user experience. Users liked that they could move at their own pace and weren't pressured to continue through. Some users liked the "questions about the order of the messages".
 
 The freeform "cons question", the main point users picked up on was their dislike of the substitution quiz, saying that they weren't given enough context clues to complete it effectively. Some users commented that they felt they were memorising phrases rather than understanding the language, which although it is a valid response, is partly the aim of the application.
 
-Further to this, some users pointed out that the application could more appropriately point out what to pay attention to during the conversation introduction, so that the quiz (especially substitution quiz) can be answered more effectively.
+Further to this, some users pointed out that the application could more appropriately point out what to pay attention to during the conversation introduction, so that the quiz (especially substitution questions) can be answered more effectively.
 
-About 50% of users progressed onto the survey language quiz, where all respondents got the final two questions correct, and most got the first correct.
+Approximately 50% of participants continued on to the optional language quiz. Out of those who completed it, all respondents answered the last two questions correctly, while performance on the first question was lower. This suggests that users were able to recall some of the material, but that their understanding or retention may have been less consistent. Below is a chart showing the results of this section.
+
+#figure(
+  image("../images/graphs/language-pickup.png", width: 60%),
+  caption: [Language Pickup Chart]
+)
+
+The small number of users who progressed to the second part of the survey suggests that the study design could have more clearly explained expectations for how to engage with the system. Alternatively, it could have required completion of the second section. It may also mean that participants did not feel confident enough in their understanding of the language in order to attempt the questions. As well as this, it may suggest that further reinforcement of earlier content could improve learning outcomes.
+
+In order to obtain more robust insights into the performance of the system, a larger sample size would be required. Although multiple groups of potential participants were contacted, the response rate was low, resulting in a limited number of completed responses.
 
 == PF4M Evaluation
 
 #[
 #set heading(outlined: false)
 
-In this evaluation step, boolean questions are answered with either yes, no, or somewhat, and with an appropriate description and evidence. Questions that require more explanation will respond and analyse appropriately. Where applicable, answers will explain how the answer to the question can be changed in a future version of the application.
+In this evaluation step, questions are answered with either yes, no, or somewhat, and with an appropriate description and evidence. Questions that require more explanation will respond and analyse appropriately. Where applicable, answers will explain how the answer to the question may change in a future version of the application.
 
 === Learner / Personalisation
 
@@ -469,6 +496,8 @@ No. There is no functionality to do so within the application, but space is give
 In the future, LLMs involved in personalisation of units may help with a first-class goal-setting ability.
 
 ==== Does personalisation affect pedagogy or only surface features?
+
+To some extent, the site does not personalise specific questions or content, but it does personalise which units the practice tab shows as next to be completed based on spaced repetition that adapts to the user.
 
 ==== Does it support different learning styles or preferences?
 
@@ -622,3 +651,11 @@ No. They are not able to talk to real learners or native speakers.
 
 Yes, units are based around contextualised and realistic scripted conversations.
 ]
+
+== Evaluation
+
+Overall, the PF4M evaluation shows that the system performs strongly in areas related to learner control, accessibility, and usability. Especially in allowing flexible pacing and supporting engagement through conversation-based learning. The system aligns well with the learner and device pillars, particularly in terms of ease of use and suitability for short and self-paced sessions.
+
+However, it shows that there are limitations in personalisation and adaptability, as the system largely follows a predefined and linear structure rather than dynamically responding to individual learner requirements. Similarly, while the content is contextualised through conversation, there are gaps in supporting deeper understanding and confidence, as highlighted in the survey results.
+
+From a pedagogical perspective, the system clearly demonstrates an underlying rationale. But it could definitely be further improved through better feedback and adaptive learning alongside stronger integration between content, the learner, and device capabilities. Overall, the system can be considered partially aligned with the PF4M framework, with strong foundations but clear areas for future development.

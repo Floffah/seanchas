@@ -6,7 +6,7 @@
 #set par(spacing: leading * 2)
 #set par(leading: leading)
 
-This document was exported inside Typst's web IDE on #datetime.today().display("[day] [month repr:long] [year]")
+This document was exported on #datetime.today().display("[day] [month repr:long] [year]")
 
 Document begins on the next page with the title page.
 
