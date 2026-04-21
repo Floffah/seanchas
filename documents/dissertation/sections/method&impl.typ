@@ -26,17 +26,17 @@ The site should give constructive feedback when the user gets something wrong, w
 
 === Reasoning and Thinking
 
-The initial reason why I considered the conversation-based design is that similar applications I have previously used employ this, with non targeting Gaidhlig. But during research, this decision was solidified by several theoretical approaches and prior research pointing to this being effective. 
+The initial reason conversation-based design was selected is that similar applications the author has encountered utilise this methodology, with none targeting Gaidhlig. But during research, this decision was solidified by several theoretical approaches and prior research pointing to this being effective. 
 
 Several researchers point towards two learning theories that are effective: Mobile-Assisted Language Learning (MALL) and Situated Learning Theory (SLT).
 
-PF4M @wang_designing_2024 places strong emphasis on content, its context, and its application to real-world scenarios. We don't want to create an application that teaches learners solely vocabulary, but rather one that truly can contribute to a learner's true understanding and communicative potential of the language.
+PF4M @wang_designing_2024 places strong emphasis on content, its context, and its application to real-world scenarios. The aim is not to create an application that teaches learners solely vocabulary, but rather one that truly can contribute to a learner's true understanding and communicative potential of the language.
 
-An interesting product of the conversation-and-quiz-style approach designed, is that we get the immediate benefits of recall, where users have to remember the conversation and consider certain activities based on it. This means the user performs a recall rep within the first hour, as outlined by the literature review. Subsequently, based on the FSRS algorithm, users will perform another rep with the same recall the next day, ideally within 24 hours.
+An interesting product of the conversation-and-quiz-style approach designed, is that learners get the immediate benefits of recall, where they have to remember the conversation and consider certain activities based on it. This means the user performs a recall repetition within the first hour, as outlined by the literature review. Subsequently, based on the FSRS algorithm, users will perform another repetition with the same recall the next day, ideally within 24 hours.
 
 == Non-functional Requirements
 
-There are several core non-functional requirements to consider here. The first is security. The site won't collect much personal information about the user, with the main protected information being their email, password, and learning progress. Given this, we still need to prevent leakage. Passwords should be encrypted, data should be adequately protected, and bad actors should be forbidden from accessing user accounts and implemented systems they shouldn't have access to.
+There are several core non-functional requirements to consider here. The first is security. The site won't collect much personal information about the user, with the main protected information being their email, password, and learning progress. Given this, this system is still required to prevent leakage. Passwords should be encrypted, data should be adequately protected, and bad actors should be forbidden from accessing user accounts and implemented systems they shouldn't have access to.
 
 User experience (UX) should be core to the application's design. Based on the research reviewed, if the application is unintuitive, difficult to access, ugly, or not properly supportive of learning, then the user may be demotivated to use it or may not retain the site. The site should follow standard design principles and effort must be made to improve UX.
 
@@ -48,130 +48,140 @@ This project doesn't require a complex system design. It will be implemented usi
 
 The front-end layer is responsible for rendering the interface, handling interactions, and interacting with backend functions. The front-end layer will be built with a component architecture, splitting all main UI responsibilities into its own components. It will feature routing, separating each logical system aspect into its own page. The site will also use server-side rendering with a client-side hydration system to manage the UI, so users will see content as quickly as possible.
 
-The backend layer will be structured as a remote procedure call (RPC) structure, with each necessary operation as its own callable function. Each function will process incoming requests, validate them, perform business logic, and interact with the database. RPC will happen over REST. It will also include a basic real-time data-syncing component to inform the web client of data changes as needed.
-
-The data layer will use a simple document-relational database. It will store data for user login information and track the user's learning progress.
+The backend layer will be structured as a remote procedure call (RPC) structure, with each necessary operation as its own callable function. Each function will process incoming requests, validate them, perform business logic, and interact with the database. RPC will happen over REST. It will also include a basic real-time data-syncing component to inform the web client of data changes as needed. The data layer will use a simple document-relational database. It will store data for user login information and track the user's learning progress.
 
 #figure(
   image("../images/arch-c4.png"),
   caption: [System architecture C4 Diagram]
-)
+) <sys-c4>
 
-I have created a diagram that explains all the use cases in the system and which type of user will interact with each one. The use case diagram is below.
+Above (@sys-c4) is a C4 diagram that visually outlines the system architecture.
+
+\
 
 #figure(
   image("../images/use-case.drawio.png", width: 60%),
   caption: [Use case diagram]
-)
+) <sys-use-case>
+
+The diagram above (@sys-use-case) explains all the use cases in the system and which type of user will interact with each one.
 
 === Unit Design
 
-In order to decide what units to implement for the first prototype, I opted to look at existing materials for how they progress through topics. LearnGaelic and SpeakGaelic seem to start with greetings in most of their resources, followed by various methods of introductions, and soon later likes and dislikes.
+In order to decide what units to implement for the first prototype, existing materials were reviewed to understand how they progress through topics. LearnGaelic and SpeakGaelic seem to start with greetings in most of their resources, followed by various methods of introductions, and soon later likes and dislikes.
 
-These three units: greetings, introductions, likes/dislikes, I found the easiest to hand-craft a conversation around, and immediately provide grammar and understanding challenges while being common phrases.
+These three units: greetings, introductions, likes/dislikes, were found to be the easiest to hand-craft a conversation around, and immediately provide grammar and understanding challenges while being common phrases.
 
-I discovered a dataset#footnote[https://github.com/innesmck/GaelicFrequencyLists] where various resources linked to LearnGaelic were scraped to find the most common words. I tried to craft the conversations to include common words in this dataset such as: "tha", "gu math", "is", "e"/"i", "thu"/"sibh", etc. However, it proved difficult to fully incorporate all of the top most common words. The dataset is general and non-contextualised so these aren't necessarily the most common in real-world conversations, but also in documents and speeches. Potential future work could be analysing or surveying real Gaidhlig speakers to find out what words they use on a day-to-day basis.
+A dataset#footnote[https://github.com/innesmck/GaelicFrequencyLists] was discovered in which the analyst reviewed various resources linked to LearnGaelic, which were scraped to find the most common words. The conversations were crafted to include common words in this dataset such as: "tha", "gu math", "is", "e"/"i", "thu"/"sibh", etc. However, it proved difficult to fully incorporate all of the top most common words. The dataset is general and non-contextualised so these aren't necessarily the most common in real-world scenarios, but also in documents and speeches. Potential future work could be to analyse or survey real Gaidhlig speakers to find out what words they use on a day-to-day basis.
 
 === Data Design
-
-The database will be very simple. The database will hold a user table for storing login information and allowing authentication. It will also hold a table for tracking unit completions, which only takes a user ID, unit ID, and the step they are currently on (or a completed state) via a union or enum type.
 
 #figure(
   image("../images/data-design.png"),
   caption: [Database Design]
-)
+) <design-db>
 
-=== User Interface (UI) Design
+Above (@design-db) is an Entity Relationship Diagram outlining the simple database design. The database will hold a user table for storing login information and allowing authentication. It will also hold a table for tracking unit completions, which only takes a user ID, unit ID, and the step they are currently on (or a completed state) via a union or enum type.
+
+=== User Interface (UI) Design <ui-design>
 
 Some of these pages automatically work on mobile, but where necessary, a mobile variant is designed, and would need responsive layout code in the implementation stage to automatically switch between both versions.
-
-Firstly, the entry point into the application is the login page. This page doubles as a sign-up page, allowing the user to do both in a simple user interface (UI).
 
 #figure(
   image("../images/figmas/login.png"),
   caption: [Login page]
-)
+) <design-login>
 
-The user dashboard page is the portal to all of the site's content after login. This page must provide a way for the user to access all of the units the site offers and account settings. I also designed UI for displaying a user's streak, the number of units completed, links to a potential news and practice page, and terms of service/privacy policy links.
+#v(10pt)
 
-The mobile variant of this site is similar. It shows the same content but with both of the asides collapsed into menu buttons near the top. Clicking these will open the corresponding aside menu overlaid above the main content.
+Firstly, the entry point into the application is the login page. This page doubles as a sign-up page, allowing the user to do both in a simple user interface (UI). See @design-login.
 
 #figure(
   grid(columns: (76.4%, auto), 
   gutter: 2%,
   image("../images/figmas/home-screen.png"), image("../images/figmas/home-screen-mobile.png")),
   caption: [Home Page Design]
-)
+) <design-home>
 
-When the user selects a unit, it will take them to the last step (or first if not applicable) that they completed in that unit. The first step consists of the actual conversation they will study for this unit. It is a very minimal page so the focus is on the content itself. They will initially see the first message in the conversation, and must subsequently press the space bar (or tap the screen on mobile) to show the next message.
+#v(10pt)
 
-Occasionally, the system will show a small tooltip above a specific part of a message if we need to point something out to the learner. For example, in the first beginner unit, we may point out that adjectives usually come after the noun they modify. This is a unique step in the display flow. Pressing space will dismiss the tooltip and continue on to the next message or another tooltip if necessary.
+The user dashboard page (see @design-home) is the portal to all of the site's content after login. This page must provide a way for the user to access all of the units the site offers and account settings. A UI was designed for displaying a user's streak, the number of units completed, links to a potential news and practice page, and terms of service/privacy policy links.
+
+The mobile variant of this site is similar. It shows the same content but with both of the asides collapsed into menu buttons near the top. Clicking these will open the corresponding aside menu overlaid above the main content.
 
 #figure(
   image("../images/figmas/conversation.png", width: 90%),
-  caption: [Unit Page Design: Conversation Step]
-)
+  caption: [Unit Page Design: Conversation Introduction]
+) <design-convo-intro>
+#v(10pt)
 
-Once the user finishes viewing the conversation, we move on to a set of quizzes. We will reuse the same UI for all quiz types, as it is versatile. It consists of the question context, e.g. a phrase, with the question underneath. Under this, there are a number of answer candidates. When selecting the correct answer, it will turn green and let the user advance. If they select the incorrect answer, it will appear in red and show context underneath on what the correct answer was, and why it was correct.
+When the user selects a unit, the site will display the last step (or first if not applicable) that the user completed in that unit. The first step consists of the actual conversation the user will study for this unit (see @design-convo-intro). It is a very minimal page so the focus is on the content itself. The user will initially see the first message in the conversation, and must subsequently press the space bar (or tap the screen on mobile) to show the next message.
 
-The types of questions that will be shown are explained at the beginning of the methodology section.
+Occasionally, the system will show a small tooltip above a specific part of a message if the user needs to pay attention to a specific language feature. For example, in the first beginner unit, the tooltip may highlight that adjectives usually come after the noun modified. This is a unique step in the display flow. Pressing space will dismiss the tooltip and continue on to the next message or another tooltip if necessary.
 
 #figure(
   image("../images/figmas/quiz.png", width: 90%),
   caption: [Unit Page Design: Quiz Step]
-)
+) <design-quiz>
+#v(10pt)
 
-The practice page is another simple page. Its main function is to present users with the units they previously made mistakes on, giving them an opportunity to revise it. Each unit card redirects to the same unit screens as above.
+Once the user finishes viewing the conversation, the application administers a set of quiz activities (see @design-quiz). The codebase will reuse the same UI for all quiz types, as the design is versatile. The design consists of the question context, e.g. a phrase, with the question underneath. Under this, there are a number of answer candidates. When selecting the correct answer, the option will turn green and let the user advance. If the user selects the incorrect answer, it will appear in red and show context underneath relating to the correct answer.
+
+The types of questions that will be shown are explained at the beginning of the methodology section.
 
 #figure(
   image("../images/figmas/practice.png", width: 80%),
   caption: [Practice page Design]
-)
+) <design-practice>
+#v(10pt)
 
-The news/blog page is simple. It will provide users with a log of what admins of the site have changed over time.
-
-Similar to the dashboard, on mobile it will hide the left aside but is still accessible by clicking the menu icon.
+The practice page is another simple page (see @design-practice). The main function of the page is to present users with the units in which mistakes were previously made, giving a further opportunity to revise. Each unit card redirects to the same unit screens as above.
 
 #figure(
   grid(columns: (73.7%, auto), 
   gutter: 2%,
   image("../images/figmas/news-desktop.png"), image("../images/figmas/news-mobile.png")),
   caption: [News Page Design]
-)
+) <design-news>
+#v(10pt)
 
-The account page is also very simple. It provides the user with a way to sign out or delete their account. This page also hides the left navigation aside, but still makes it accessible with the menu icon button.
+The news/blog page is simple (see @design-news) and will provide users with a log of what administrators of the site have changed over time.
 
+Similar to the dashboard, on mobile devices, the application will hide the navigation panel and instead place a button that shows the panel above the content.
 
 #figure(
   grid(columns: (73.7%, auto), 
   gutter: 2%,
   image("../images/figmas/account-desktop.png"), image("../images/figmas/account-mobile.png")),
   caption: [Account Page Design]
-)
+) <design-account>
+#v(10pt)
+
+The account page shown in @design-account provides the user with a way to sign out or delete their account. As described previously, the navigation panel is hidden and only shown when a menu button is pressed.
 
 === Tools and Technologies
 
-I have identified a suite of technologies I will use to implement this site. A big factor in the choice of these tools is how comfortable I am with them already, but each have their own pros as to why it makes sense to use it here.
+A suite of technologies were identified that could be utilised to implement the site. A big factor in the choice of these tools is how familiar the tools are, but each have their own pros as to why it makes sense to use here.
 
-To implement the frontend I will use the framework NextJS#footnote[https://nextjs.org/] (React) with Typescript#footnote[https://www.typescriptlang.org/] (JavaScript), which provides great primitives that help with the accessibility and performance aspects of the application, also minimising the work needed to be done to get to a working prototype. The site has a lot of dynamic data across the application, and NextJS is the best JavaScript framework for coping with a dynamic site like this due to its industry-standard hybrid server-side and static generation approach.
+To implement the frontend, the framework NextJS#footnote[https://nextjs.org/] (React) will be used in conjunction with Typescript#footnote[https://www.typescriptlang.org/] (JavaScript), which both provide great primitives that help with the accessibility and performance aspects of the application, also minimising the work needed to be done to get to a working prototype. The application contains a large amount of dynamic data, and NextJS is the best JavaScript framework for coping with a dynamic system like this due to its industry-standard hybrid server-side and static generation approach.
 
-In the frontend I will use the TailwindCSS#footnote[https://tailwindcss.com/] styling system and ShadCN#footnote[https://ui.shadcn.com/] component library so that a design system is already established and I can focus on layout and functionality. TailwindCSS is a CSS framework that provides utilities as CSS classes for every feature in the browser's styling system, ensuring that styling is better co-located with the UI code. It works particularly well with React applications, as the styles can still be written once, but with the benefit of co-location. ShadCN is a component library built on top of the UI logic primitives provided by RadixUI and styled with a consistent design system using TailwindCSS.
+In the frontend, the TailwindCSS#footnote[https://tailwindcss.com/] styling system will be utilised alongside ShadCN#footnote[https://ui.shadcn.com/] component library so that a design system is already established and the code can focus on layout and functionality. TailwindCSS is a CSS framework that provides utilities as CSS classes for every feature in the browser's styling system, ensuring that styling is better co-located with the UI code. It works particularly well with React applications, as the styles can still be written once, but with the benefit of co-location. ShadCN is a component library built on top of the UI logic primitives provided by RadixUI and styled with a consistent design system using TailwindCSS.
 
-The Figma designs below uses the Figma version of ShadCN. Both of these tools work very well with NextJS and provide a solid foundation for a good user and developer experience.
+The designs shown in @ui-design use the Figma version of ShadCN. Both of these tools work very well with NextJS and provide a solid foundation for a good user and developer experience.
 
-For the backend I have decided to use Convex#footnote[https://www.convex.dev/] as it provides everything necessary to make a working application. Convex provides a database, RPC API, file storage, and authentication solution, all with real-time capabilities. Convex tightly integrates its database and backend functions solution to provide a comprehensive end-to-end sync engine for data. Convex handles most of the backend functionality, while my implementation focuses on database schema and backend logic. Every time I push code containing desired backend functions to my repository, Convex automatically builds and deploys the code to its designated deployment.
+For the backend, Convex#footnote[https://www.convex.dev/] is used as it provides everything necessary to make a working application. Convex provides a database, RPC API, file storage, and authentication solution, all with real-time capabilities. Convex tightly integrates its database and backend functions solution to provide a comprehensive end-to-end sync engine for data. Convex handles most of the backend functionality, while the implementation focuses on database schema and backend logic. Every time code is pushed to the repository containing desired backend functions, Convex automatically builds and deploys the functions to its designated deployment.
 
 == Software Development Methodology
 
-In developing this application, I will follow a strict workflow methodology. All tasks will be noted in an issue tracker (Linear#footnote[https://linear.app/]). This issue tracker holds the Gantt chart and task list for everything I will complete. I follow a Gitflow-adjacent structure.
+In developing this application, a strict workflow methodology will be followed. All tasks will be noted in an issue tracker (Linear#footnote[https://linear.app/]). This issue tracker holds the Gantt chart and list of tasks containing all work to be done. 
 
-All changes will be checked into a specific branch. This will be named `feature/some-change`. Changes that map directly to a single Linear ticket will use the Linear-generated branch name, e.g. `feature/ram-20-introduce-conversation`, where RAM-20 is the ticket ID. When the changes are ready and complete, a pull request will be opened where changes are summarised, and any related Linear tickets are associated. GitHub Copilot (AI agent) will be requested for review to ensure I didn't miss any oversights during the process, but is disallowed from making actual code changes. Once I am satisfied the changes are ready, the changes will be merged to the `main` branch.
+A Gitflow-adjacent structure is followed. All changes will be checked into a specific branch. This will be named `feature/some-change`. Changes that map directly to a single Linear ticket will use the Linear-generated branch name, e.g. `feature/ram-20-introduce-conversation`, where RAM-20 is the ticket ID. When the changes are ready and complete, a pull request will be opened where changes are summarised, and any related Linear tickets are associated. GitHub Copilot (AI agent) will be requested for review to ensure no glaring issues were missed, but is disallowed from making actual code changes. Once the changes are satisfactory and ready, they will be merged to the `main` branch.
 
 When a pile of changes are ready to be promoted to production, they will be pushed from the `main` branch into a separate non-default `production` branch.
 
 === DevOps
 
-Developer Operations (DevOps) is a key portion for delivery of the application. In this application, I will provide several continuous integration (CI) and continuous deployment (CD) strategies.
+Developer Operations (DevOps) is a key portion for delivery of the application. In this application, several continuous integration (CI) and continuous deployment (CD) strategies will be employed.
 
 The front-end code will use a custom or provided CD pipeline where every successful change to the main (development / staging) branch will automatically deploy the changes to the staging environment. Eventually, these deployments can be promoted to production by merging into the production branch where the same technology will automatically build and deploy it to the production environment.
 
@@ -179,9 +189,9 @@ The back-end will use a very similar approach, with the crucial piece being that
 
 == Evaluation Methodology
 
-To evaluate this project implementation, I will conduct several analysis processes.
+To evaluate this project implementation, several analysis processes will be conducted.
 
-The first is analysing it compared to the academic techniques noted in the literature review. Specifically, I will analyse it using the PF4M model designed by #cite(<wang_designing_2024>, form: "prose"). The basic questions I will consider in analysing the site are:
+The first analysis will focus on comparing the implemented application to the academic techniques noted in the literature review. Specifically, it will be analysed using the PF4M model designed by #cite(<wang_designing_2024>, form: "prose"). The basic questions considered when analysing the site are:
 - Learner / Personalisation
   - Does the system adapt to the learner?
   - Can learners control pacing?
@@ -282,25 +292,27 @@ It is intended that these phrases should be used in the units in a way that user
 
 = Implementation
 
-This section provides evidence that my implementation meets the functional and non-functional requirements set out in the methodology section. It also outlines and evidences the testing strategy and executes the evaluation plan outlined in the methodology section.
+This section provides evidence that the implementation meets the functional and non-functional requirements set out in the methodology section. It also outlines and evidences the testing strategy and executes the evaluation plan outlined in the methodology section.
 
 == User Interface
-
-Firstly, related to authentication, I implemented a simple UI for signing in and out that is backed by Convex and their official authentication adapter, seen below.
 
 #figure(
   image("../images/impl-sign-in.png", width: 70%),
   caption: [Implemented Sign In UI],
-)
+) <impl-login>
+#h(10pt)
+
+Firstly, related to authentication, a simple UI was implemented for signing in and out that is backed by Convex and their official authentication adapter, seen in @impl-login.
 
 The Convex authentication adapter considers security standards as part of the package, in this case utilising hashing algorithms for passwords, where passwords are not stored in plain text but rather hashed into an irreversible secret that is compared during login. For this prototype, the ability to reset passwords was omitted to focus on the application's main content, but is easily implementable using the backend provided by Convex's authentication adapter.
-
-When logged in, the user is presented with a unit list which is ordered from easiest to hardest and in the intended progression path.
 
 #figure(
   image("../images/impl-home-page.png", width: 70%),
   caption: [Implemented Unit List UI],
-)
+) <impl-home>
+#h(10pt)
+
+When logged in, the user is presented with a unit list which is ordered from easiest to hardest and in the intended progression path (see @impl-home).
 
 When clicking on a unit card, the user is presented with the unit page, which uses a finite-state-backed list of steps: including an introduction, summary quiz, translation quiz, response quiz, and substitution quiz.
 
@@ -311,32 +323,35 @@ When clicking on a unit card, the user is presented with the unit page, which us
 
 This page presents the user with the scripted conversation, but only shows one message at a time. Almost like a slide show, the state of the conversation can be advanced by hitting the space bar. Beyond the functional requirements, I also implemented a "tips" system, where instead of just showing the messages in order, sometimes it will pause to explain a feature of the language as shown in @impl-unit-intro. The messages show their Gaidhlig content and the English translation below.
 
-After the user studies the presented conversation, they are shown a button to advance to the quiz portions of the site. Below are four figures showing example questions from each step. Each image shows the various states the quizzes can be in. They use the same generic quiz component. When the user selects the correct answer, it displays "Correct." and highlights their answer in green. When they get it wrong, their answer is highlighted in red and the correct answer is highlighted in green with a caption explaining what the correct answer was.
-
 #grid(
   columns: (auto, auto),
   gutter: 1em,
-  figure(image("../images/impl-unit-summary.png"), caption: [Implemented Unit Page: Summary Quiz]),
+  [#figure(image("../images/impl-unit-summary.png"), caption: [Implemented Unit Page: Summary Quiz]) <impl-quiz-summary>],
   figure(image("../images/impl-unit-translation.png"), caption: [Implemented Unit Page: Translation Quiz]),
   figure(image("../images/impl-unit-response.png"), caption: [Implemented Unit Page: Response Quiz]),
-  figure(image("../images/impl-unit-substitution.png"), caption: [Implemented Unit Page: Substitution Quiz]),
+  [#figure(image("../images/impl-unit-substitution.png"), caption: [Implemented Unit Page: Substitution Quiz]) <impl-quiz-substitution>],
 )
+#h(10pt)
 
-When the user completes a unit, their home page will change shape. Completed units are hidden under a collapsible heading so the main list only includes units they haven't attempted.
+After the user studies the presented conversation, they are shown a button to advance to the quiz portions of the site. @impl-quiz-summary to 18 show example questions from each step. Each image shows the various states the quizzes can be in. They use the same generic quiz component. When the user selects the correct answer, it displays "Correct." and highlights their answer in green. When they get it wrong, their answer is highlighted in red and the correct answer is highlighted in green with a caption explaining what the correct answer was.
 
 #figure(
   image("../images/impl-home-completion.png", width: 70%),
-  caption: [Implemented Unit List w/ Units Completed]
-)
+  caption: [Implemented Unit List with Units Completed]
+) <impl-home-with-completed>
+#h(10pt)
 
-The practice page is a simple reordering of the unit list, where the list of units is ordered and grouped based on the output of the FSRS scheduler. Units are grouped into "New", "Due", and "Later". "New" means the unit hasn't been attempted, "Due" means the user needs to attempt it soon, and "Later" means the unit doesn't need attention right now. As previously explained, FSRS creates data points from all attempts to gauge users confidence and decide when to schedule new attempts.
+When the user completes a unit, their home page will change shape. Completed units are hidden under a collapsible heading so the main list only includes units that haven't been attempted. See @impl-home-with-completed.
 
 #figure(
   image("../images/impl-practice.png", width: 70%),
   caption: [Implemented Practice Page]
-)
+) <impl-practice>
+#h(10pt)
 
-Further implementation related to account management and site news were omitted for this first prototype as the main site value is in the unit and content.
+The practice page (see @impl-practice) is a simple reordering of the unit list, where the list of units is ordered and grouped based on the output of the FSRS scheduler. Units are grouped into "New", "Due", and "Later". "New" means the unit hasn't been attempted, "Due" means the user needs to attempt it soon, and "Later" means the unit doesn't need attention right now. As previously explained, FSRS creates data points from all attempts to gauge users confidence and decide when to schedule new attempts.
+
+Further implementation related to account management and news were omitted for this first prototype as the main value is in the unit and content.
 
 == Internal Systems
 
@@ -384,53 +399,57 @@ There are several peculiarities to how the system works internally.
 
 This project employs a combination of manual testing and unit testing. 
 
-On every new feature or change, I manually tested the user interface in my browser using a development server. I also wrote and ran tests for every new change, which would also run inside CI on every commit, push, or pull request. No pull request would be merged without the tests passing locally or the GitHub CI displaying a green tick for the unit tests.
+On every new feature or change, the user interface was manually tested using a browser and a development server. Unit tests were written and executed for every new feature, which also run inside CI on every commit, push, or pull request. No pull request would be merged without the tests passing locally or the GitHub CI displaying a green tick for the unit tests.
 
 The unit tests used raw logic testing, either comparing function outputs with literal `expect(something)` calls or snapshot comparisons (where the runtime will store a complex value in a file and compare it on subsequent test runs). All of the UI code was tested using a server-side DOM implementation called `happy-dom` with the rendering and comparison checks being done by `testing-library`. The UI tests render each UI component, then interact with the UI (by clicking or else), and compare visual outputs or data outputs.
-
-Below is a #link("https://bun.com/docs/test/reporters#dots-reporter")[Dot Summary] of the entire test suite#footnote[A full summary of the test suite for the latest CI run is visible here: https://github.com/Floffah/seanchas/actions/runs/24285687766/job/70914554196]. A Dot Summary is a concise way to represent the result of an entire suite of unit tests. When a test passes, the runtime will write a green period to the screen. If a test fails, the runtime will instead interrupt the stream of periods with an error message. The test suite for this project is large and does not fit on a single screen by default. A Dot Summary is favourable for summarising the test suite.
 
 #figure(
   image("../images/tests-dots.png"),
   caption: [Unit Test Suite Dot Summary]
-)
+) <testing-dot-summary>
+#h(10pt)
+
+@testing-dot-summary shows a #link("https://bun.com/docs/test/reporters#dots-reporter")[Dot Summary] of the entire test suite#footnote[A full summary of the test suite for the latest CI run is visible here: https://github.com/Floffah/seanchas/actions/runs/24285687766/job/70914554196]. A Dot Summary is a concise way to represent the result of an entire suite of unit tests. When a test passes, the runtime will write a green period to the screen. If a test fails, the runtime will instead interrupt the stream of periods with an error message. The test suite for this project is large and does not fit on a single screen by default. A Dot Summary is favourable for summarising the test suite.
 
 = Application Evaluation
 
 == Survey Results
 
-As described in the methodology section, I sent the application along with a survey to a group of users to test it and gather feedback. The groups of users were: family, friends in Scotland, friends in Ireland, and more international friends.
-
-For the Likert scale, the results indicate that users found it easy to sign in, locate units, to understand units and their content, and users indicated that the conversation format helped them learn more effectively than memorisation would.
-
-All the respondents answered either slightly or largely agree to the Likert questions, except for the question asking if the units were relevant. Some respondents slightly disagreed with this point. Below is a chart showing the results for the Likert scale.
+As described in the methodology section, the application was sent alongside a survey to a group of users who tested the system and gave feedback. The groups of users were: family, friends in Scotland, friends in Ireland, and more international friends.
 
 #figure(
   image("../images/graphs/statement-likert.png"),
   caption: [Likert Scale Chart]
-)
+) <results-likert>
+#h(10pt)
 
-For the list of statements, none of the statements have zero points, so someone agreed with them all, however users disagreed with the statement "I feel more confident recognising or using some of the language after using the site" significantly more than the other points, where the other points gained evenly high scores. Below is a chart showing the results of each statement.
+For the Likert scale (seen in @results-likert), the results indicate that users found it easy to sign in, locate units, to understand units and their content, and users indicated that the conversation format helped them learn more effectively than memorisation would.
+
+All the respondents answered either slightly or largely agree to the Likert questions, except for the question asking if the units were relevant. Some respondents slightly disagreed with this point. Below is a chart showing the results for the Likert scale.
 
 #figure(
   image("../images/graphs/statement-checklist.png"),
   caption: [Multiple Choice Statements Chart]
-)
+) <results-statements>
+#h(10pt)
+
+For the list of statements (seen in @results-statements), there was general agreement. However, users disagreed with the statement "I feel more confident recognising or using some of the language after using the site" significantly more than the other points, where the other points gained evenly high scores. Below is a chart showing the results of each statement.
 
 For the freeform "pros question", most people commented on the ease of use and good user experience. Users liked that they could move at their own pace and weren't pressured to continue through. Some users liked the "questions about the order of the messages".
 
-The freeform "cons question", the main point users picked up on was their dislike of the substitution quiz, saying that they weren't given enough context clues to complete it effectively. Some users commented that they felt they were memorising phrases rather than understanding the language, which although it is a valid response, is partly the aim of the application.
+Users described their dislike of the substitution quiz in the freeform "cons question", saying that they weren't given enough context clues to complete it effectively. Some users commented that they felt they were memorising phrases rather than understanding the language, which although it is a valid response, is partly the aim of the application.
 
 Further to this, some users pointed out that the application could more appropriately point out what to pay attention to during the conversation introduction, so that the quiz (especially substitution questions) can be answered more effectively.
-
-Approximately 50% of participants continued on to the optional language quiz. Out of those who completed it, all respondents answered the last two questions correctly, while performance on the first question was lower. This suggests that users were able to recall some of the material, but that their understanding or retention may have been less consistent. Below is a chart showing the results of this section.
 
 #figure(
   image("../images/graphs/language-pickup.png", width: 60%),
   caption: [Language Pickup Chart]
-)
+) <results-language-quiz>
+#h(10pt)
 
-The small number of users who progressed to the second part of the survey suggests that the study design could have more clearly explained expectations for how to engage with the system. Alternatively, it could have required completion of the second section. It may also mean that participants did not feel confident enough in their understanding of the language in order to attempt the questions. As well as this, it may suggest that further reinforcement of earlier content could improve learning outcomes.
+Approximately 50% of participants continued on to the optional language quiz. Out of those who completed it, all respondents answered the last two questions correctly, while performance on the first question was lower. This suggests that users were able to recall some of the material, but that their understanding or retention may have been less consistent. See @results-language-quiz for a chart showing the results of this section.
+
+The small number of users who progressed to the second part of the survey suggests that the study design could have more clearly explained expectations for how to engage with the system. Alternatively, it could have required completion of the second section. It may also mean that participants did not feel confident enough in their understanding of the language in order to attempt the questions. Additionally, it may suggest that further reinforcement of earlier content could improve learning.
 
 In order to obtain more robust insights into the performance of the system, a larger sample size would be required. Although multiple groups of potential participants were contacted, the response rate was low, resulting in a limited number of completed responses.
 
@@ -439,13 +458,13 @@ In order to obtain more robust insights into the performance of the system, a la
 #[
 #set heading(outlined: false)
 
-In this evaluation step, questions are answered with either yes, no, or somewhat, and with an appropriate description and evidence. Questions that require more explanation will respond and analyse appropriately. Where applicable, answers will explain how the answer to the question may change in a future version of the application.
+In this evaluation step, questions are answered with either "yes", "no", or "somewhat", and with an appropriate description and evidence. Questions that require more explanation will respond and analyse appropriately. Where applicable, answers will explain how the answer to the question may change in a future version of the application.
 
 === Learner / Personalisation
 
 ==== Does the system adapt to the learner?
 
-Somewhat. The application learns what units the learner previously struggled with and gives a way to reattempt them. It does not personalise the content within units to each learner.
+The system does adapt to the learner to some degree. The application learns what units the learner previously struggled with and gives a way to reattempt them. It does not personalise the content within units to each learner.
 
 In the future, as technology advances, specialised LLMs may be used to personalise each unit and create new practice sessions based on the user's previous interactions.
 
@@ -479,7 +498,7 @@ Yes. The content is specific to beginners of the language Gaidhlig.
 
 ==== Does it apply difficulty matching?
 
-Somewhat. Within the bounds of pre-written conversation units, each unit builds on the last with slightly more difficulty and less helpful harnesses.
+The system does apply difficulty matching to some degree. Within the bounds of pre-written conversation units, each unit builds on the last with slightly more difficulty and less helpful harnesses.
 
 ==== Does it help learners understand why they made mistakes?
 
@@ -517,11 +536,11 @@ The prototype does not work on touchscreen mobile phones due to a lack of time, 
 
 ==== Does it support interruptions?
 
-It does not support interruptions while in a unit. E.g., if the user closes a tab while completing a quiz, they will be sent back to the start when they reopen the site. However, once you complete a quiz, this persists for the lifetime of the user's account. This balance works well for the application as if there is a large gap between looking at the conversation and completing the various quizzes, the user's perceived context may be lost.
+The application does not support interruptions while in a unit. E.g., if the user closes a tab while completing a quiz, they will be sent back to the start when they reopen the site. However, once you complete a quiz, this persists for the lifetime of the user's account. This balance works well for the application as if there is a large gap between looking at the conversation and completing the various quizzes, the user's perceived context may be lost.
 
 ==== Can it be used offline?
 
-It cannot be used offline, but may be able to be in the future.
+The application cannot be used offline, but may be able to be in the future.
 
 ==== Can learning happen in short bursts?
 
@@ -549,11 +568,11 @@ Yes, as long as the user logs in with the same account, their progress is synchr
 
 ==== Does the platform support context-aware learning?
 
-Somewhat, it provides a contextualised pre-scripted conversation and quiz questions all in the same context. However, it doesn't account for external factors such as speech, pronunciation, talking with a real person, etc.
+The application does provide a contextualised pre-scripted conversation and quiz questions all in the same context. However, it doesn't account for external factors such as speech, pronunciation, talking with a real person, etc.
  
 ==== Is performance stable under poor connectivity?
 
-Somewhat, there is minimal bandwidth usage, but very low connectivity may impact the user's experience.
+There is minimal bandwidth usage, but very low connectivity may impact the user's experience.
 
 ==== Does the UI support cognitive load minimisation on small screens?
 
@@ -595,7 +614,7 @@ Not at the moment, but support could be added.
  
 ==== Does instruction transition from guided to independent practice?
 
-Somewhat, there is a separate practice feature that uses spaced repetition to allow users to practice freely.
+There is a separate practice feature that uses spaced repetition to allow users to practice freely.
 
 ==== Is there integration between formal and informal learning activities?
 
@@ -617,7 +636,7 @@ Yes, instead of phrases or words, units teach based on scripted realistic conver
 
 ==== Are learners solving real communicative tasks?
 
-Somewhat. Quizzes are surrounding a communication format, but aren't necessarily full puzzles or tasks.
+Quizzes are surrounding a communication format, but aren't necessarily full puzzles or tasks.
 
 ==== Does it simulate reality?
 
@@ -656,6 +675,6 @@ Yes, units are based around contextualised and realistic scripted conversations.
 
 Overall, the PF4M evaluation shows that the system performs strongly in areas related to learner control, accessibility, and usability. Especially in allowing flexible pacing and supporting engagement through conversation-based learning. The system aligns well with the learner and device pillars, particularly in terms of ease of use and suitability for short and self-paced sessions.
 
-However, it shows that there are limitations in personalisation and adaptability, as the system largely follows a predefined and linear structure rather than dynamically responding to individual learner requirements. Similarly, while the content is contextualised through conversation, there are gaps in supporting deeper understanding and confidence, as highlighted in the survey results.
+However, this shows that there are limitations in personalisation and adaptability, as the system largely follows a predefined and linear structure rather than dynamically responding to individual learner requirements. Similarly, while the content is contextualised through conversation, there are gaps in supporting deeper understanding and confidence, as highlighted in the survey results.
 
-From a pedagogical perspective, the system clearly demonstrates an underlying rationale. But it could definitely be further improved through better feedback and adaptive learning alongside stronger integration between content, the learner, and device capabilities. Overall, the system can be considered partially aligned with the PF4M framework, with strong foundations but clear areas for future development.
+From a pedagogical perspective, the system clearly demonstrates an underlying rationale. However, it could definitely be further improved through better feedback and adaptive learning alongside stronger integration between content, the learner, and device capabilities. Overall, the system can be considered partially aligned with the PF4M framework, with strong foundations but clear areas for future development.

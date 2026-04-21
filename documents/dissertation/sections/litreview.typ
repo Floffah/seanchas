@@ -128,7 +128,7 @@ Other findings, including connectivity and pronunciation anxiety, are relevant b
 
   === Duolingo
 
-  Duolingo#footnote[https://www.duolingo.com/] is a widely used online Software as a Service (Saas) product that aims to teach people a variety of languages in an accessible manner. It relies heavily on gamification in its exercises, where users are encouraged to learn by competing in competitions, with limited "resources" like losing a "life" when they fail a quiz. It also has a social side, where users are encouraged to add friends on the platform with whom they can complete "friend quests" and compare scores. It employs heavy repetition and streak tactics.
+  Duolingo#footnote[https://www.duolingo.com/] is a widely used online Software as a Service (SaaS) product that aims to teach people a variety of languages in an accessible manner. It relies heavily on gamification in its exercises, where users are encouraged to learn by competing in competitions, with limited "resources" like losing a "life" when they fail a quiz. It also has a social side, where users are encouraged to add friends on the platform with whom they can complete "friend quests" and compare scores. It employs heavy repetition and streak tactics.
 
   Duolingo has a wide catalogue of languages it supports, with many endangered languages supported including Gaidhlig, Navajo, Hawaiian, Irish, Welsh, Yiddish, Maori and more.
   Duolingo excels in habit-building, accessibility, and engagement. Where users are more inclined to keep using it, with it also supporting several device types.

@@ -1,5 +1,5 @@
 
-= Appendix 2: IPO Form
+= Appendix 2: IPO Form <ipo>
 
 // the original IPO document is copied verbatim from the other document markup, with edits made to fix the heading level depths
 
