@@ -66,7 +66,7 @@ export default function ConversationMessage({
         >
             <div
                 className={cn("flex rounded-lg p-4", {
-                    "self-start bg-card text-card-foreground":
+                    "self-start bg-secondary text-card-foreground dark:bg-card":
                         utterance.speaker === ConversationSpeaker.A,
                     "self-end bg-primary text-primary-foreground":
                         utterance.speaker === ConversationSpeaker.B,
