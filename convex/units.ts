@@ -4,11 +4,12 @@ import { mutation, query } from "@/convex/server";
 import { buildPracticeQueue, getUnitPracticeState } from "@/lib/util/practice";
 import { getStreakGoal, getUpdatedStreakState } from "@/lib/util/streak";
 
-import { getCurrentUserOrThrow } from "./lib/auth";
+import { getCurrentUser, getOrCreateCurrentUser } from "./lib/auth";
 
 export const getCompletedUnitIds = query({
     handler: async (ctx) => {
-        const user = await getCurrentUserOrThrow(ctx);
+        const user = await getCurrentUser(ctx);
+        if (!user) return [];
 
         const completions = await ctx.db
             .query("unitCompletions")
@@ -21,7 +22,8 @@ export const getCompletedUnitIds = query({
 
 export const getPracticeQueue = query({
     handler: async (ctx) => {
-        const user = await getCurrentUserOrThrow(ctx);
+        const user = await getCurrentUser(ctx);
+        if (!user) return buildPracticeQueue([], Date.now());
 
         const practiceStates = await ctx.db
             .query("unitPracticeStates")
@@ -34,7 +36,14 @@ export const getPracticeQueue = query({
 
 export const getHomeProgress = query({
     handler: async (ctx) => {
-        const user = await getCurrentUserOrThrow(ctx);
+        const user = await getCurrentUser(ctx);
+        if (!user) {
+            return {
+                completedCount: 0,
+                currentStreak: 0,
+                streakGoal: getStreakGoal(0),
+            };
+        }
 
         const completions = await ctx.db
             .query("unitCompletions")
@@ -56,7 +65,7 @@ export const upsertCompletion = mutation({
         questionCount: v.number(),
     },
     handler: async (ctx, args) => {
-        const user = await getCurrentUserOrThrow(ctx);
+        const user = await getOrCreateCurrentUser(ctx);
         const now = Date.now();
 
         const existingCompletion = await ctx.db

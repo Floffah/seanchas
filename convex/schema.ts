@@ -1,22 +1,12 @@
-import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 const schema = defineSchema({
-    ...authTables,
     users: defineTable({
-        name: v.optional(v.string()),
-        image: v.optional(v.string()),
-        email: v.optional(v.string()),
-        emailVerificationTime: v.optional(v.number()),
-        phone: v.optional(v.string()),
-        phoneVerificationTime: v.optional(v.number()),
-        isAnonymous: v.optional(v.boolean()),
-
-        // non convex auth user fields
+        tokenIdentifier: v.string(),
         currentStreak: v.optional(v.number()),
         lastActiveAt: v.optional(v.number()),
-    }).index("email", ["email"]),
+    }).index("by_tokenIdentifier", ["tokenIdentifier"]),
 
     unitCompletions: defineTable({
         userId: v.id("users"),

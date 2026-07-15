@@ -14,4 +14,4 @@ This project was originally for my honours project. The original documents (incl
 
 ![Poster](./documents/poster/poster.png)
 
-([click here](./poster.pdf) for pdf form)
+([click here](documents/poster/poster.pdf) for pdf form)

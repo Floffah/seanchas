@@ -1,4 +1,5 @@
-import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
+import { ClerkProvider } from "@clerk/nextjs";
+import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -27,15 +28,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
     return (
-        <ConvexAuthNextjsServerProvider>
-            <html lang="en" suppressHydrationWarning>
-                <body
-                    className={cn(
-                        "antialiased",
-                        geistSans.variable,
-                        geistMono.variable,
-                    )}
-                >
+        <html lang="en" suppressHydrationWarning>
+            <body
+                className={cn(
+                    "antialiased",
+                    geistSans.variable,
+                    geistMono.variable,
+                )}
+            >
+                <ClerkProvider appearance={{ theme: shadcn }}>
                     <ConvexClientProvider>
                         <TooltipProvider>
                             <NextThemesProvider
@@ -48,8 +49,8 @@ export default function RootLayout({ children }: PropsWithChildren) {
                             </NextThemesProvider>
                         </TooltipProvider>
                     </ConvexClientProvider>
-                </body>
-            </html>
-        </ConvexAuthNextjsServerProvider>
+                </ClerkProvider>
+            </body>
+        </html>
     );
 }
