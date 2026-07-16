@@ -1,10 +1,13 @@
+import { auth } from "@clerk/nextjs/server";
 import { LanguagesIcon } from "lucide-react";
 import Link from "next/link";
 
 import PracticeUnitList from "@/components/blocks/PracticeUnitList";
 import { Button } from "@/components/ui/button";
 
-export default function Page() {
+export default async function Page() {
+    await auth.protect();
+
     return (
         <div className="flex gap-4 p-8">
             <aside className="flex shrink-0 basis-auto flex-col gap-4">

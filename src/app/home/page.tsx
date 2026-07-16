@@ -5,8 +5,11 @@ import { ViewTransition } from "react";
 import HomeProgressWidgets from "@/components/blocks/HomeProgressWidgets";
 import UnitList from "@/components/blocks/UnitList";
 import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs/server";
 
-export default function Page() {
+export default async function Page() {
+    await auth.protect()
+
     return (
         <ViewTransition>
             <div className="flex gap-4 p-8">

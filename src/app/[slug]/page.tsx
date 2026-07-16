@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 
 import ConversationUnit from "@/components/blocks/ConversationUnit";
@@ -15,6 +16,8 @@ export default async function Page({
 }: {
     params: Promise<{ slug: string }>;
 }) {
+    await auth.protect();
+
     const { slug } = await params;
 
     const convo = conversations.find((c) => c.id === slug);
